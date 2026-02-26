@@ -81,7 +81,7 @@ const PacientesList = () => {
   return (
     <div className="p-4">
       <div className="flex justify-start gap-1 items-center mb-6">
-        <h2 className="text-2xl font-semibold">Administrar pacientes</h2>
+        <h2 className="text-2xl font-semibold">Administrar usuarios</h2>
         <Link
           to="/admin-dash/pacientes/nuevo"
           className="inline-flex py-2 items-center gap-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
@@ -89,7 +89,7 @@ const PacientesList = () => {
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
           </svg>
-          Nuevo Paciente
+          Nuevo usuario
         </Link>
       </div>
 
@@ -157,9 +157,9 @@ const PacientesList = () => {
 
       {/* Tabla */}
       {isLoading ? (
-        <p>Cargando pacientes...</p>
+        <p>Cargando usuarios...</p>
       ) : error ? (
-        <p>Error al cargar los pacientes.</p>
+        <p>Error al cargar los usuarios.</p>
       ) : (
         <div className="overflow-x-auto rounded-xl shadow-lg border border-gray-200">
           <table className="min-w-full text-sm text-gray-800 bg-white">

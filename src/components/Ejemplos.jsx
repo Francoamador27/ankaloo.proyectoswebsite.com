@@ -1,6 +1,6 @@
 import { Search, Layout } from "lucide-react";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Pagination,Navigation  } from 'swiper/modules';
+import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 
@@ -17,26 +17,30 @@ import img4 from '../assets/img/ejemplos/ejemplo-4.jpg';
 import img5 from '../assets/img/ejemplos/ejemplo-5.jpg';
 import img6 from '../assets/img/ejemplos/ejemplo-6.jpg';
 import GaleriaSwiper from "./GaleriaSwiper";
+import SEOHead from "./Head/Head";
+import useCont from "../hooks/useCont";
 
 export default function Ejemplos() {
+   const {company} = useCont();
   const [index, setIndex] = useState(-1);
   const isMobile = window.innerWidth < 640;
- useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
   const project = {
-    title: "Imanes Decorativos Personalizados",
+    title: "Experiencias de Viaje Inolvidables",
     description:
-      "Creamos imanes únicos con tus fotos favoritas, ideales para decorar tu heladera, regalar a seres queridos o recordar momentos especiales. Cada imán es producido con materiales de alta calidad y un acabado brillante que realza los colores de tus recuerdos.",
+      `En ${company.name} somos expertos en crear experiencias turísticas únicas y personalizadas. Ofrecemos paquetes integrales a los mejores destinos del mundo, priorizando tu comodidad, seguridad y satisfacción en cada viaje.`,
     tags: [
-      "Fotos personalizadas",
-      "Decoración",
-      "Regalos originales",
-      "Hecho en Córdoba",
-      "Calidad Premium",
-      "Imanes brillantes"
+      "Paquetes Turísticos",
+      "Viajes Personalizados",
+      "Destinos Exóticos",
+      "All Inclusive",
+      "Agencia de Viajes",
+      "Tours Exclusivos"
     ],
-    type: "Producto decorativo",
+    type: "Agencia de Viajes",
     mainImage: img1,
     gallery: [
       img2,
@@ -47,28 +51,28 @@ export default function Ejemplos() {
     ],
     features: [
       {
-        title: "Personalización total",
-        description: "Cada imán se fabrica a partir de las fotos que nos enviás. Podés elegir una o varias imágenes según la cantidad."
+        title: "Destinos Exclusivos",
+        description: "Seleccionamos cuidadosamente los mejores destinos del mundo, desde playas paradisíacas hasta ciudades históricas y aventuras en la naturaleza."
       },
       {
-        title: "Material resistente",
-        description: "Usamos materiales de alta durabilidad con terminación brillante para asegurar que tus recuerdos duren en el tiempo."
+        title: "Paquetes Premium",
+        description: "Ofrecemos paquetes de primera calidad con alojamientos 4 y 5 estrellas, traslados privados y experiencias VIP en cada destino."
       },
       {
-        title: "Tamaño ideal",
-        description: "Los imanes miden 6x6 cm, el formato perfecto para destacar sin ocupar demasiado espacio."
+        title: "Viajes a Medida",
+        description: "Diseñamos cada viaje según tus preferencias, presupuesto y necesidades específicas, creando experiencias completamente personalizadas."
       },
       {
-        title: "Producción rápida",
-        description: "Fabricamos tu pedido en un plazo de 2 a 3 días hábiles desde la confirmación del diseño y pago."
+        title: "Itinerarios Exclusivos",
+        description: "Creamos rutas únicas con actividades inolvidables, desde tours guiados hasta experiencias gastronómicas y culturales auténticas."
       },
       {
-        title: "Packaging de regalo",
-        description: "Cada pedido se entrega en una cajita kraft con presentación cuidada, lista para sorprender."
+        title: "Asistencia 24/7",
+        description: "Nuestro equipo de soporte está disponible en todo momento durante tu viaje, garantizando tranquilidad y respuesta inmediata ante cualquier situación."
       },
       {
-        title: "Hecho con amor",
-        description: "Nos encanta transformar momentos en objetos únicos. Cada pedido es producido artesanalmente en Córdoba."
+        title: "Seguro Completo",
+        description: "Todos nuestros paquetes incluyen seguro de viaje integral, cobertura médica y protección ante imprevistos."
       }
     ]
   };
@@ -77,14 +81,19 @@ export default function Ejemplos() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-20 ">
+      <SEOHead
+        priority="high"
+        title={`Galeria de imagenes de ${company.name} `}
+        description={`Descubre nuestros paquetes turísticos exclusivos. Experiencias únicas en los mejores destinos del mundo con ${company.name}.`}
+      />
       <p className="text-gray-400 mb-2 flex items-center gap-4 flex-wrap">
         <span className="flex items-center gap-2">
-          <Layout className="w-5 h-5 text-orange-500" />
+          <Layout className="w-5 h-5 text-[#dc834e]" />
           {project.type}
         </span>
       </p>
 
-      <h1 className="text-4xl font-bold">{project.title}</h1>
+      <h1 className="text-4xl font-bold thea-amelia">Experiencias de Viaje <span className="text-[#dc834e] thea-amelia text-5xl">Inolvidables</span></h1>
       <p className="text-lg text-gray-400 mt-2">{project.description}</p>
 
       <div className="flex flex-wrap gap-2 mt-4">
@@ -97,13 +106,13 @@ export default function Ejemplos() {
 
       {/* Galería */}
       <div className="mt-8">
-<GaleriaSwiper />
-</div>
+        <GaleriaSwiper />
+      </div>
 
 
       {/* Características */}
       <section className="mt-16">
-        <h2 className="text-2xl font-bold text-orange-500 mb-6">Características</h2>
+        <h2 className="text-2xl font-bold mb-6 thea-amelia">Nuestros <span className="text-[#dc834e] thea-amelia text-3xl">Servicios</span></h2>
         <div className="grid md:grid-cols-2 gap-8">
           {project.features.map((feature, index) => (
             <div key={index}>

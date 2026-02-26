@@ -99,7 +99,15 @@ const Provider = ({ children }) => {
   };
 
   useEffect(() => {
-    reloadSettings();
+    const scheduleReload = () => reloadSettings();
+
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(scheduleReload);
+      return undefined;
+    }
+
+    const timeoutId = setTimeout(scheduleReload, 1500);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const logoUrl = settings?.logo

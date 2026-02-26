@@ -1,106 +1,87 @@
-import GaleriaSwiper from './GaleriaSwiper';
-
-export default function ComoComprar() {
+export default function QuienesSomos() {
   return (
-    <section id="como-comprar" className="bg-white">
+    <section id="quienes-somos" className="bg-white">
       {/* Encabezado */}
       <div className="text-center py-10">
-        <h2 className="text-3xl font-bold" style={{ color: '#8cb9ce' }}>
-          Quienes Somos?
+        <h2 className="text-4xl font-extrabold thea-amelia" style={{ color: '#dc834e' }}>
+          ¿Quiénes Somos?
         </h2>
-        <div className="mt-2 h-1 w-20 mx-auto rounded-full" style={{ backgroundColor: '#8cb9ce' }} />
+        <div
+          className="mt-2 h-1.5 w-24 mx-auto rounded-full"
+          style={{ backgroundColor: '#dc834e' }}
+        />
       </div>
 
-      {/* 2 columnas en desktop, stacked en mobile */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-        {/* Izquierda: Galería (sin textos/títulos dentro) */}
-        <div>
-          <GaleriaSwiper size="large" />
+      {/* 2 columnas */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center-start mb-20">
+        {/* Izquierda: Video institucional + texto SEO */}
+        <div className="flex flex-col gap-6">
+          <div className="rounded-3xl overflow-hidden border border-gray-100 shadow-xl bg-gray-50 aspect-video transition-transform hover:scale-[1.02] duration-500">
+            <iframe
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/f6QFJUkORmQ"
+              title="Vídeo Institucional RevenantTravel"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+
+          {/* Texto SEO dentro de la misma columna */}
+          <div className="text-gray-700 leading-relaxed bg-orange-50 rounded-2xl border border-orange-100 p-6 shadow-sm">
+            <h4 className="text-xl font-bold text-slate-900 mb-3">Compromiso con tu Experiencia</h4>
+            <p className="mb-4">
+              En <strong className="text-[#dc834e]">RevenantTravel</strong>, entendemos que cada viaje es una experiencia única que merece ser memorable. Por eso, combinamos años de experiencia con asesoramiento personalizado y atención al detalle.
+            </p>
+            <p>
+              Nuestra <strong>agencia de viajes</strong> se destaca por la calidad de nuestros servicios, la selección exclusiva de destinos y el soporte continuo durante todo tu viaje.
+            </p>
+          </div>
         </div>
 
-        {/* Derecha: Descripción del consultorio */}
-        <aside className="md:pl-6">
-          <div className="rounded-2xl border border-gray-200 shadow-sm p-6">
-            <div className="mb-4">
-              <span
-                className="inline-block h-2 w-16 rounded-full"
-                style={{ backgroundColor: '#8cb9ce' }}
-              />
-            </div>
+        {/* Derecha: Descripción */}
+        <aside className="md:pl-10">
+          <div className="rounded-3xl border border-slate-100 shadow-lg p-8 bg-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-full -z-0 opacity-50"></div>
 
-            <h3 className="text-2xl font-semibold text-gray-800 mb-3">
-              Mint Odontología
-            </h3>
-
-            <p className="text-gray-600 leading-relaxed mb-4">
-              Somos un equipo enfocado en brindar una experiencia odontológica
-              cálida, precisa y moderna. Combinamos tecnología de última
-              generación con un trato cercano para que cada visita sea cómoda y
-              segura.
-            </p>
-
-            <p className="text-gray-600 leading-relaxed mb-6">
-              Nuestro consultorio está diseñado para tu bienestar: espacios
-              luminosos, esterilización certificada y protocolos de atención
-              pensados para pacientes de todas las edades. Nos guía un enfoque
-              preventivo y estético para lograr sonrisas sanas y naturales.
-            </p>
-
-            {/* Píldoras de valor */}
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <li className="flex items-center gap-2">
+            <div className="relative z-10">
+              <div className="mb-6">
                 <span
-                  className="inline-block h-2 w-2 rounded-full"
-                  style={{ backgroundColor: '#8cb9ce' }}
+                  className="inline-block h-2 w-20 rounded-full"
+                  style={{ backgroundColor: '#dc834e' }}
                 />
-                <span className="text-gray-700">Equipamiento digital</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span
-                  className="inline-block h-2 w-2 rounded-full"
-                  style={{ backgroundColor: '#8cb9ce' }}
-                />
-                <span className="text-gray-700">Esterilización certificada</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span
-                  className="inline-block h-2 w-2 rounded-full"
-                  style={{ backgroundColor: '#8cb9ce' }}
-                />
-                <span className="text-gray-700">Odontología estética</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span
-                  className="inline-block h-2 w-2 rounded-full"
-                  style={{ backgroundColor: '#8cb9ce' }}
-                />
-                <span className="text-gray-700">Atención para toda la familia</span>
-              </li>
-            </ul>
-
-            {/* Separador sutil */}
-            <div className="my-6 h-px bg-gray-100" />
-
-            {/* Mini “stats”/confianza */}
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div>
-                <div className="text-xl font-bold" style={{ color: '#8cb9ce' }}>
-                  +500
-                </div>
-                <div className="text-xs text-gray-500">Pacientes</div>
               </div>
-              <div>
-                <div className="text-xl font-bold" style={{ color: '#8cb9ce' }}>
-                  5+
-                </div>
-                <div className="text-xs text-gray-500">Años de experiencia</div>
-              </div>
-              <div>
-                <div className="text-xl font-bold" style={{ color: '#8cb9ce' }}>
-                  5★
-                </div>
-                <div className="text-xs text-gray-500">Valoraciones</div>
-              </div>
+
+
+
+              <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                Somos una agencia líder especializada en crear <strong>experiencias de viaje personalizadas</strong>. Brindamos paquetes integrales a destinos únicos en el mundo, enfocándonos en tu comodidad, seguridad y satisfacción.
+              </p>
+
+              <p className="text-gray-700 text-lg leading-relaxed mb-8">
+                Contamos con una amplia trayectoria organizando viajes que superan las expectativas de nuestros clientes. Brindamos <strong>asesoramiento sin cargo</strong> y atención personalizada para cada aventura.
+              </p>
+
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[
+                  "Viajes personalizados",
+                  "Destinos exclusivos",
+                  "Asesoramiento sin cargo",
+                  "Atención 24/7",
+                  "Seguros incluidos",
+                  "Mejores tarifas"
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-3">
+                    <div
+                      className="flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center text-white text-[10px]"
+                      style={{ backgroundColor: '#dc834e' }}
+                    >
+                      ✓
+                    </div>
+                    <span className="text-slate-800 font-semibold">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </aside>

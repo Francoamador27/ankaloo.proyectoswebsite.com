@@ -1,7 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../../config/axios';
+import {
+  DndContext,
+  closestCenter,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  useSortable,
+  rectSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { GripVertical } from 'lucide-react';
 
-const EjemplosPanel = () => {
+const SortableImage = ({ img, onDelete }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: img.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="w-40 h-40 border rounded relative overflow-hidden shadow bg-white"
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="absolute top-1 left-1 z-10 bg-white/90 text-gray-600 rounded p-1 cursor-grab active:cursor-grabbing"
+        title="Arrastrar"
+      >
+        <GripVertical size={16} />
+      </div>
+      <img
+        src={`${import.meta.env.VITE_API_URL}/storage/uploads${img.imagen}`}
+        alt="Aberturas de aluminio a medida en Córdoba – calidad, diseño y durabilidad"
+        className="object-cover w-full h-full"
+      />
+      <button
+        onClick={() => onDelete(img.id)}
+        className="absolute top-1 right-1 bg-white text-red-600 text-xs px-2 py-1 rounded shadow hover:bg-red-100"
+      >
+        Eliminar
+      </button>
+    </div>
+  );
+};
+
+const GaleriaPanel = () => {
   const token = localStorage.getItem('AUTH_TOKEN');
 
   const [imagen, setImagen] = useState(null);
@@ -11,6 +66,7 @@ const EjemplosPanel = () => {
   const [cargando, setCargando] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [imagenesSubidas, setImagenesSubidas] = useState([]);
+  const [ordenError, setOrdenError] = useState(null);
 
   // Obtener imágenes al montar
   useEffect(() => {
@@ -122,6 +178,38 @@ const EjemplosPanel = () => {
     }
   };
 
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = imagenesSubidas.findIndex((img) => img.id === active.id);
+    const newIndex = imagenesSubidas.findIndex((img) => img.id === over.id);
+
+    const newOrder = arrayMove(imagenesSubidas, oldIndex, newIndex);
+    setImagenesSubidas(newOrder);
+
+    try {
+      await clienteAxios.post(
+        '/api/ejemplos/reorder',
+        {
+          order: newOrder.map((img, index) => ({
+            id: img.id,
+            position: index + 1,
+          })),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setOrdenError(null);
+    } catch (err) {
+      console.error(err);
+      setOrdenError('Error guardando el orden.');
+    }
+  };
+
   return (
     <div className="bg-white p-4 rounded shadow max-w-4xl mx-auto">
       <h2 className="text-lg font-semibold mb-4">Subir imagen a la galería</h2>
@@ -205,34 +293,36 @@ const EjemplosPanel = () => {
 
       {/* Galería */}
       <div className="mt-10">
-        <h3 className="text-md font-semibold mb-4">Imágenes subidas</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-md font-semibold">Imágenes subidas</h3>
+          <button
+            onClick={obtenerImagenes}
+            className="text-sm text-blue-600 hover:text-blue-700"
+            type="button"
+          >
+            Refrescar orden
+          </button>
+        </div>
+        {ordenError && <p className="text-red-600 text-sm mb-2">{ordenError}</p>}
         {imagenesSubidas.length === 0 ? (
           <p className="text-gray-500 text-sm">No hay imágenes subidas aún.</p>
         ) : (
-          <div className="flex flex-wrap gap-4">
-            {imagenesSubidas.map((img) => (
-              <div
-                key={img.id}
-                className="w-40 h-40 border rounded relative overflow-hidden shadow"
-              >
-                <img
-                  src={`${import.meta.env.VITE_API_URL}storage/uploads${img.imagen}`}
-                  alt="Ejemplo"
-                  className="object-cover w-full h-full"
-                />
-                <button
-                  onClick={() => handleEliminar(img.id)}
-                  className="absolute top-1 right-1 bg-white text-red-600 text-xs px-2 py-1 rounded shadow hover:bg-red-100"
-                >
-                  Eliminar
-                </button>
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={imagenesSubidas.map((img) => img.id)}
+              strategy={rectSortingStrategy}
+            >
+              <div className="flex flex-wrap gap-4">
+                {imagenesSubidas.map((img) => (
+                  <SortableImage key={img.id} img={img} onDelete={handleEliminar} />
+                ))}
               </div>
-            ))}
-          </div>
+            </SortableContext>
+          </DndContext>
         )}
       </div>
     </div>
   );
 };
 
-export default EjemplosPanel;
+export default GaleriaPanel;

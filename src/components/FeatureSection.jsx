@@ -1,109 +1,177 @@
-import { CalendarDaysIcon, ShieldCheckIcon, HeartIcon, PhoneIcon } from '@heroicons/react/24/outline'
-import Gallery from './ServiciosFront'
-import { Link } from 'react-router-dom'
-import backgroundD from '../assets/img/fondo-mint.png';
-import Popup from './PopUp';
+import { useEffect, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, EffectFade, Pagination, Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-fade';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import clienteAxios from '../config/axios';
+import useCont from '../hooks/useCont';
 import WhatsappHref from '../utils/WhatsappUrl';
-import SEOHead  from "./Head/Head.jsx";
-import useCont from "../hooks/useCont";
-const features = [
-  {
-    name: 'Turnos online',
-    description:
-    'Reservá tu consulta através de Whatsapp en minutos .',
-    icon: CalendarDaysIcon,
-  },
-  {
-    name: 'Atención segura',
-    description:
-    'Protocolos de bioseguridad, esterilización certificada y materiales de primera línea.',
-    icon: ShieldCheckIcon,
-  },
-  {
-    name: 'Cuidado integral',
-    description:
-    'Odontología general, estética, ortodoncia y urgencias, todo en un mismo lugar.',
-    icon: HeartIcon,
-  },
-]
 
-export default function FeatureSection() {
+// Componente separado que siempre renderiza Swiper para mantener consistencia de hooks
+function HeroSwiper({ slides, company, contact }) {
   return (
-    <>
+    <Swiper
+      modules={[Autoplay, EffectFade, Pagination, Navigation]}
+      effect="fade"
+      fadeEffect={{ crossFade: true }}
+      autoplay={{
+        delay: 5000,
+        disableOnInteraction: false,
+      }}
+      pagination={{ clickable: true }}
+      navigation
+      loop={slides.length > 1}
+      className="hero-swiper w-full h-full"
+    >
+      {slides.map((slide, index) => (
+        <SwiperSlide key={slide.id} className="h-full">
+          <div className="relative w-full h-full flex items-center justify-center">
+            {slide.image ? (
+              <img
+                src={slide.image}
+                alt={slide.title || "Hero"}
+                className="absolute inset-0 w-full h-full object-cover"
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+                fetchPriority={index === 0 ? "high" : "auto"}
+              />
+            ) : null}
+            {/* Overlay con gradiente */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#003366]/80 via-black/40 to-black/30" />
 
-      <div
-        className="relative pt-24 px-6 text-left min-h-screen"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(255,255,255,.92), rgba(255,255,255,.65), rgba(255,255,255,.15)), url(${backgroundD})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        {/* Contenedor centrado para limitar ancho y mantener el "look" blanco sobre el fondo */}
-        <div className="max-w-5xl mx-auto">
-          <h1 className="font-bold titulo-principal leading-tight mb-4 text-slate-900">
-            <span className="text-slate-900">Mint</span>{' '}
-            <span className="text-slate-700">Odontología</span><br />
-            <span className="text-slate-800">Sonrisas</span> que inspiran{' '}
-            <span className="text-[#008DD2]">confianza</span>
-          </h1>
+            {/* Content */}
+            <div className="relative z-10 w-full max-w-6xl px-6 lg:px-12 mx-auto text-center">
+              <span className="inline-block mb-6 px-5 py-2 text-sm font-black tracking-wider bg-white/10 backdrop-blur-md text-white rounded-full border border-white/20 thea-amelia">
+                {company?.name || "RevenantTravel"}
+              </span>
 
-          <p className="text-lg description-principal mb-6 text-slate-700">
-            Cuidamos tu salud bucal con tecnología moderna y un trato cercano.
-            Tratamientos estéticos, ortodoncia, implantes y más — pensados para vos.
-          </p>
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black  text-white mb-8 leading-[1.1] tracking-tight">
+                {slide.title}
+              </h1>
 
-          <div className="flex flex-wrap gap-3">
-            {/* Primario claro sobre fondo celeste */}
-            <a href={WhatsappHref({ message: "Hola, necesito turno para odontologia" })}
-              to="/turnos"
-              className="bg-white/95 hover:bg-white text-[#008DD2] ring-1 ring-[#008DD2]/20 px-6 py-3 rounded-md font-semibold shadow-sm transition"
-            target='_blank'
-            >
-              📅 Reservar turno
-            </a >
+              <p className="max-w-2xl mx-auto text-xl md:text-2xl text-white/80 mb-12 font-light leading-relaxed">
+                {slide.description}
+              </p>
 
-                  <a href='tel:3517699950'
-                    className="bg-white/80 hover:bg-white text-slate-800 ring-1 ring-slate-200 px-6 py-3 rounded-md font-semibold shadow-sm transition flex items-center gap-2"
-                  >
-                    <PhoneIcon className="h-5 w-5" />
-                    Llamar
-                  </a>
+              <div className="flex flex-wrap justify-center gap-6">
+                <a
+                  href={`tel:${contact?.phone || contact?.whatsapp || ""}`}
+                  className="px-10 py-5 font-black text-[#003366] bg-white rounded-2xl hover:bg-slate-100 transition-all shadow-xl hover:-translate-y-1 active:scale-95 text-lg"
+                >
+                  LLAMAR AHORA
+                </a>
 
-            <Link
-              to="/contacto"
-              className="bg-transparent hover:bg-white/70 text-slate-800 ring-1 ring-white/60 backdrop-blur px-6 py-3 rounded-md font-semibold shadow-sm transition"
-            >
-              📍 ¿Cómo llegar?
-            </Link>
-
-          </div>
-
-          {/* Features en "glass white" para integrarse con el fondo */}
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => (
-              <div
-                key={feature.name}
-                className="bg-white/85 backdrop-blur-md rounded-xl p-5 shadow-sm ring-1 ring-white/60"
-              >
-                <div className="flex items-start gap-3">
-                  <feature.icon className="h-8 w-8 text-[#008DD2]" aria-hidden="true" />
-                  <div>
-                    <h3 className="text-base font-semibold text-slate-900">{feature.name}</h3>
-                    <p className="mt-1 text-sm text-slate-600">{feature.description}</p>
-                  </div>
-                </div>
+                <a
+                  href={WhatsappHref({
+                    message: `Hola, me interesa saber más sobre "${slide.title}". Quisiera pedir un presupuesto.`,
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-10 py-5 font-black text-white border-2 border-white/60 rounded-2xl hover:bg-white/10 backdrop-blur-sm transition-all text-lg"
+                >
+                  WHATSAPP
+                </a>
               </div>
-            ))}
+            </div>
           </div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  );
+}
 
-          {/* Opcional: galería */}
-          {/* <div id="galeria" className="mt-12">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">Antes y después</h2>
-            <Gallery />
-          </div> */}
+export default function HeroFeatures() {
+  const [slides, setSlides] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { company, contact } = useCont();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchSlides = async () => {
+      try {
+        const { data } = await clienteAxios.get('/api/sliders');
+        if (!cancelled && Array.isArray(data?.data) && data.data.length > 0) {
+          setSlides(data.data);
+        }
+      } catch (error) {
+        console.error('Error cargando sliders', error);
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(fetchSlides);
+    } else {
+      setTimeout(fetchSlides, 1500);
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <section className="relative w-full h-[85vh] min-h-[600px] overflow-hidden">
+      <style>{`
+        .hero-swiper,
+        .hero-swiper .swiper-wrapper,
+        .hero-swiper .swiper-slide {
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        .hero-swiper .swiper-button-next,
+        .hero-swiper .swiper-button-prev {
+          color: white;
+          width: 48px;
+          height: 48px;
+          background: rgba(0,0,0,.45);
+          border-radius: 9999px;
+          transition: all .25s ease;
+        }
+
+        .hero-swiper .swiper-button-next:hover,
+        .hero-swiper .swiper-button-prev:hover {
+          background: rgba(0,0,0,.7);
+          transform: scale(1.05);
+        }
+
+        .hero-swiper .swiper-button-next::after,
+        .hero-swiper .swiper-button-prev::after {
+          font-size: 20px;
+          font-weight: bold;
+        }
+        
+        .hero-swiper .swiper-pagination-bullet {
+          background: white;
+          opacity: 0.5;
+        }
+        
+        .hero-swiper .swiper-pagination-bullet-active {
+          background: #003366;
+          opacity: 1;
+          width: 12px;
+          border-radius: 6px;
+          transition: width 0.3s;
+        }
+      `}</style>
+
+      {loading ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 to-[#dc834e]">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-white text-lg font-semibold thea-amelia">Cargando experiencias...</p>
+          </div>
         </div>
-      </div>
-    </>
-  )
+      ) : slides.length > 0 ? (
+        <HeroSwiper slides={slides} company={company} contact={contact} />
+      ) : null}
+    </section>
+  );
 }

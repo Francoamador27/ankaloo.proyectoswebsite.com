@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { FolderGit2, LogOut, Settings, Home } from 'lucide-react';
+import { FolderGit2, LogOut, Settings, Home, Bot, Mail, FileText } from 'lucide-react';
 
 import {
     Drawer,
@@ -43,15 +43,19 @@ const AdminSidebar = () => {
     };
 
     const menuItems = [
-        { text: 'Calendario', icon: <Calendar size={20} />, path: '/admin-dash' },
-        { text: 'Citas', icon: <ListCheck size={20} />, path: '/admin-dash/citas' },
-        { text: 'Pacientes', icon: <Users size={20} />, path: '/admin-dash/pacientes' },
-        { text: 'Profesionales', icon: <ShieldUser size={20} />, path: '/admin-dash/doctores' },
+        { text: 'Sliders', icon: <GalleryThumbnails size={20} />, path: '/admin-dash/sliders' },
+        { text: 'Galería', icon: <GalleryThumbnails size={20} />, path: '/admin-dash/galeria' },
+        // { text: 'Calendario', icon: <Calendar size={20} />, path: '/admin-dash' },
+        // { text: 'Citas', icon: <ListCheck size={20} />, path: '/admin-dash/citas' },
+        { text: 'Usuarios', icon: <Users size={20} />, path: '/admin-dash/pacientes' },
+        // { text: 'Profesionales', icon: <ShieldUser size={20} />, path: '/admin-dash/doctores' },
         { text: 'Finanzas', icon: <Coins size={20} />, path: '/admin-dash/finanzas' },
+        { text: 'Leads Contacto', icon: <Mail size={20} />, path: '/admin-dash/leads-contacto' },
         { text: 'Testimonios', icon: <MessageSquareQuote size={20} />, path: '/admin-dash/testimonios' },
-        { text: 'Galería', icon: <GalleryThumbnails size={20} />, path: '/admin-dash/ejemplos' },
-        { text: 'Servicios', icon: <FolderGit2 size={20} />, path: '/admin-dash/tratamientos' },
+        { text: 'Paquetes', icon: <FolderGit2 size={20} />, path: '/admin-dash/servicios' },
+        { text: 'Posts', icon: <FileText size={20} />, path: '/admin-dash/posts' },
         { text: 'Configuraciones', icon: <Settings size={20} />, path: '/admin-dash/configuraciones' },
+        { text: 'Chatbot', icon: <Bot size={20} />, path: '/admin-dash/chatbot' },
     ];
 
     return (
@@ -106,8 +110,8 @@ const AdminSidebar = () => {
                                     src={company.logo}
                                     alt={company.name || 'Logo'}
                                     style={{
-                                        height: 'auto',
-                                        maxWidth: '140px',
+                                        height: '40px',
+                                        maxWidth: '100',
                                         objectFit: 'contain',
                                     }}
                                 />

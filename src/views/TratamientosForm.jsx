@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import clienteAxios from "../config/axios";
 
 // Utilidad para crear slug
@@ -16,30 +16,43 @@ const slugify = (str) =>
 const MAX_MB = 5;
 const MAX_BYTES = MAX_MB * 1024 * 1024;
 
+// 🔥 Función para extraer el ID de cualquier URL de YouTube
+const extractYouTubeID = (url) => {
+    if (!url) return "";
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[7].length === 11) ? match[7] : "";
+};
+
 const TratamientosForm = () => {
     const token = localStorage.getItem("AUTH_TOKEN");
 
-    const [title, setTitle] = useState(""); // nombre del sitio
-    const [link, setLink] = useState(""); // url
-    const [description, setDescription] = useState(""); // descripción
+    const [title, setTitle] = useState("");
+    const [video, setVideo] = useState("");
+    const [youtubeId, setYoutubeId] = useState("");  // ID para previsualizar
+    const [description, setDescription] = useState("");
+    const [price, setPrice] = useState("");
+
     const slug = useMemo(() => slugify(title), [title]);
-    const [category, setCategory] = useState(1);     // 1 = Desarrollo web, 2 = Integraciones web
-    const [createData, setCreateData] = useState(""); // "2025-07-01"
+    const [category, setCategory] = useState("");
+    const [categorias, setCategorias] = useState([]);
+    const [createData, setCreateData] = useState("");
+
     // Tags
     const [tagsInput, setTagsInput] = useState("");
     const [tags, setTags] = useState([]);
 
     // Características
     const [features, setFeatures] = useState([
-        { title: "", description: "" },
+        { title: "", description: "" }
     ]);
 
     // Imágenes
     const [mainImage, setMainImage] = useState(null);
     const [mainImagePreview, setMainImagePreview] = useState(null);
 
-    const [gallery, setGallery] = useState([]); // Files[]
-    const [galleryPreviews, setGalleryPreviews] = useState([]); // string[]
+    const [gallery, setGallery] = useState([]);
+    const [galleryPreviews, setGalleryPreviews] = useState([]);
 
     // Estado UI
     const [mensaje, setMensaje] = useState(null);
@@ -48,7 +61,28 @@ const TratamientosForm = () => {
     const [dragActiveMain, setDragActiveMain] = useState(false);
     const [dragActiveGallery, setDragActiveGallery] = useState(false);
 
-    // Helpers de validación de archivos
+    useEffect(() => {
+        const loadCategorias = async () => {
+            try {
+                const { data } = await clienteAxios.get("/api/servicios-categorias");
+                const items = Array.isArray(data?.data)
+                    ? data.data
+                    : Array.isArray(data)
+                    ? data
+                    : [];
+                setCategorias(items);
+                if (!category && items.length > 0) {
+                    setCategory(String(items[0].id));
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        loadCategorias();
+    }, []);
+
+    // Validación archivos
     const validarArchivo = (file) => {
         const okType = /image\/(jpeg|png|webp)/.test(file.type);
         if (!okType) return "Formato inválido. Solo JPG, PNG o WEBP.";
@@ -56,7 +90,7 @@ const TratamientosForm = () => {
         return null;
     };
 
-    // TAGS
+    // Tags
     const parseTags = (raw) =>
         raw
             .split(",")
@@ -66,7 +100,6 @@ const TratamientosForm = () => {
     const addTagsFromInput = () => {
         const nuevos = parseTags(tagsInput);
         if (!nuevos.length) return;
-        // Evitar repetidos
         const set = new Set([...tags, ...nuevos]);
         setTags(Array.from(set));
         setTagsInput("");
@@ -76,7 +109,7 @@ const TratamientosForm = () => {
         setTags((prev) => prev.filter((_, i) => i !== idx));
     };
 
-    // FEATURES
+    // Features
     const addFeature = () => {
         setFeatures((prev) => [...prev, { title: "", description: "" }]);
     };
@@ -91,7 +124,7 @@ const TratamientosForm = () => {
         );
     };
 
-    // MAIN IMAGE
+    // Main Image
     const handleMainImageChange = (file) => {
         if (!file) return;
         const err = validarArchivo(file);
@@ -130,7 +163,6 @@ const TratamientosForm = () => {
         setMainImage(null);
         setMainImagePreview(null);
     };
-
     // GALLERY
     const handleGalleryChange = (filesList) => {
         const files = Array.from(filesList || []);
@@ -184,14 +216,19 @@ const TratamientosForm = () => {
         setError(null);
 
         // Validaciones mínimas
-        if (!title.trim()) return setError("El nombre del tratamiento es obligatorio.");
+        if (!title.trim()) return setError("El nombre del Paquete es obligatorio.");
         if (!description.trim())
-            return setError("La descripción del tratamiento es obligatoria.");
+            return setError("La descripcion del Paquete es obligatoria.");
+        if (categorias.length > 0 && !category)
+            return setError("Selecciona una categoria para el Paquete.");
         if (!mainImage) return setError("Subí la imagen principal.");
 
         // features: opcional, pero si hay vacías, las filtramos
         const featuresClean = features
-            .map((f) => ({ title: f.title.trim(), description: f.description.trim() }))
+            .map((f) => ({
+                title: f.title.trim(),
+                description: f.description.trim()
+            }))
             .filter((f) => f.title || f.description);
 
         // armado del payload
@@ -199,25 +236,28 @@ const TratamientosForm = () => {
         formData.append("title", title);
         formData.append("slug", slug);
         formData.append("description", description);
-        formData.append("link", link);
-        formData.append("category", String(category));
+        if (price !== "") formData.append("price", price);
+        formData.append("video", video);
+        if (category) formData.append("category", String(category));
         if (createData) formData.append("create_data", createData);
-        
+
         // Tags
         tags.forEach((t) => formData.append("tags[]", t));
         formData.append("tags_json", JSON.stringify(tags));
 
         // Features y imágenes
         formData.append("features", JSON.stringify(featuresClean));
-        formData.append("mainImage", mainImage);
-        formData.append("image", mainImage);
+        if (mainImage) {
+            formData.append("mainImage", mainImage);
+            formData.append("image", mainImage);
+        }
 
         // Galería
         gallery.forEach((f) => formData.append("gallery[]", f));
 
         try {
             setCargando(true);
-            
+
             const response = await clienteAxios.post("/api/servicios", formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -226,25 +266,27 @@ const TratamientosForm = () => {
             });
 
             if (response.status === 200 || response.status === 201) {
-                setMensaje("Tratamiento registrado correctamente");
-                
+                setMensaje("Paquete registrado correctamente");
+
                 // Reset del formulario
                 setTitle("");
-                setLink("");
+                setVideo("");
+                setYoutubeId("");
                 setDescription("");
+                setPrice("");
                 setTagsInput("");
                 setTags([]);
                 setFeatures([{ title: "", description: "" }]);
-                setCategory(1);
+                setCategory("");
                 setCreateData("");
                 clearMainImage();
                 setGallery([]);
                 setGalleryPreviews([]);
             }
-            
+
         } catch (err) {
             console.error("Error completo:", err);
-            
+
             if (err.response) {
                 setError(err.response.data?.message || `Error del servidor: ${err.response.status}`);
             } else if (err.request) {
@@ -260,8 +302,6 @@ const TratamientosForm = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 ">
             <div className="max-w-5xl mx-auto">
-
-
                 {/* Form Container */}
                 <div className="bg-white shadow-lg border border-slate-200 rounded-xl p-8">
                     <form onSubmit={handleSubmit} className="space-y-8">
@@ -270,12 +310,12 @@ const TratamientosForm = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <div className="lg:col-span-2 space-y-2">
                                 <label className="block text-sm font-semibold text-slate-700">
-                                    Nombre del Tratamiento / Servicio
+                                    Nombre del Paquete
                                 </label>
                                 <input
                                     type="text"
                                     className="w-full border border-slate-300 p-3 rounded-lg focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all duration-200 bg-white"
-                                    placeholder="Ej: Blanqueamiento Dental, Implantes, Limpieza"
+                                    placeholder="Ej: Risotto de hongos, Milanesa, Ensalada Cesar"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
@@ -297,27 +337,94 @@ const TratamientosForm = () => {
                         {/* Descripción */}
                         <div className="space-y-2">
                             <label className="block text-sm font-semibold text-slate-700">
-                                Descripción del Tratamiento
+                                Descripcion del Paquete
                             </label>
                             <textarea
                                 className="w-full border border-slate-300 p-4 rounded-lg focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all duration-200 bg-white resize-none"
-                                placeholder="Describa el tratamiento, procedimientos incluidos, beneficios para el paciente..."
+                                placeholder="Describe el Paquete, ingredientes principales y estilo de preparacion..."
                                 rows={5}
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
 
+                        {/* Categoria */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                                Categoria del Paquete
+                            </label>
+                            <select
+                                className="w-full border border-slate-300 p-3 rounded-lg bg-white"
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                            >
+                                <option value="">Selecciona una categoria</option>
+                                {categorias.map((cat) => (
+                                    <option key={cat.id} value={cat.id}>
+                                        {cat.nombre}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Precio */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                                Precio (opcional)
+                            </label>
+                            <input
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                className="w-full border border-slate-300 p-3 rounded-lg bg-white"
+                                placeholder="Ej: 12500"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                            />
+                        </div>
+
+                        {/* Link de YouTube */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                                Video de YouTube (opcional)
+                            </label>
+
+                            <input
+                                type="text"
+                                className="w-full border border-slate-300 p-3 rounded-lg 
+                                focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition-all duration-200 bg-white"
+                                placeholder="Pegá el enlace de YouTube aquí"
+                                value={video}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setVideo(val);
+                                    setYoutubeId(extractYouTubeID(val));
+                                }}
+                            />
+
+                            {youtubeId && (
+                                <div className="mt-4 aspect-video w-full rounded-lg overflow-hidden shadow-lg border border-slate-200">
+                                    <iframe
+                                        className="w-full h-full"
+                                        src={`https://www.youtube.com/embed/${youtubeId}`}
+                                        title="YouTube video preview"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
+                            )}
+                        </div>
+
                         {/* Tags */}
                         <div className="space-y-3">
                             <label className="block text-sm font-semibold text-slate-700">
-                                Palabras Clave del Tratamiento
+                                Palabras Clave del Paquete
                             </label>
                             <div className="flex gap-3">
                                 <input
                                     type="text"
                                     className="flex-1 border border-slate-300 p-3 rounded-lg focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all duration-200 bg-white"
-                                    placeholder="Ej: Caries, Blanqueamiento, Ortodoncia..."
+                                    placeholder="Ej: Vegano, Sin gluten, Picante..."
                                     value={tagsInput}
                                     onChange={(e) => setTagsInput(e.target.value)}
                                     onKeyDown={(e) => {
@@ -367,7 +474,7 @@ const TratamientosForm = () => {
                             onDrop={onMainDrop}
                         >
                             <label className="block text-sm font-semibold text-slate-700">
-                                Imagen Principal del Tratamiento
+                                Imagen Principal del Paquete
                                 <span className="text-xs text-slate-500 font-normal ml-2">
                                     (JPG/PNG/WEBP, máximo {MAX_MB}MB)
                                 </span>
@@ -427,7 +534,7 @@ const TratamientosForm = () => {
                             onDrop={onGalleryDrop}
                         >
                             <label className="block text-sm font-semibold text-slate-700">
-                                Galería de Imágenes Adicionales
+                                Galeria de Imagenes Adicionales
                                 <span className="text-xs text-slate-500 font-normal ml-2">
                                     (JPG/PNG/WEBP, máximo {MAX_MB}MB cada una)
                                 </span>
@@ -487,20 +594,23 @@ const TratamientosForm = () => {
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <label className="block text-sm font-semibold text-slate-700">
-                                    Características del Tratamiento
+                                    Caracteristicas del Paquete
                                 </label>
                                 <button
                                     type="button"
                                     onClick={addFeature}
                                     className="px-4 py-2 rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition-all duration-200 text-sm"
                                 >
-                                    + Agregar Característica
+                                    + Agregar Caracteristica
                                 </button>
                             </div>
 
                             <div className="space-y-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
                                 {features.map((f, idx) => (
-                                    <div key={idx} className="grid grid-cols-1 lg:grid-cols-7 gap-4 items-start p-4 bg-white rounded-lg border border-slate-200">
+                                    <div
+                                        key={idx}
+                                        className="grid grid-cols-1 lg:grid-cols-7 gap-4 items-start p-4 bg-white rounded-lg border border-slate-200"
+                                    >
                                         <div className="lg:col-span-2">
                                             <input
                                                 type="text"
@@ -513,7 +623,7 @@ const TratamientosForm = () => {
                                         <div className="lg:col-span-4">
                                             <textarea
                                                 className="w-full border border-slate-300 p-3 rounded-lg focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 transition-all duration-200 resize-none"
-                                                placeholder="Descripción detallada..."
+                                                placeholder="Descripcion detallada..."
                                                 rows={2}
                                                 value={f.description}
                                                 onChange={(e) =>
@@ -534,15 +644,14 @@ const TratamientosForm = () => {
                                 ))}
                             </div>
                         </div>
-
                         {/* Botones de acción */}
                         <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 border-t border-slate-200">
                             <button
                                 type="submit"
                                 disabled={cargando}
                                 className={`w-full sm:w-auto px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 ${cargando
-                                    ? 'bg-slate-400 cursor-not-allowed text-white'
-                                    : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
+                                        ? "bg-slate-400 cursor-not-allowed text-white"
+                                        : "bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl"
                                     }`}
                             >
                                 {cargando ? (
@@ -551,7 +660,7 @@ const TratamientosForm = () => {
                                         Guardando...
                                     </span>
                                 ) : (
-                                    'Registrar Tratamiento'
+                                    "Registrar Paquete"
                                 )}
                             </button>
 
@@ -562,19 +671,34 @@ const TratamientosForm = () => {
                                 </summary>
                                 <div className="mt-3 p-4 bg-slate-900 text-green-400 rounded-lg max-h-60 overflow-auto text-xs font-mono">
                                     <pre>
-                                        {JSON.stringify({
-                                            slug,
-                                            title,
-                                            description,
-                                            link,
-                                            tags,
-                                            features: features
-                                                .map(f => ({ title: f.title.trim(), description: f.description.trim() }))
-                                                .filter(f => f.title || f.description),
-                                            image: mainImage ? "(archivo de imagen principal)" : null,
-                                            mainImage: mainImage ? "(archivo de imagen principal)" : null,
-                                            gallery: gallery.length ? `(${gallery.length} archivos de galería)` : []
-                                        }, null, 2)}
+                                        {JSON.stringify(
+                                            {
+                                                slug,
+                                                title,
+                                                description,
+                                                price,
+                                                video, // 🔴 el link de YouTube enviado
+                                                category,
+                                                tags,
+                                                features: features
+                                                    .map((f) => ({
+                                                        title: f.title.trim(),
+                                                        description: f.description.trim()
+                                                    }))
+                                                    .filter((f) => f.title || f.description),
+                                                image: mainImage
+                                                    ? "(archivo de imagen principal)"
+                                                    : null,
+                                                mainImage: mainImage
+                                                    ? "(archivo de imagen principal)"
+                                                    : null,
+                                                gallery: gallery.length
+                                                    ? `(${gallery.length} archivos de galería)`
+                                                    : []
+                                            },
+                                            null,
+                                            2
+                                        )}
                                     </pre>
                                 </div>
                             </details>

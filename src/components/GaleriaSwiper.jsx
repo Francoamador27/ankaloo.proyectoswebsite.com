@@ -73,8 +73,8 @@ const GaleriaSwiper = ({ size }) => {
     size === "small"
       ? { w: 400, h: 300 }
       : size === "large"
-      ? { w: 1000, h: 600 }
-      : { w: 800, h: 500 };
+        ? { w: 1000, h: 600 }
+        : { w: 800, h: 500 };
 
   const handleImageLoad = (i) => {
     setLoadedImages((prev) => {
@@ -89,8 +89,8 @@ const GaleriaSwiper = ({ size }) => {
   return (
     <section className="w-full mx-auto relative ">
       <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-[#8cb9ce] rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-40 h-40 bg-[#a8d0e0] rounded-full blur-3xl"></div>
+        <div className="absolute top-10 left-10 w-32 h-32 bg-[#003366] rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 right-10 w-40 h-40 bg-blue-600 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10">
@@ -136,7 +136,7 @@ const GaleriaSwiper = ({ size }) => {
           ]}
           thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
           className="w-full max-w-6xl galeria-swiper-main"
-         
+
         >
           {imagenesSubidas.map((img, i) => (
             <SwiperSlide
@@ -171,7 +171,7 @@ const GaleriaSwiper = ({ size }) => {
                 {/* Loading spinner */}
                 {!loadedImages.has(i) && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-200 z-5">
-                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#8cb9ce] border-t-transparent"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#003366] border-t-transparent"></div>
                   </div>
                 )}
 
@@ -179,9 +179,8 @@ const GaleriaSwiper = ({ size }) => {
                 <img
                   src={getSrc(img.imagen)}
                   alt={img.titulo || `Caso clínico ${i + 1}`}
-                  className={`w-full h-full object-contain transition-opacity duration-500 ${
-                    loadedImages.has(i) ? "opacity-100" : "opacity-0"
-                  }`}
+                  className={`w-full h-full object-contain transition-opacity duration-500 ${loadedImages.has(i) ? "opacity-100" : "opacity-0"
+                    }`}
                   onLoad={() => handleImageLoad(i)}
                   loading="lazy"
                   decoding="async"
@@ -224,7 +223,7 @@ const GaleriaSwiper = ({ size }) => {
                     onClick={() => {
                       mainSwiperRef.current?.slideToLoop?.(i);
                     }}
-                    className="relative overflow-hidden rounded-xl group transition-all duration-300 hover:shadow-xl hover:ring-2 hover:ring-[#8cb9ce]"
+                    className="relative overflow-hidden rounded-xl group transition-all duration-300 hover:shadow-xl hover:ring-2 hover:ring-[#003366]"
                     style={{ aspectRatio: "4/3" }}
                   >
                     <img
@@ -270,9 +269,9 @@ const GaleriaSwiper = ({ size }) => {
           padding: 4,
           gap: 12,
         }}
-        carousel={{ 
-          finite: false, 
-          preload: 2, 
+        carousel={{
+          finite: false,
+          preload: 2,
           imageFit: "cover"  // Cambiado a cover para mejor visualización
         }}
         controller={{

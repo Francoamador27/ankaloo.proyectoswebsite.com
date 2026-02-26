@@ -5,7 +5,7 @@ const Mapa = () => {
       const {contact } = useCont();
     return (
             <iframe
-                title="Ubicación Mint Odontología"
+                title="Ubicación de la empresa"
                 src={contact.map_iframe ||  ""}
                 width="100%"
                 height="100%"

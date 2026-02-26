@@ -1,7 +1,68 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import useSWR, { mutate } from 'swr';
 import { Link } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
+import {
+  DndContext,
+  closestCenter,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { GripVertical } from 'lucide-react';
+
+const SortableServicioItem = ({ servicio }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: servicio.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="bg-white border rounded-xl shadow-sm flex items-center gap-4 p-4"
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
+        title="Arrastrar"
+      >
+        <GripVertical />
+      </div>
+
+      {servicio.image ? (
+        <img
+          src={servicio.image}
+          alt={servicio.title}
+          className="w-20 h-20 object-cover rounded-lg border"
+        />
+      ) : (
+        <div className="w-20 h-20 rounded-lg border bg-gray-50" />
+      )}
+
+      <div className="flex-1">
+        <h4 className="font-semibold text-sm">{servicio.title || '—'}</h4>
+        <p className="text-xs text-gray-600 line-clamp-2">
+          {servicio.description || ''}
+        </p>
+      </div>
+    </div>
+  );
+};
 
 const ServiciosList = () => {
   const token = localStorage.getItem('AUTH_TOKEN');
@@ -11,6 +72,9 @@ const ServiciosList = () => {
   const [direccion, setDireccion] = useState('desc');
   const [pagina, setPagina] = useState(1);
   const [perPage] = useState(10);
+  const [ordenItems, setOrdenItems] = useState([]);
+  const [ordenError, setOrdenError] = useState(null);
+  const [ordenLoading, setOrdenLoading] = useState(false);
 
   const query = useMemo(() => {
     const p = new URLSearchParams();
@@ -29,8 +93,29 @@ const ServiciosList = () => {
 
   const { data, error, isLoading } = useSWR(`/api/servicios?${query}`, fetcher);
 
-  if (isLoading) return <p className="p-4 text-gray-600">Cargando servicios...</p>;
-  if (error) return <p className="p-4 text-red-600">Error al cargar los servicios.</p>;
+  const fetchOrden = async () => {
+    try {
+      setOrdenLoading(true);
+      setOrdenError(null);
+      const { data } = await clienteAxios('/api/servicios?sort=position&dir=asc&per_page=1000', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      const items = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
+      setOrdenItems(items);
+    } catch (err) {
+      console.error(err);
+      setOrdenError('Error al cargar el orden de Paquetes.');
+    } finally {
+      setOrdenLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrden();
+  }, []);
+
+  if (isLoading) return <p className="p-4 text-gray-600">Cargando Paquetes...</p>;
+  if (error) return <p className="p-4 text-red-600">Error al cargar los Paquetes.</p>;
 
   const servicios = data?.data ?? [];
   const currentPage = data?.current_page ?? pagina;
@@ -38,7 +123,7 @@ const ServiciosList = () => {
 
   // 👉 Función para eliminar
   const handleEliminar = async (id) => {
-    if (!window.confirm('¿Seguro que querés eliminar este servicio?')) return;
+       if (!window.confirm('¿Seguro que querés eliminar este Paquete?')) return;
 
     try {
       await clienteAxios.delete(`/api/servicios/${id}`, {
@@ -48,15 +133,80 @@ const ServiciosList = () => {
       mutate(`/api/servicios?${query}`);
     } catch (err) {
       console.error(err);
-      alert('Error al eliminar el servicio.');
+         alert('Error al eliminar el Paquete.');
+    }
+  };
+
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = ordenItems.findIndex((s) => s.id === active.id);
+    const newIndex = ordenItems.findIndex((s) => s.id === over.id);
+
+    const newOrder = arrayMove(ordenItems, oldIndex, newIndex);
+    setOrdenItems(newOrder);
+
+    try {
+      await clienteAxios.post(
+        '/api/servicios/reorder',
+        {
+          order: newOrder.map((s, index) => ({
+            id: s.id,
+            position: index + 1,
+          })),
+        },
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+    } catch (err) {
+      console.error(err);
+      setOrdenError('Error guardando el orden.');
     }
   };
 
   return (
     <div className="p-4">
       <div className="mb-6 flex items-center justify-between gap-4">
-        <h2 className="text-2xl font-semibold">Administrar Servicios</h2>
+        <h2 className="text-2xl font-semibold">Administrar Paquetes</h2>
 
+      </div>
+
+      {/* Orden por drag & drop */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold">Orden de visualizacion</h3>
+          <button
+            onClick={fetchOrden}
+            className="text-sm text-blue-600 hover:text-blue-700"
+            type="button"
+          >
+            Refrescar orden
+          </button>
+        </div>
+
+        {ordenLoading && (
+          <p className="text-sm text-gray-500">Cargando orden...</p>
+        )}
+        {ordenError && (
+          <p className="text-sm text-red-600">{ordenError}</p>
+        )}
+
+        {!ordenLoading && ordenItems.length > 0 && (
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={ordenItems.map((s) => s.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="space-y-3">
+                {ordenItems.map((servicio) => (
+                  <SortableServicioItem key={servicio.id} servicio={servicio} />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
+        )}
       </div>
 
       {/* Filtros */}
@@ -121,6 +271,7 @@ const ServiciosList = () => {
               <th className="px-4 py-3 text-left">ID</th>
               <th className="px-4 py-3 text-left">Imagen</th>
               <th className="px-4 py-3 text-left">Título</th>
+              <th className="px-4 py-3 text-left">Categoria</th>
               <th className="px-4 py-3 text-left">Descripción</th>
               <th className="px-4 py-3 text-left">Tags</th>
               <th className="px-4 py-3 text-left">Creado</th>
@@ -143,6 +294,9 @@ const ServiciosList = () => {
                   )}
                 </td>
                 <td className="px-4 py-3 font-medium">{s.title || '—'}</td>
+                <td className="px-4 py-3">
+                  {s.categoria?.nombre || '—'}
+                </td>
                 <td className="px-4 py-3 max-w-md">
                   <div className="line-clamp-2 text-gray-600">{s.description}</div>
                 </td>
@@ -183,8 +337,8 @@ const ServiciosList = () => {
             ))}
             {servicios.length === 0 && (
               <tr>
-                <td className="px-4 py-6 text-center text-gray-500" colSpan={7}>
-                  No hay servicios para mostrar.
+                <td className="px-4 py-6 text-center text-gray-500" colSpan={8}>
+                  No hay Paquetes para mostrar.
                 </td>
               </tr>
             )}

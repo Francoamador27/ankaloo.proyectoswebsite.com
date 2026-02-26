@@ -64,3 +64,43 @@
     justify-content: space-around;
     gap: 14px;
 }
+/* Estilos para corregir overflow del Swiper en mobile */
+
+.galeria-swiper-main {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden;
+}
+
+.galeria-swiper-main .swiper-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.galeria-swiper-main .swiper-slide {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* Asegurar que las imágenes no causen overflow */
+.galeria-swiper-main .swiper-slide img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Ajustar navegación en mobile */
+@media (max-width: 768px) {
+  .galeria-swiper-main .swiper-button-prev,
+  .galeria-swiper-main .swiper-button-next {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  
+  .galeria-swiper-main .swiper-button-prev:after,
+  .galeria-swiper-main .swiper-button-next:after {
+    font-size: 16px !important;
+  }
+}

@@ -1,163 +1,166 @@
-import { useState } from 'react';
-import logo from '../../assets/img/logo/logo-celeste-blanco.png';
-import { Link } from 'react-router-dom';
-import UseAuth from '../../hooks/useAuth';
-import { Menu, X, ChevronDown } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { NavLink, Link, useLocation } from 'react-router-dom';
+import { Menu, X, Phone, User, ShoppingCart, ChevronDown } from "lucide-react";
+
+import logo from '../../assets/img/logo/logo_blanco.png';
+import logo_azul from '../../assets/img/logo/logo_negro.png';
+import { label } from 'yet-another-react-lightbox';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [MobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
+  // States for Auth (kept commented out as in original)
+  /*
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-
   const { user, logout } = UseAuth({ middleware: 'guest' });
+  */
 
-  const toggleNavbar = () => {
-    setMobileDrawerOpen(!MobileDrawerOpen);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  const navItems = [
+  const leftNav = [
     { label: "Inicio", href: "/" },
-    { label: "Servicios", href: "/servicios" },
-    { label: "Contacto", href: "/contacto" },
-    { label: "Quienes Somos", href: "/quienes-somos" },
+    { label: "Paquetes", href: "/servicios" },
+    { label: "Galería", href: "/galeria" },
   ];
 
-  return (
-    <header className="sticky top-0 z-50 bg-[#8cb9ce] border-b border-neutral-200 backdrop-blur-md">
-      <nav>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2">
-            <div className='contenedor-logo'>
+  const rightNav = [
+    { label: "Quiénes Somos", href: "/quienes-somos" },
+    {label:"Blog", href:"/blog"},
+    { label: "Contacto", href: "/contacto" },
+  ];
 
+  // Determinar si usar estilo claro (para home sin scroll) u oscuro (para home con scroll o cualquier otra página)
+  const useDarkStyle = !isHome || scrolled;
+
+  return (
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${useDarkStyle
+          ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-slate-200'
+          : 'bg-white/10 backdrop-blur-md border-b border-white/20'
+          }`}
+      >
+        <nav className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between h-16 md:h-20">
+
+            {/* LOGO A LA IZQUIERDA */}
+            <Link
+              to="/"
+              className="flex-shrink-0 relative group flex items-center"
+            >
+              <div className={`absolute -inset-4 bg-[#dc834e]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
               <img
-                src={logo}
-                alt="Logo"
-                className="logo-header   w-auto object-contain transition-transform duration-200 hover:scale-100"
-                style={{ maxWidth: '160px' }}
+                src={useDarkStyle ? logo_azul : logo}
+                alt="RevenantTravel"
+                className="logo-header h-10 md:h-12 w-auto object-contain transition-all duration-500 group-hover:scale-105 relative z-10"
               />
-            </div>
             </Link>
 
-            {/* Nav links */}
-            <ul className="hidden lg:flex items-center space-x-8 text-sm font-medium text-white">
-              {navItems.map((item, index) => (
-                <li key={index}>
-                  <Link
+            {/* NAVEGACION (Desktop) */}
+            <ul className="hidden lg:flex items-center gap-1">
+              {[...leftNav, ...rightNav].map((item, i) => (
+                <li key={i}>
+                  <NavLink
                     to={item.href}
-                    className="hover:text-blue-500 transition-colors duration-200"
+                    className={({ isActive }) => `
+                      relative px-5 py-2 text-[14px] font-bold tracking-tight uppercase transition-all duration-300
+                      ${useDarkStyle
+                        ? (isActive ? 'text-[#dc834e]' : 'text-slate-700 hover:text-[#dc834e]')
+                        : (isActive ? 'text-white' : 'text-white/90 hover:text-white')
+                      }
+                      group
+                    `}
                   >
                     {item.label}
-                  </Link>
+                    <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#dc834e] transition-all duration-300 group-hover:w-3/4 ${({ isActive }) => isActive ? 'w-3/4' : ''}`}></span>
+                  </NavLink>
                 </li>
               ))}
             </ul>
 
-            {/* Login / User */}
-            <div className="hidden lg:flex items-center space-x-4 relative">
-              {!user ? (
-                <Link
-                  to="/auth/login"
-                  className="inline-block bg-blue-500 text-white px-5 py-2 rounded-md font-semibold hover:bg-blue-600 transition"
-                >
-                  Iniciar sesión
-                </Link>
-              ) : (
-                <div className="relative inline-block text-left">
-                  <button
-                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="bg-blue-500 text-white px-5 py-2 rounded-md font-semibold hover:bg-blue-600 transition flex items-center gap-2"
+            {/* MOBILE MENU BUTTON */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className={`lg:hidden p-2 rounded-xl transition-all duration-300 ${useDarkStyle
+                ? 'bg-slate-100 text-slate-800 hover:bg-slate-200'
+                : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+            >
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
+        </nav>
+
+        {/* MOBILE MENU */}
+        <div
+          className={`lg:hidden absolute top-full left-0 w-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${mobileMenuOpen ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-4 invisible'
+            }`}
+        >
+          <div className="mx-4 mt-3 p-6 rounded-3xl shadow-2xl overflow-hidden relative border border-white/10">
+            <div className={`absolute inset-0 bg-white`}></div>
+
+            <ul className="relative space-y-2">
+              {[...leftNav, ...rightNav].map((item, i) => (
+                <li key={i}>
+                  <NavLink
+                    to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) => `
+                      flex items-center px-6 py-4 rounded-2xl text-base font-bold tracking-tight transition-all
+                      ${isActive
+                        ? 'bg-[#dc834e]/10 text-[#dc834e] translate-x-2' 
+                        :  'text-slate-700 hover:bg-slate-50' 
+                      }
+                    `}
                   >
-                    Mi cuenta <ChevronDown className="w-4 h-4" />
-                  </button>
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
 
-                  {userDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
-                      <Link
-                        to="/mi-cuenta"
-                        className="block w-full text-left px-5 py-3 text-sm text-white-700 hover:bg-red-50 hover:text-[#008DD2] transition"
-                      >
-                        Ir a mi cuenta
-                      </Link>
-                      <button
-                        onClick={logout}
-                        className="block w-full text-left px-5 py-3 text-sm text-blue-600 hover:bg-red-50 transition"
-                      >
-                        Cerrar sesión
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-            </div>
-
-            {/* Mobile button */}
-            <div className="lg:hidden">
-              <button onClick={toggleNavbar}>
-                {MobileDrawerOpen ? (
-                  <X className="w-6 h-6 text-gray-800" />
-                ) : (
-                  <Menu className="w-6 h-6 text-gray-800" />
-                )}
-              </button>
-            </div>
+              <li className="pt-4">
+                <Link
+                  to="/contacto"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-3 py-4 bg-[#dc834e] hover:bg-[#c77542] text-white rounded-2xl font-black text-base shadow-xl shadow-[#dc834e]/20 active:scale-95 transition-all"
+                >
+                  <Phone size={18} />
+                  CONTACTANOS
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
+      </header>
 
-        {/* Mobile menu */}
-        {MobileDrawerOpen && (
-          <div className="lg:hidden  text-black px-6 py-8 space-y-6">
-            <ul className="space-y-4 text-base font-medium">
-              {navItems.map((item, index) => (
-                <li key={index}>
-                  <Link to={item.href} className="hover:text-blue-400 transition">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+      {/* Auth / User Dropdown (Commented out sections from original) */}
+      {/* 
+      <div className="hidden lg:flex items-center space-x-4">
+          {!user ? (
+            <>
+              <Link to="/auth/login">Iniciar sesión</Link>
+              <Link to="/registro">Probar Gratis</Link>
+            </>
+          ) : (
+            <UserDropdown />
+          )}
+      </div>
+      */}
 
-            {!user ? (
-              <Link
-                to="/auth/login"
-                className="inline-block bg-blue-500 text-white px-5 py-2 rounded-md font-semibold hover:bg-blue-600 transition"
-              >
-                Iniciar sesión
-              </Link>
-            ) : (
-              <div className="relative inline-block text-left">
-                <button
-                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="bg-blue-500 text-white px-5 py-2 rounded-md font-semibold hover:bg-blue-600 transition flex items-center gap-2"
-                >
-                  Mi cuenta <ChevronDown className="w-4 h-4" />
-                </button>
-
-                {userDropdownOpen && (
-                  <div className="absolute top-full  left-auto mt-2 sm:mt-2 min-w-[12rem] max-w-[90vw] bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
-                    <Link
-                      to="/mi-cuenta"
-                      className="block w-full text-left px-5 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-[#008DD2] transition"
-                    >
-                      Ir a mi cuenta
-                    </Link>
-                    <button
-                      onClick={logout}
-                      className="block w-full text-left px-5 py-3 text-sm text-blue-600 hover:bg-red-50 transition"
-                    >
-                      Cerrar sesión
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-
-
-          </div>
-        )}
-      </nav>
-    </header>
+      <style>{`
+        .active-link-indicator {
+          width: 75% !important;
+        }
+      `}</style>
+    </>
   );
 }
