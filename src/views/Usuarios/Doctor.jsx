@@ -1,4 +1,4 @@
-// src/pages/Doctor.jsx
+// src/pages/diseño.jsx
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import clienteAxios from "../../config/axios";
@@ -12,7 +12,7 @@ const toYMD = (val) => {
   return String(val).slice(0, 10);
 };
 
-const Doctor = () => {
+const diseño = () => {
   const { id } = useParams(); // "nuevo" o ID numérico
   const navigate = useNavigate();
   const token = localStorage.getItem("AUTH_TOKEN");
@@ -20,7 +20,7 @@ const Doctor = () => {
   const isEditing = id && id !== "nuevo";
   const isCreating = !id || id === "nuevo";
 
-  const [doctor, setDoctor] = useState({
+  const [diseño, setDoctor] = useState({
     nodoc: "",
     apdoc: "",
     ceddoc: "",
@@ -31,7 +31,7 @@ const Doctor = () => {
     color: "#008dd2",
     sexd: "",
     phd: "",
-    rol: 2,           // 1=Admin, 2=Doctor, 3=Secretario
+    rol: 2,           // 1=Admin, 2=diseño, 3=Secretario
     password: "",     // solo creación
   });
   const [loading, setLoading] = useState(isEditing);
@@ -65,10 +65,10 @@ const Doctor = () => {
           password: "", // no se edita aquí
         });
       } catch (error) {
-        console.error("Error al cargar el doctor:", error);
+        console.error("Error al cargar el diseño:", error);
         setErrMsg(
           error?.response?.data?.message ||
-          "No se pudo cargar la información del doctor."
+          "No se pudo cargar la información del diseño."
         );
       } finally {
         setLoading(false);
@@ -86,8 +86,8 @@ const Doctor = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!doctor?.nodoc?.trim()) return mostrarError("El nombre es obligatorio.");
-    if (isCreating && (!doctor?.password?.trim() || doctor.password.length < 6)) {
+    if (!diseño?.nodoc?.trim()) return mostrarError("El nombre es obligatorio.");
+    if (isCreating && (!diseño?.password?.trim() || diseño.password.length < 6)) {
       return mostrarError("La contraseña es obligatoria y debe tener al menos 6 caracteres.");
     }
 
@@ -95,31 +95,31 @@ const Doctor = () => {
     setErrMsg("");
     try {
       const payload = {
-        ...doctor,
+        ...diseño,
         // normaliza rol a número
-        rol: Number(doctor.rol || 2),
+        rol: Number(diseño.rol || 2),
         // asegura nacd como YYYY-MM-DD (por si el usuario borra y vuelve a escribir)
-        nacd: doctor.nacd ? toYMD(doctor.nacd) : null,
-        ...(doctor?.state != null ? { state: Number(doctor.state) } : {}),
+        nacd: diseño.nacd ? toYMD(diseño.nacd) : null,
+        ...(diseño?.state != null ? { state: Number(diseño.state) } : {}),
       };
 
       if (isCreating) {
         await clienteAxios.post(`/api/doctores`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        mostrarExito("Doctor creado correctamente");
+        mostrarExito("diseño creado correctamente");
       } else {
         await clienteAxios.put(`/api/doctores/${id}`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        mostrarExito("Doctor actualizado correctamente");}
+        mostrarExito("diseño actualizado correctamente");}
       navigate("/admin-dash/doctores");
     } catch (error) {
       console.error(error);
       const firstError =
         error?.response?.data?.errors &&
         Object.values(error.response.data.errors)[0]?.[0];
-      setErrMsg(firstError || `Error al ${isCreating ? "crear" : "actualizar"} el doctor.`);
+      setErrMsg(firstError || `Error al ${isCreating ? "crear" : "actualizar"} el diseño.`);
     } finally {
       setSaving(false);
     }
@@ -154,7 +154,7 @@ const Doctor = () => {
     );
   }
 
-  if (isEditing && !doctor.nodoc && !loading) {
+  if (isEditing && !diseño.nodoc && !loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6 flex items-center justify-center">
         <div className="max-w-md mx-auto bg-white rounded-3xl shadow-xl border border-slate-200/60 p-8 text-center">
@@ -163,7 +163,7 @@ const Doctor = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Doctor no encontrado</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">diseño no encontrado</h3>
           {errMsg && (
             <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
               {errMsg}
@@ -189,10 +189,10 @@ const Doctor = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-white">
-                  {isCreating ? "Crear Nuevo Doctor" : `Editar:  ${doctor.nodoc} ${doctor.apdoc ? doctor.apdoc : ""}`}
+                  {isCreating ? "Crear Nuevo diseño" : `Editar:  ${diseño.nodoc} ${diseño.apdoc ? diseño.apdoc : ""}`}
                 </h2>
                 <p className="text-blue-100 mt-1">
-                  {isCreating ? "Complete la información del nuevo doctor" : `ID: ${id}`}
+                  {isCreating ? "Complete la información del nuevo diseño" : `ID: ${id}`}
                 </p>
               </div>
               <div className="flex items-center gap-3">
@@ -201,11 +201,11 @@ const Doctor = () => {
                   className="w-12 h-12 rounded-xl border-2 border-white/30 shadow-lg"
                   style={{
                     background:
-                      doctor.color && /^#([0-9a-f]{6}|[0-9a-f]{8})$/i.test(doctor.color)
-                        ? doctor.color
+                      diseño.color && /^#([0-9a-f]{6}|[0-9a-f]{8})$/i.test(diseño.color)
+                        ? diseño.color
                         : "linear-gradient(135deg, #f3f4f6, #e5e7eb)",
                   }}
-                  title={doctor.color || "Sin color"}
+                  title={diseño.color || "Sin color"}
                 />
               </div>
             </div>
@@ -246,7 +246,7 @@ const Doctor = () => {
                   <input
                     type="text"
                     name="nodoc"
-                    value={doctor.nodoc || ""}
+                    value={diseño.nodoc || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                     required
@@ -260,7 +260,7 @@ const Doctor = () => {
                   <input
                     type="text"
                     name="apdoc"
-                    value={doctor.apdoc || ""}
+                    value={diseño.apdoc || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                     placeholder="Ingresa el apellido"
@@ -273,7 +273,7 @@ const Doctor = () => {
                   <input
                     type="text"
                     name="ceddoc"
-                    value={doctor.ceddoc || ""}
+                    value={diseño.ceddoc || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                     placeholder="35534354"
@@ -287,7 +287,7 @@ const Doctor = () => {
                     <input
                       type="date"
                       name="nacd"
-                      value={doctor.nacd || ""}   // 👈 ya viene YYYY-MM-DD
+                      value={diseño.nacd || ""}   // 👈 ya viene YYYY-MM-DD
                       onChange={handleChange}
                       className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                       max={new Date().toISOString().split("T")[0]}
@@ -304,7 +304,7 @@ const Doctor = () => {
                   <input
                     type="text"
                     name="nomesp"
-                    value={doctor.nomesp || ""}
+                    value={diseño.nomesp || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                     placeholder="Ej: Odontología"
@@ -316,7 +316,7 @@ const Doctor = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Sexo</label>
                   <select
                     name="sexd"
-                    value={doctor.sexd || ""}
+                    value={diseño.sexd || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                   >
@@ -333,7 +333,7 @@ const Doctor = () => {
                   <input
                     type="text"
                     name="phd"
-                    value={doctor.phd || ""}
+                    value={diseño.phd || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                     placeholder="+54 3517699950"
@@ -361,7 +361,7 @@ const Doctor = () => {
                     <input
                       type="text"
                       name="username"
-                      value={doctor.username || ""}
+                      value={diseño.username || ""}
                       onChange={handleChange}
                       className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                       placeholder="usuario.login"
@@ -379,7 +379,7 @@ const Doctor = () => {
                     <input
                       type="email"
                       name="corr"
-                      value={doctor.corr || ""}
+                      value={diseño.corr || ""}
                       onChange={handleChange}
                       className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                       placeholder="correo@ejemplo.com"
@@ -397,13 +397,13 @@ const Doctor = () => {
                   </label>
                   <select
                     name="rol"
-                    value={doctor.rol ?? 2}
+                    value={diseño.rol ?? 2}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                     required
                   >
                     <option value={1}>Admin</option>
-                    <option value={2}>Doctor</option>
+                    <option value={2}>diseño</option>
                     <option value={3}>Secretario</option>
                   </select>
                 </div>
@@ -418,7 +418,7 @@ const Doctor = () => {
                       <input
                         type="password"
                         name="password"
-                        value={doctor.password || ""}
+                        value={diseño.password || ""}
                         onChange={handleChange}
                         className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm"
                         placeholder="••••••••"
@@ -430,7 +430,7 @@ const Doctor = () => {
                       </svg>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
-                      Mínimo 6 caracteres. El doctor podrá cambiarla después.
+                      Mínimo 6 caracteres. El diseño podrá cambiarla después.
                     </p>
                   </div>
                 )}
@@ -454,14 +454,14 @@ const Doctor = () => {
                   <input
                     type="text"
                     name="color"
-                    value={doctor.color || ""}
+                    value={diseño.color || ""}
                     onChange={handleChange}
                     className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white group-hover:shadow-sm font-mono"
                     placeholder="#008DD2"
                   />
                   <input
                     type="color"
-                    value={/^#([0-9a-f]{6})$/i.test(doctor.color || "") ? doctor.color : "#008dd2"}
+                    value={/^#([0-9a-f]{6})$/i.test(diseño.color || "") ? diseño.color : "#008dd2"}
                     onChange={(e) => setDoctor((prev) => ({ ...prev, color: e.target.value }))}
                     className="w-16 h-12 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-gray-400 transition-colors"
                     title="Selector de color"
@@ -470,15 +470,15 @@ const Doctor = () => {
                     className="w-12 h-12 rounded-xl border-2 border-gray-300 shadow-inner"
                     style={{
                       background:
-                        doctor.color && /^#([0-9a-f]{6}|[0-9a-f]{8})$/i.test(doctor.color)
-                          ? doctor.color
+                        diseño.color && /^#([0-9a-f]{6}|[0-9a-f]{8})$/i.test(diseño.color)
+                          ? diseño.color
                           : "linear-gradient(135deg, #f3f4f6, #e5e7eb)",
                     }}
                     title="Vista previa del color"
                   />
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  Este color se usará para identificar al doctor en el calendario y reportes.
+                  Este color se usará para identificar al diseño en el calendario y reportes.
                 </p>
               </div>
             </div>
@@ -499,7 +499,7 @@ const Doctor = () => {
                 className={`inline-flex items-center gap-2 px-8 py-3 rounded-xl text-white font-medium transition-all duration-200 ${saving ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5"
                   }`}
               >
-                {saving ? "Guardando…" : isCreating ? "Crear doctor" : "Guardar cambios"}
+                {saving ? "Guardando…" : isCreating ? "Crear diseño" : "Guardar cambios"}
               </button>
             </div>
           </form>
@@ -509,4 +509,4 @@ const Doctor = () => {
   );
 };
 
-export default Doctor;
+export default diseño;

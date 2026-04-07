@@ -1,9 +1,97 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, lazy, Suspense } from "react";
+const TiptapEditor = lazy(() => import("../TiptapEditor/TiptapEditor"));
 import useSWR, { mutate } from "swr";
 import clienteAxios from "../../config/axios";
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical } from "lucide-react";
 
 const MAX_MB = 5;
 const MAX_BYTES = MAX_MB * 1024 * 1024;
+
+function SortableCategoryCard({ cat, level, onEdit, onDelete, renderChildren }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: cat.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className={`${level > 0 ? "ml-8 mt-2" : ""}`}>
+      <div className="border rounded-lg p-4 flex gap-4 bg-white">
+        <button
+          type="button"
+          {...attributes}
+          {...listeners}
+          className="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600 mt-1"
+          title="Arrastrar"
+        >
+          <GripVertical size={18} />
+        </button>
+
+        {cat.imagen ? (
+          <img
+            src={cat.imagen}
+            alt={cat.nombre}
+            className="w-20 h-20 object-cover rounded-lg border"
+          />
+        ) : (
+          <div className="w-20 h-20 bg-slate-100 rounded-lg border" />
+        )}
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h4 className="font-semibold">{cat.nombre}</h4>
+            {level > 0 && (
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
+                Subcategoria
+              </span>
+            )}
+          </div>
+          {cat.descripcion ? (
+            <div className="text-sm text-slate-600 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: cat.descripcion }} />
+          ) : (
+            <p className="text-sm text-slate-600">Sin descripcion</p>
+          )}
+          {cat.children && cat.children.length > 0 && (
+            <p className="text-xs text-slate-500 mt-1">
+              {cat.children.length} subcategoria{cat.children.length !== 1 ? "s" : ""}
+            </p>
+          )}
+          <div className="mt-3 flex gap-2">
+            <button
+              type="button"
+              onClick={() => onEdit(cat.id)}
+              className="text-xs bg-blue-600 text-white px-3 py-1 rounded"
+            >
+              Editar
+            </button>
+            <button
+              type="button"
+              onClick={() => onDelete(cat.id)}
+              className="text-xs bg-red-600 text-white px-3 py-1 rounded"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+      {renderChildren}
+    </div>
+  );
+}
 
 export default function ServiciosCategorias() {
   const token = localStorage.getItem("AUTH_TOKEN");
@@ -17,6 +105,7 @@ export default function ServiciosCategorias() {
   const [mensaje, setMensaje] = useState(null);
   const [cargando, setCargando] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [orderedCategorias, setOrderedCategorias] = useState([]);
 
   const fetcher = (url) => clienteAxios(url).then((res) => res.data);
   const { data, error: loadError, isLoading } = useSWR(
@@ -30,6 +119,10 @@ export default function ServiciosCategorias() {
     if (Array.isArray(data)) return data;
     return [];
   }, [data]);
+
+  useEffect(() => {
+    setOrderedCategorias(categorias);
+  }, [categorias]);
 
   // Flatten categories for parent selection dropdown
   const flattenedCategories = useMemo(() => {
@@ -98,7 +191,7 @@ export default function ServiciosCategorias() {
 
     const formData = new FormData();
     formData.append("nombre", nombre.trim());
-    formData.append("descripcion", descripcion.trim());
+    formData.append("descripcion", descripcion);
     if (parentId) formData.append("parent_id", parentId);
     if (imagen) formData.append("imagen", imagen);
 
@@ -150,9 +243,42 @@ export default function ServiciosCategorias() {
     }
   };
 
-  // Función recursiva para renderizar categorías con subcategorías
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = orderedCategorias.findIndex((c) => c.id === active.id);
+    const newIndex = orderedCategorias.findIndex((c) => c.id === over.id);
+    if (oldIndex < 0 || newIndex < 0) return;
+
+    const newOrder = arrayMove(orderedCategorias, oldIndex, newIndex);
+    setOrderedCategorias(newOrder);
+
+    try {
+      await clienteAxios.post(
+        "/api/servicios-categorias/reorder",
+        {
+          parent_id: null,
+          order: newOrder.map((cat, index) => ({
+            id: cat.id,
+            position: index + 1,
+          })),
+        },
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+      mutate("/api/servicios-categorias");
+    } catch (err) {
+      console.error(err);
+      setError("No se pudo guardar el orden de categorias.");
+      setOrderedCategorias(categorias);
+    }
+  };
+
+  // Render recursivo para subcategorias (solo lectura por ahora)
   const renderCategory = (cat, level = 0) => (
-    <div key={cat.id} className={`${level > 0 ? 'ml-8 mt-2' : ''}`}>
+    <div key={cat.id} className={`${level > 0 ? "ml-8 mt-2" : ""}`}>
       <div className="border rounded-lg p-4 flex gap-4 bg-white">
         {cat.imagen ? (
           <img
@@ -168,16 +294,18 @@ export default function ServiciosCategorias() {
             <h4 className="font-semibold">{cat.nombre}</h4>
             {level > 0 && (
               <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
-                Subcategoría
+                Subcategoria
               </span>
             )}
           </div>
-          <p className="text-sm text-slate-600">
-            {cat.descripcion || "Sin descripcion"}
-          </p>
+          {cat.descripcion ? (
+            <div className="text-sm text-slate-600 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: cat.descripcion }} />
+          ) : (
+            <p className="text-sm text-slate-600">Sin descripcion</p>
+          )}
           {cat.children && cat.children.length > 0 && (
             <p className="text-xs text-slate-500 mt-1">
-              {cat.children.length} subcategoría{cat.children.length !== 1 ? 's' : ''}
+              {cat.children.length} subcategoria{cat.children.length !== 1 ? "s" : ""}
             </p>
           )}
           <div className="mt-3 flex gap-2">
@@ -199,9 +327,7 @@ export default function ServiciosCategorias() {
         </div>
       </div>
       {cat.children && cat.children.length > 0 && (
-        <div className="space-y-2">
-          {cat.children.map(child => renderCategory(child, level + 1))}
-        </div>
+        <div className="space-y-2">{cat.children.map((child) => renderCategory(child, level + 1))}</div>
       )}
     </div>
   );
@@ -223,7 +349,7 @@ export default function ServiciosCategorias() {
               className="w-full border p-3 rounded-lg"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              placeholder="Ej: Entradas, Principales, Postres"
+              placeholder="Ej: Obras viales, hidraulicas, etc"
             />
           </div>
 
@@ -251,16 +377,16 @@ export default function ServiciosCategorias() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Descripcion
             </label>
-            <textarea
-              className="w-full border p-3 rounded-lg"
-              rows={3}
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
-              placeholder="Breve descripcion de la categoria"
-            />
+            <Suspense fallback={<div className="border rounded-lg p-4 text-slate-400">Cargando editor...</div>}>
+              <TiptapEditor
+                content={descripcion}
+                onChange={setDescripcion}
+                placeholder="Breve descripcion de la categoria"
+              />
+            </Suspense>
           </div>
 
           <div>
@@ -333,9 +459,33 @@ export default function ServiciosCategorias() {
           <div className="text-sm text-slate-500">No hay categorias creadas.</div>
         )}
 
-        <div className="space-y-4">
-          {categorias.map((cat) => renderCategory(cat))}
-        </div>
+        <p className="text-xs text-slate-500 mb-3">
+          Arrastra las categorias principales desde el icono para definir su orden de visualizacion en el front.
+        </p>
+
+        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext
+            items={orderedCategorias.map((cat) => cat.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-4">
+              {orderedCategorias.map((cat) => (
+                <SortableCategoryCard
+                  key={cat.id}
+                  cat={cat}
+                  level={0}
+                  onEdit={setEditingId}
+                  onDelete={handleDelete}
+                  renderChildren={
+                    cat.children && cat.children.length > 0 ? (
+                      <div className="space-y-2">{cat.children.map((child) => renderCategory(child, 1))}</div>
+                    ) : null
+                  }
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       </div>
     </div>
   );

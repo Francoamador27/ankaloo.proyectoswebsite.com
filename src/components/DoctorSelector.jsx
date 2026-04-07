@@ -50,11 +50,11 @@ export default function DoctorSelector({ value, onChange }) {
 
   return (
     <div ref={boxRef} style={{ position: "relative", display: "grid", gap: 6 }}>
-      <label style={{ fontWeight: 600, color: "#374151" }}>Doctor</label>
+      <label style={{ fontWeight: 600, color: "#374151" }}>diseño</label>
       <input
         value={query}
         onChange={(e) => { setQuery(e.target.value); if (!e.target.value.trim()) onChange?.(null); }}
-        placeholder="Buscar doctor por nombre o especialidad"
+        placeholder="Buscar diseño por nombre o especialidad"
         autoComplete="off"
         style={{ padding: "10px 12px", border: "1px solid #d1d5db", borderRadius: 8, fontSize: 14, outline: "none" }}
         onFocus={() => results.length && setOpen(true)}

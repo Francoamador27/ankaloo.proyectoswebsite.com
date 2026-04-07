@@ -104,7 +104,7 @@ const ServiciosList = () => {
       setOrdenItems(items);
     } catch (err) {
       console.error(err);
-      setOrdenError('Error al cargar el orden de Paquetes.');
+      setOrdenError('Error al cargar el orden de Servicios.');
     } finally {
       setOrdenLoading(false);
     }
@@ -114,8 +114,8 @@ const ServiciosList = () => {
     fetchOrden();
   }, []);
 
-  if (isLoading) return <p className="p-4 text-gray-600">Cargando Paquetes...</p>;
-  if (error) return <p className="p-4 text-red-600">Error al cargar los Paquetes.</p>;
+  if (isLoading) return <p className="p-4 text-gray-600">Cargando Servicios...</p>;
+  if (error) return <p className="p-4 text-red-600">Error al cargar los Servicios.</p>;
 
   const servicios = data?.data ?? [];
   const currentPage = data?.current_page ?? pagina;
@@ -123,7 +123,7 @@ const ServiciosList = () => {
 
   // 👉 Función para eliminar
   const handleEliminar = async (id) => {
-       if (!window.confirm('¿Seguro que querés eliminar este Paquete?')) return;
+       if (!window.confirm('¿Seguro que querés eliminar este servicio?')) return;
 
     try {
       await clienteAxios.delete(`/api/servicios/${id}`, {
@@ -133,7 +133,7 @@ const ServiciosList = () => {
       mutate(`/api/servicios?${query}`);
     } catch (err) {
       console.error(err);
-         alert('Error al eliminar el Paquete.');
+         alert('Error al eliminar el servicio.');
     }
   };
 
@@ -169,7 +169,7 @@ const ServiciosList = () => {
   return (
     <div className="p-4">
       <div className="mb-6 flex items-center justify-between gap-4">
-        <h2 className="text-2xl font-semibold">Administrar Paquetes</h2>
+        <h2 className="text-2xl font-semibold">Administrar Obras</h2>
 
       </div>
 
@@ -266,7 +266,7 @@ const ServiciosList = () => {
       {/* Tabla */}
       <div className="overflow-x-auto rounded-xl shadow-lg border border-gray-200">
         <table className="min-w-full text-sm text-gray-800 bg-white">
-          <thead className="bg-gray-100 text-xs text-gray-600 uppercase">
+          <thead className="bg-gray-100 text-xs text-gray-600 ">
             <tr>
               <th className="px-4 py-3 text-left">ID</th>
               <th className="px-4 py-3 text-left">Imagen</th>
@@ -338,7 +338,7 @@ const ServiciosList = () => {
             {servicios.length === 0 && (
               <tr>
                 <td className="px-4 py-6 text-center text-gray-500" colSpan={8}>
-                  No hay Paquetes para mostrar.
+                  No hay Servicios para mostrar.
                 </td>
               </tr>
             )}

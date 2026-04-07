@@ -1,4 +1,4 @@
-// src/pages/Paciente.jsx
+// src/pages/usuario.jsx
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import clienteAxios from "../../../config/axios";
@@ -10,7 +10,7 @@ const toYMD = (val) => {
   return String(val).slice(0, 10);
 };
 
-const Paciente = () => {
+const usuario = () => {
   //si idpaciente no existe buscamos en params
   const { id } = useParams(); // "nuevo" o ID
 
@@ -21,7 +21,7 @@ const Paciente = () => {
   const todayYMD = useMemo(() => new Date().toISOString().split("T")[0], []);
 
   // Estado alineado 1:1 con tu tabla patients + campos de users
-  const [paciente, setPaciente] = useState({
+  const [usuario, setPaciente] = useState({
     // patients
     nompa: "",
     apepa: "",
@@ -38,7 +38,7 @@ const Paciente = () => {
     dni: "",
     codigo_postal: "",
     provincia: "",
-    rol: 3, // 1=Admin, 2=Doctor, 3=Paciente
+    rol: 3, // 1=Admin, 2=diseño, 3=usuario
   });
 
   const [loading, setLoading] = useState(isEditing);
@@ -52,7 +52,7 @@ const Paciente = () => {
       setErrMsg("");
       setLoading(true);
       try {
-        const { data } = await clienteAxios(`/api/pacientes/${id}`, {
+        const { data } = await clienteAxios(`/api/usuarios/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -80,10 +80,10 @@ const Paciente = () => {
           password: "",
         }));
       } catch (error) {
-        console.error("Error al cargar el paciente:", error);
+        console.error("Error al cargar el usuario:", error);
         setErrMsg(
           error?.response?.data?.message ||
-            "No se pudo cargar la información del paciente."
+            "No se pudo cargar la información del usuario."
         );
       } finally {
         setLoading(false);
@@ -106,9 +106,9 @@ const Paciente = () => {
     e.preventDefault();
 
     // Validaciones mínimas
-    if (!paciente?.nompa?.trim()) return mostrarError("El nombre es obligatorio.");
-    if (!paciente?.email?.trim()) return mostrarError("El email es obligatorio.");
-    if (isCreating && (!paciente?.password?.trim() || paciente.password.length < 6)) {
+    if (!usuario?.nompa?.trim()) return mostrarError("El nombre es obligatorio.");
+    if (!usuario?.email?.trim()) return mostrarError("El email es obligatorio.");
+    if (isCreating && (!usuario?.password?.trim() || usuario.password.length < 6)) {
       return mostrarError("La contraseña es obligatoria y debe tener al menos 6 caracteres.");
     }
 
@@ -119,52 +119,52 @@ const Paciente = () => {
       // -------- patients (tabla patients)
       const patientPayload = {
      
-        nompa: paciente.nompa?.trim(),
-        apepa: paciente.apepa || null,
-        direc: paciente.direc || null,
-        sex: paciente.sex || null,
-        grup: paciente.grup || null,
-        phon: paciente.phon || null,
-        cump: paciente.cump ? toYMD(paciente.cump) : null,
-        state: paciente.state ?? 1,
+        nompa: usuario.nompa?.trim(),
+        apepa: usuario.apepa || null,
+        direc: usuario.direc || null,
+        sex: usuario.sex || null,
+        grup: usuario.grup || null,
+        phon: usuario.phon || null,
+        cump: usuario.cump ? toYMD(usuario.cump) : null,
+        state: usuario.state ?? 1,
       };
 
       // -------- users (tabla users)
       const userPayload = {
-        email: paciente.email?.trim() || null,
-        dni: paciente.dni || null,
-        codigo_postal: paciente.codigo_postal || null,
-        provincia: paciente.provincia || null,
-        rol: Number(paciente.rol ?? 3),
+        email: usuario.email?.trim() || null,
+        dni: usuario.dni || null,
+        codigo_postal: usuario.codigo_postal || null,
+        provincia: usuario.provincia || null,
+        rol: Number(usuario.rol ?? 3),
         ...(isCreating
-          ? { password: paciente.password }
-          : (paciente.password?.trim() ? { password: paciente.password } : {})),
+          ? { password: usuario.password }
+          : (usuario.password?.trim() ? { password: usuario.password } : {})),
       };
 
-      // 👉 Unificar en un solo payload si tu endpoint /api/pacientes espera todo junto
+      // 👉 Unificar en un solo payload si tu endpoint /api/usuarios espera todo junto
       const payload = { ...patientPayload, ...userPayload };
 
       // Si tu backend espera objetos separados, usa en su lugar:
       // const payload = { patient: patientPayload, user: userPayload };
 
       if (isCreating) {
-        await clienteAxios.post(`/api/pacientes`, payload, {
+        await clienteAxios.post(`/api/usuarios`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        mostrarExito("Paciente creado correctamente");
+        mostrarExito("usuario creado correctamente");
       } else {
-        await clienteAxios.put(`/api/pacientes/${id}`, payload, {
+        await clienteAxios.put(`/api/usuarios/${id}`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        mostrarExito("Paciente actualizado correctamente");
+        mostrarExito("usuario actualizado correctamente");
       }
-      navigate("/admin-dash/pacientes");
+      navigate("/admin-dash/usuarios");
     } catch (error) {
       console.error(error);
       const firstError =
         error?.response?.data?.errors &&
         Object.values(error.response.data.errors)[0]?.[0];
-      setErrMsg(firstError || `Error al ${isCreating ? "crear" : "actualizar"} el paciente.`);
+      setErrMsg(firstError || `Error al ${isCreating ? "crear" : "actualizar"} el usuario.`);
     } finally {
       setSaving(false);
     }
@@ -200,7 +200,7 @@ const Paciente = () => {
     );
   }
 
-  if (isEditing && !paciente.nompa && !loading) {
+  if (isEditing && !usuario.nompa && !loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6 flex items-center justify-center">
         <div className="max-w-md mx-auto bg-white rounded-3xl shadow-xl border border-slate-200/60 p-8 text-center">
@@ -209,14 +209,14 @@ const Paciente = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Paciente no encontrado</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">usuario no encontrado</h3>
           {errMsg && (
             <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
               {errMsg}
             </div>
           )}
           <button
-            onClick={() => navigate("/admin-dash/pacientes")}
+            onClick={() => navigate("/admin-dash/usuarios")}
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
           >
             Volver a usuarios
@@ -236,12 +236,12 @@ const Paciente = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-white">
-                  {isCreating ? "Crear Nuevo Paciente" : "Editar Paciente"}
+                  {isCreating ? "Crear Nuevo usuario" : "Editar usuario"}
                 </h2>
                 <p className="text-blue-100 mt-1">
                   {isCreating
-                    ? "Complete la información del nuevo paciente"
-                    : `${paciente.nompa} ${paciente.apepa || ""} - ID: ${id}`}
+                    ? "Complete la información del nuevo usuario"
+                    : `${usuario.nompa} ${usuario.apepa || ""} - ID: ${id}`}
                 </p>
               </div>
             </div>
@@ -283,7 +283,7 @@ const Paciente = () => {
                   <input
                     type="text"
                     name="nompa"
-                    value={paciente.nompa || ""}
+                    value={usuario.nompa || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder="Nombre"
@@ -297,7 +297,7 @@ const Paciente = () => {
                   <input
                     type="text"
                     name="apepa"
-                    value={paciente.apepa || ""}
+                    value={usuario.apepa || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder="Apellido"
@@ -310,7 +310,7 @@ const Paciente = () => {
                   <input
                     type="text"
                     name="dni"
-                    value={paciente.dni || ""}
+                    value={usuario.dni || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder="12345678"
@@ -322,7 +322,7 @@ const Paciente = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Sexo</label>
                   <select
                     name="sex"
-                    value={paciente.sex || ""}
+                    value={usuario.sex || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white"
                   >
@@ -339,7 +339,7 @@ const Paciente = () => {
                   <input
                     type="date"
                     name="cump"
-                    value={paciente.cump || ""}
+                    value={usuario.cump || ""}
                     onChange={handleChange}
                     max={todayYMD}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
@@ -352,7 +352,7 @@ const Paciente = () => {
                   <input
                     type="text"
                     name="grup"
-                    value={paciente.grup || ""}
+                    value={usuario.grup || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder="O+, A-, etc."
@@ -365,7 +365,7 @@ const Paciente = () => {
                   <input
                     type="tel"
                     name="phon"
-                    value={paciente.phon || ""}
+                    value={usuario.phon || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder="+54 3517699950"
@@ -392,7 +392,7 @@ const Paciente = () => {
                   <input
                     type="email"
                     name="email"
-                    value={paciente.email || ""}
+                    value={usuario.email || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder="correo@ejemplo.com"
@@ -405,13 +405,13 @@ const Paciente = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Rol</label>
                   <select
                     name="rol"
-                    value={paciente.rol ?? 3}
+                    value={usuario.rol ?? 3}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white"
                   >
                     <option value={1}>Admin</option>
-                    <option value={2}>Doctor</option>
-                    <option value={3}>Paciente</option>
+                    <option value={2}>diseño</option>
+                    <option value={3}>usuario</option>
                   </select>
                 </div>
 
@@ -423,7 +423,7 @@ const Paciente = () => {
                   <input
                     type="password"
                     name="password"
-                    value={paciente.password || ""}
+                    value={usuario.password || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder={isCreating ? "Mínimo 6 caracteres" : "Dejar vacío para no cambiar"}
@@ -453,7 +453,7 @@ const Paciente = () => {
                   <input
                     type="text"
                     name="direc"
-                    value={paciente.direc || ""}
+                    value={usuario.direc || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder="Calle, número, piso, depto."
@@ -466,7 +466,7 @@ const Paciente = () => {
                   <input
                     type="text"
                     name="codigo_postal"
-                    value={paciente.codigo_postal || ""}
+                    value={usuario.codigo_postal || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder="5000"
@@ -479,7 +479,7 @@ const Paciente = () => {
                   <input
                     type="text"
                     name="provincia"
-                    value={paciente.provincia || ""}
+                    value={usuario.provincia || ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
                     placeholder="Córdoba, Buenos Aires, etc."
@@ -492,7 +492,7 @@ const Paciente = () => {
             <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
               <button
                 type="button"
-                onClick={() => navigate("/admin-dash/pacientes")}
+                onClick={() => navigate("/admin-dash/usuarios")}
                 className="inline-flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
                 disabled={saving}
               >
@@ -507,7 +507,7 @@ const Paciente = () => {
                     : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5"
                 }`}
               >
-                {saving ? "Guardando…" : isCreating ? "Crear paciente" : "Guardar cambios"}
+                {saving ? "Guardando…" : isCreating ? "Crear usuario" : "Guardar cambios"}
               </button>
             </div>
           </form>
@@ -517,4 +517,4 @@ const Paciente = () => {
   );
 };
 
-export default Paciente;
+export default usuario;

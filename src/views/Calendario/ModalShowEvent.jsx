@@ -36,7 +36,7 @@ export default function ModalShowEvent({ selected, closeModal, handleDelete, onS
   const [isPaid, setIsPaid] = useState(Boolean(xp.chec ?? xp.chec ?? false));
   const initialDoctor = useMemo(() => {
     const name = [xp.doctor_name, xp.doctor_lastname].filter(Boolean).join(" ").trim();
-    return xp.doctorId ? { id: xp.doctorId, name: name || xp.doctorName || "Doctor" } : null;
+    return xp.doctorId ? { id: xp.doctorId, name: name || xp.doctorName || "diseño" } : null;
   }, [xp.doctorId, xp.doctor_name, xp.doctor_lastname, xp.doctorName]);
   const [selectedDoctor, setSelectedDoctor] = useState(initialDoctor);
   function formatLikeToStringUTC(input) {
@@ -105,7 +105,7 @@ export default function ModalShowEvent({ selected, closeModal, handleDelete, onS
     const dur = parseInt(duration, 10);
     if (!dur || dur < 15) return alert("La duración mínima es 15 minutos");
     if (!amount || Number(amount) <= 0) return alert("Ingresá un monto válido");
-    if (!selectedDoctor?.id) return alert("Seleccioná un doctor");
+    if (!selectedDoctor?.id) return alert("Seleccioná un diseño");
 
     try {
       const token = localStorage.getItem("AUTH_TOKEN");
@@ -169,12 +169,12 @@ console.log('datos', datos);
 
         {/* Body */}
 
-        {/* DATOS DEL PACIENTE */}
+        {/* DATOS DEL usuario */}
 
         <div style={{ padding: "20px 24px", display: "grid", gap: 16, overflowY: "auto", maxHeight: "calc(90vh - 160px)" }}>
           {/* Fecha / Hora (LOCAL con AM/PM) */}
           <section>
-            <h4 style={{ color: "#374151", fontSize: 16, fontWeight: 600, padding: "12px 24px" }}>Datos del Paciente</h4>
+            <h4 style={{ color: "#374151", fontSize: 16, fontWeight: 600, padding: "12px 24px" }}>Datos del usuario</h4>
             <div style={{ padding: "0 24px 12px", color: "#6b7280", fontSize: 14 }}>
               <div><strong>Nombre:</strong> {datos?.patient_name || "—"} {datos?.patient_lastname || "—"}</div>
               <NotificacionWhatsapp datos={datos} date={date} hora={hora} />
@@ -271,7 +271,7 @@ console.log('datos', datos);
 </div>
 
 
-          {/* Doctor */}
+          {/* diseño */}
           <DoctorSelector value={selectedDoctor} onChange={setSelectedDoctor} />
 
         </div>
@@ -282,9 +282,9 @@ console.log('datos', datos);
             🗑 Eliminar
           </button>
           <div style={{ display: "flex", gap: 10 }}>
-              <Link to={`/admin-dash/pacientes/historial/${datos?.patientId || ""}`} style={{ textDecoration: "none" }}>
+              <Link to={`/admin-dash/usuarios/historial/${datos?.patientId || ""}`} style={{ textDecoration: "none" }}>
                 <button style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "#6b7280", color: "#fff" }}>
-                  📋Historial Paciente
+                  📋Historial usuario
                 </button>
               </Link>
 

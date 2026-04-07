@@ -1,4 +1,4 @@
-// SEOHead.jsx (versión optimizada para RevenanTravel)
+// SEOHead.jsx
 import useCont from "../../hooks/useCont";
 
 export default function SEOHead(props) {
@@ -10,7 +10,7 @@ export default function SEOHead(props) {
     title: pTitle,
     description: pDesc,
     keywords,
-    author = company?.name ?? "RevenanTravel - Fábrica de Aberturas de Aluminio",
+    author = company?.name ?? "Ankaloo Construcciones",
     canonical: pCanonical,
     robots = "index, follow",
     og = {},
@@ -19,7 +19,6 @@ export default function SEOHead(props) {
     bingVerification,
     yandexVerification,
     pinterestVerification,
-    // Puedes ajustar la geolocalización según la ubicación real de RevenanTravel
     geo = {
       region: "AR-X",
       placename: "Córdoba",
@@ -37,13 +36,13 @@ export default function SEOHead(props) {
   } = props;
 
   // ---- Datos derivados
-  const siteName = company?.name ?? "RevenanTravel";
-  const defaultTitle = `${siteName} | Fábrica de Aberturas de Aluminio a Medida`;
+  const siteName = company?.name ?? "Ankaloo Construcciones";
+  const defaultTitle = `${siteName} | Soluciones Tecnológicas Integrales`;
   const defaultDesc =
     pDesc ??
     (company
-      ? `${company.name}: Fábrica especializada en aberturas de aluminio a medida. Puertas, ventanas y soluciones personalizadas con presupuesto sin cargo. ${company.address ?? ""} ${company.business_hours ? `· Horario de atención: ${company.business_hours}` : ""}`.trim()
-      : "RevenanTravel: Fabricamos aberturas de aluminio de alta calidad a medida. Puertas, ventanas y cerramientos para tu hogar o empresa. Presupuesto sin cargo y atención personalizada.");
+      ? `${company.name}: Soluciones de desarrollo de sistemas, software, hardware y marketing digital. Transformamos tu negocio con tecnología. ${company.address ?? ""} ${company.business_hours ? `· Horario de atención: ${company.business_hours}` : ""}`.trim()
+      : "Ankaloo Construcciones: Acompañamos a las empresas en su transformación digital con soluciones integrales de desarrollo, software, hardware y marketing digital.");
 
   const title = pTitle ?? defaultTitle;
   const description = pDesc ?? defaultDesc;
@@ -84,7 +83,7 @@ export default function SEOHead(props) {
           }
           : undefined,
         description:
-          "Fábrica de aberturas de aluminio a medida. Especialistas en puertas y ventanas de alta prestación. Presupuestos sin cargo.",
+          "Soluciones tecnológicas integrales de desarrollo, software, hardware y marketing digital. Transformamos tu negocio con tecnología moderna.",
         openingHoursSpecification: [
           {
             "@type": "OpeningHoursSpecification",
@@ -116,7 +115,7 @@ export default function SEOHead(props) {
         name="keywords"
         content={
           keywords ||
-          "aberturas de aluminio, fabrica de aberturas, ventanas de aluminio, puertas de aluminio, aberturas a medida, presupuesto sin cargo, carpinteria de aluminio, RevenanTravel"
+          "desarrollo de software, transformación digital, soluciones tecnológicas, sistemas personalizados, marketing digital, desarrollo web, aplicaciones móviles, consultoría IT, Ankaloo Construcciones"
         }
         data-priority={precedence}
       />

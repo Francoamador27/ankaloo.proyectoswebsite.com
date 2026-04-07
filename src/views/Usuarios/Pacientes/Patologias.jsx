@@ -4,7 +4,7 @@ import clienteAxios from "../../../config/axios";
 import { mostrarExito } from "../../../utils/Alertas";
 
 const Patologias = () => {
-  const { id } = useParams(); // Obtiene el ID del paciente desde la URL
+  const { id } = useParams(); // Obtiene el ID del usuario desde la URL
   const [formData, setFormData] = useState({
     alergico: "",
     medicamentos: "",
@@ -22,7 +22,7 @@ const Patologias = () => {
       try {
         setLoading(true);
         const response = await clienteAxios.get(
-          `/api/patologias/paciente/${id}`,
+          `/api/patologias/usuario/${id}`,
           {
             headers: token ? { Authorization: `Bearer ${token}` } : {},
           }
@@ -85,7 +85,7 @@ const Patologias = () => {
       <div className="max-w-3xl mx-auto text-slate-700 flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-slate-600">Cargando datos del paciente...</p>
+          <p className="text-slate-600">Cargando datos del usuario...</p>
         </div>
       </div>
     );
@@ -95,7 +95,7 @@ const Patologias = () => {
     <div className="max-w-3xl mx-auto text-slate-700">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-blue-700">
-          Patologías del Paciente
+          Patologías del usuario
         </h2>
         {isEditing && (
           <span className="text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
@@ -108,9 +108,9 @@ const Patologias = () => {
         onSubmit={handleSubmit}
         className="bg-white rounded-xl shadow-md p-6 border border-slate-200 space-y-5"
       >
-        {/* ID Paciente */}
+        {/* ID usuario */}
         <div className="text-sm text-slate-500">
-          <span className="font-semibold text-slate-700">ID del paciente:</span>{" "}
+          <span className="font-semibold text-slate-700">ID del usuario:</span>{" "}
           {id}
         </div>
 

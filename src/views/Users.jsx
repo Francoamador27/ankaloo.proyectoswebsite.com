@@ -106,7 +106,7 @@ const Users = () => {
             {/* Tabla de usuarios */}
             <div className="overflow-x-auto rounded-xl shadow-lg border border-gray-200">
                 <table className="min-w-full text-sm text-gray-800 bg-white">
-                    <thead className="bg-gray-100 text-xs text-gray-600 uppercase">
+                    <thead className="bg-gray-100 text-xs text-gray-600 ">
                         <tr>
                             <th className="px-4 py-3 text-left">ID</th>
                             <th className="px-4 py-3 text-left">Nombre</th>

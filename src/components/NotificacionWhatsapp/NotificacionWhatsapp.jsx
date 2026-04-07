@@ -16,7 +16,7 @@ Recordatorios importantes:
 - Traer estudios previos si los tuviera
 - Traer cepillo y elementos de higiene que utilice
 
-⚠ Importante: Por favor respete su horario exacto de cita. Llegar muy temprano puede interrumpir la atención del paciente anterior.
+⚠ Importante: Por favor respete su horario exacto de cita. Llegar muy temprano puede interrumpir la atención del usuario anterior.
 
 Si necesita cancelar o reprogramar, por favor avísenos con 24 horas de anticipación.
 

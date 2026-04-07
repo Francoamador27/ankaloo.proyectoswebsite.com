@@ -97,9 +97,9 @@ const Ingresos = () => {
                     </p>
                 </div>
 
-                <div className="bg-orange-50 border border-orange-200 rounded-xl p-6 shadow-md">
-                    <h3 className="text-sm font-medium text-orange-600 mb-2">Total Pendiente</h3>
-                    <p className="text-2xl font-bold text-orange-700">
+                <div className="bg-cyan-50 border border-cyan-200 rounded-xl p-6 shadow-md">
+                    <h3 className="text-sm font-medium text-cyan-600 mb-2">Total Pendiente</h3>
+                    <p className="text-2xl font-bold text-cyan-700">
                         {formatCurrency(totalNoPagados)}
                     </p>
                     <p className="text-sm text-gray-600 mt-1">
@@ -149,7 +149,7 @@ const Ingresos = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Doctor</label>
+                        <label className="block text-sm font-medium mb-1">diseño</label>
                         {loadingDoctores ? (
                             <div className="p-2">Cargando doctores...</div>
                         ) : errorDoctores ? (
@@ -240,12 +240,12 @@ const Ingresos = () => {
             {/* Tabla de eventos */}
             <div className="overflow-x-auto rounded-xl shadow-lg border border-gray-200">
                 <table className="min-w-full text-sm text-gray-800 bg-white">
-                    <thead className="bg-gray-100 text-xs text-gray-600 uppercase">
+                    <thead className="bg-gray-100 text-xs text-gray-600 ">
                         <tr>
                             <th className="px-4 py-3 text-left">ID</th>
                             <th className="px-4 py-3 text-left">Título</th>
-                            <th className="px-4 py-3 text-left">Paciente</th>
-                            <th className="px-4 py-3 text-left">Doctor</th>
+                            <th className="px-4 py-3 text-left">usuario</th>
+                            <th className="px-4 py-3 text-left">diseño</th>
                             <th className="px-4 py-3 text-left">Fecha/Hora</th>
                             <th className="px-4 py-3 text-right">Monto</th>
                             <th className="px-4 py-3 text-center">Estado</th>
@@ -282,7 +282,7 @@ const Ingresos = () => {
                                         <span
                                             className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${evento.chec === 1 || evento.chec === true
                                                     ? 'bg-green-100 text-green-800'
-                                                    : 'bg-orange-100 text-orange-800'
+                                                    : 'bg-cyan-100 text-cyan-800'
                                                 }`}
                                         >
                                             {evento.chec === 1 || evento.chec === true ? 'Pagado' : 'Pendiente'}

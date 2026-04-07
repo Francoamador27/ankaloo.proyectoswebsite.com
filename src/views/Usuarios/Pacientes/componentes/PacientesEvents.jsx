@@ -15,11 +15,11 @@ const PacientesEvents = () => {
     try {
       setLoading(true);
       const { data } = await clienteAxios.get(`/api/events?patient_id=${idpa}`, getAuthHeaders());
-      console.log('eventos del paciente', data.data);
+      console.log('eventos del usuario', data.data);
       setItems(Array.isArray(data?.data) ? data.data : []);
       setErr("");
     } catch (e) {
-      setErr("No se pudo cargar las citas del paciente.");
+      setErr("No se pudo cargar las citas del usuario.");
     } finally {
       setLoading(false);
     }
@@ -86,7 +86,7 @@ const PacientesEvents = () => {
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-2xl font-bold text-gray-900">Citas Médicas</h3>
-          <p className="text-sm text-gray-600 mt-1">Historial completo de citas del paciente</p>
+          <p className="text-sm text-gray-600 mt-1">Historial completo de citas del usuario</p>
         </div>
         <div className="text-sm text-gray-500 bg-gray-50 px-3 py-2 rounded-lg">
           {items.length} cita{items.length !== 1 ? 's' : ''} registrada{items.length !== 1 ? 's' : ''}
@@ -107,7 +107,7 @@ const PacientesEvents = () => {
         <div className="text-center py-12 bg-gray-50 rounded-xl">
           <div className="text-4xl mb-4">📅</div>
           <p className="text-gray-600 font-medium">Sin citas registradas</p>
-          <p className="text-gray-500 text-sm mt-1">No hay citas programadas para este paciente.</p>
+          <p className="text-gray-500 text-sm mt-1">No hay citas programadas para este usuario.</p>
         </div>
       ) : (
         <div className="grid gap-6">
@@ -157,7 +157,7 @@ const PacientesEvents = () => {
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                     {/* Fecha y Hora */}
                     <div className="space-y-3">
-                      <h5 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">📅 Fecha y Hora</h5>
+                      <h5 className="text-sm font-semibold text-gray-700  tracking-wide">📅 Fecha y Hora</h5>
                       <div className="space-y-2">
                         <div>
                           <p className="text-sm text-gray-600">Inicio:</p>
@@ -171,9 +171,9 @@ const PacientesEvents = () => {
                       </div>
                     </div>
 
-                    {/* Información del Doctor */}
+                    {/* Información del diseño */}
                     <div className="space-y-3">
-                      <h5 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">👨‍⚕️ Doctor</h5>
+                      <h5 className="text-sm font-semibold text-gray-700  tracking-wide">👨‍⚕️ diseño</h5>
                       <div className="space-y-2">
                         <p className="font-medium text-gray-900">
                           {cita.doctor_name} {cita.doctor_lastname}
@@ -192,9 +192,9 @@ const PacientesEvents = () => {
                       </div>
                     </div>
 {/* 
-                    {/* Información del Paciente */}
+                    {/* Información del usuario */}
                     {/* <div className="space-y-3">
-                      <h5 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">👤 Paciente</h5>
+                      <h5 className="text-sm font-semibold text-gray-700  tracking-wide">👤 usuario</h5>
                       <div className="space-y-2">
                         <p className="font-medium text-gray-900">
                           {cita.patient_name} {cita.patient_lastname}
@@ -213,7 +213,7 @@ const PacientesEvents = () => {
 
                   {/* Detalles Financieros */}
                   <div className="bg-gray-50 rounded-xl p-4">
-                    <h5 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">💰 Información Financiera</h5>
+                    <h5 className="text-sm font-semibold text-gray-700  tracking-wide mb-3">💰 Información Financiera</h5>
                     <div className="grid md:grid-cols-3 gap-4">
                       <div>
                         <p className="text-sm text-gray-600">Monto</p>
@@ -232,7 +232,7 @@ const PacientesEvents = () => {
                   {/* IDs Técnicos */}
                   <div className="mt-4 pt-4 border-t border-gray-200">
                     <div className="flex items-center gap-6 text-xs text-gray-500">
-                      <span>ID Paciente: {cita.idpa}</span>
+                      <span>ID usuario: {cita.idpa}</span>
                       <span>ID ODC: {cita.idodc}</span>
                       <span>Color: <span className="inline-block w-3 h-3 rounded-full ml-1" style={{ backgroundColor: cita.color }}></span> {cita.color}</span>
                     </div>

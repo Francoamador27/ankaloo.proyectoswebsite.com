@@ -6,7 +6,6 @@ export default function InstallPWAButton() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const {company} = useCont();
-  console.log("Company from context:", company);
   useEffect(() => {
     const handler = (e) => {
       // Evita que Chrome muestre su mini-infobar

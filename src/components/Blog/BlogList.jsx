@@ -60,10 +60,10 @@ export default function BlogList() {
     return (
       <Link
         to={`/blog/${post.slug}`}
-        className="group relative rounded-2xl overflow-hidden border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
+        className="group relative rounded-lg overflow-hidden border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
       >
         <div className="relative">
-          <div className="aspect-[16/10] w-full overflow-hidden bg-slate-100">
+          <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
             {post.imagen ? (
               <img
                 src={post.imagen}
@@ -73,45 +73,37 @@ export default function BlogList() {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <span className="text-5xl text-slate-300">📰</span>
+                <span className="text-3xl text-slate-300">📰</span>
               </div>
             )}
           </div>
 
           {post.categoria && (
-            <div className="absolute top-4 left-4">
-              <span className="bg-white/95 text-slate-700 text-[11px] font-semibold uppercase tracking-widest px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+            <div className="absolute top-2 left-2">
+              <span className="bg-white/95 text-slate-700 text-[9px] font-semibold  tracking-widest px-2 py-1 rounded-full border border-slate-200 shadow-sm">
                 {post.categoria.nombre}
               </span>
             </div>
           )}
         </div>
 
-        <div className="p-6">
-          <div className="flex items-center gap-3 text-slate-500 text-xs mb-3">
-            <div className="flex items-center gap-2">
-              <Calendar size={16} />
-              <span>{formatDate(post.publicado_en)}</span>
-            </div>
-            {post.autor && (
-              <div className="flex items-center gap-2">
-                <span>•</span>
-                <span>{post.autor.name}</span>
-              </div>
-            )}
+        <div className="p-3">
+          <div className="flex items-center gap-2 text-slate-500 text-[11px] mb-1">
+            <Calendar size={14} />
+            <span>{formatDate(post.publicado_en)}</span>
           </div>
 
-          <h3 className="text-xl font-semibold mb-2 tracking-tight leading-tight line-clamp-2 text-slate-900">
+          <h3 className="text-sm font-semibold mb-1.5 tracking-tight leading-snug line-clamp-2 text-slate-900">
             {post.titulo}
           </h3>
 
-          <p className="text-slate-600 text-sm mb-4 leading-relaxed line-clamp-3">
+          <p className="text-slate-600 text-xs mb-2 leading-relaxed line-clamp-2">
             {extractText(post.contenido || '')}
           </p>
 
-          <div className="flex items-center gap-2 text-sm text-slate-700 group-hover:text-slate-900">
-            <span className="font-medium">Leer articulo</span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          <div className="flex items-center gap-1 text-xs text-slate-700 group-hover:text-slate-900 font-medium">
+            <span>Leer más</span>
+            <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" />
           </div>
         </div>
       </Link>
@@ -119,53 +111,51 @@ export default function BlogList() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Hero Header */}
-      <div className="border-b border-slate-200 bg-gradient-to-b from-[#fff6f0] via-white to-white">
-        <div className="container mx-auto px-6 py-16">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#dc834e] bg-[#dc834e]/10 px-4 py-2 rounded-full border border-[#dc834e]/20 mb-4">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#dc834e]" />
-              Blog de viajes
-            </div>
-            <h1 className="text-4xl lg:text-5xl font-semibold mb-4 tracking-tight text-slate-900">
-              Blog de <span className="text-[#dc834e]">RevenantTravel</span>
+      <div className="border-b border-slate-200 bg-white ">
+        <div className="container mx-auto px-6 py-4">
+          <div className="max-w-7xl mx-auto text-center">
+            <h1 className="py-10 text-5xl font-bold text-slate-900">
+              Blog  
             </h1>
-            <div className="mx-auto h-0.5 w-16 bg-[#dc834e] rounded-full mb-4" />
-            <p className="text-lg text-slate-600 leading-relaxed">
-              Historias, consejos y experiencias de viaje.
-            </p>
+            <p className="text-slate-500 text-sm mt-1">Descubre historias, guías y artículos de interés</p>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-12">
-        <div className="max-w-6xl mx-auto">
-        {/* Filtros */}
-        <div className="bg-white rounded-2xl p-6 mb-10 border border-slate-200">
-          <div className="flex flex-wrap gap-4 items-center">
-            {/* Búsqueda */}
-            <div className="flex-1 min-w-[280px]">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+      {/* Main Layout */}
+      <div className="container mx-auto px-6 py-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
+          
+          {/* Sidebar */}
+          <aside className="lg:col-span-1">
+            <div className="sticky top-6 space-y-4">
+              {/* Search Box */}
+              <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-2">
+                  <Search size={18} className="text-[#0891b2]" />
+                  <label className="text-sm font-semibold text-slate-900">Buscar</label>
+                </div>
                 <input
                   type="text"
                   value={busqueda}
                   onChange={(e) => setBusqueda(e.target.value)}
-                  placeholder="Buscar por título o contenido..."
-                  className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-xl focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 transition-all duration-200"
+                  placeholder="Título o contenido..."
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-[#0891b2] focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 transition-all duration-200 text-sm"
                 />
               </div>
-            </div>
 
-            {/* Filtro por Categoría */}
-            <div className="min-w-[250px]">
-              <div className="relative">
-                <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+              {/* Category Filter */}
+              <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-3">
+                  <Tag size={18} className="text-[#0891b2]" />
+                  <label className="text-sm font-semibold text-slate-900">Categorías</label>
+                </div>
                 <select
                   value={categoriaId}
                   onChange={(e) => setCategoriaId(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-xl focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 transition-all duration-200 appearance-none bg-white cursor-pointer"
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-[#0891b2] focus:outline-none focus:ring-2 focus:ring-[#0891b2]/20 transition-all duration-200 text-sm bg-white cursor-pointer"
                 >
                   <option value="">Todas las categorías</option>
                   {categorias.map((cat) => (
@@ -175,67 +165,71 @@ export default function BlogList() {
                   ))}
                 </select>
               </div>
-            </div>
 
-            {/* Limpiar filtros */}
-            {(busqueda || categoriaId) && (
-              <button
-                onClick={() => {
-                  setBusqueda('');
-                  setCategoriaId('');
-                }}
-                className="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-all duration-200"
-              >
-                Limpiar filtros
-              </button>
+              {/* Clear Filters */}
+              {(busqueda || categoriaId) && (
+                <button
+                  onClick={() => {
+                    setBusqueda('');
+                    setCategoriaId('');
+                  }}
+                  className="w-full px-4 py-2.5 bg-gradient-to-r from-[#0891b2] to-[#06b6d4] hover:shadow-lg text-white text-sm font-semibold rounded-lg transition-all duration-200"
+                >
+                  Limpiar filtros
+                </button>
+              )}
+
+              {/* Results Counter */}
+              <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+                <p className="text-xs text-slate-600">
+                  <span className="font-bold text-[#0891b2]">{postsFiltrados.length}</span> de{' '}
+                  <span className="font-bold text-slate-900">{posts.length}</span> artículos
+                </p>
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <main className="lg:col-span-3">
+            {/* Loading */}
+            {isLoading && (
+              <div className="text-center py-20">
+                <div className="inline-block animate-spin rounded-full h-10 w-10 border-2 border-slate-300 border-t-[#0891b2]"></div>
+                <p className="mt-3 text-slate-600 text-sm font-medium">Cargando artículos...</p>
+              </div>
             )}
-          </div>
 
-          {/* Contador de resultados */}
-          <div className="mt-4 text-sm text-slate-500">
-            Mostrando <span className="font-semibold text-slate-700">{postsFiltrados.length}</span> de{' '}
-            <span className="font-semibold text-slate-700">{posts.length}</span> articulos
-          </div>
-        </div>
+            {/* Grid de Posts */}
+            {!isLoading && postsFiltrados.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {postsFiltrados.map((post, idx) => (
+                  <PostCard key={post.id} post={post} idx={idx} />
+                ))}
+              </div>
+            )}
 
-        {/* Loading */}
-        {isLoading && (
-          <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-10 w-10 border-2 border-slate-300 border-t-transparent"></div>
-            <p className="mt-3 text-slate-600">Cargando articulos...</p>
-          </div>
-        )}
-
-        {/* Grid de Posts */}
-        {!isLoading && postsFiltrados.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {postsFiltrados.map((post, idx) => (
-              <PostCard key={post.id} post={post} idx={idx} />
-            ))}
-          </div>
-        )}
-
-        {/* Sin resultados */}
-        {!isLoading && postsFiltrados.length === 0 && (
-          <div className="text-center py-20">
-            <div className="w-24 h-24 mx-auto mb-6 bg-slate-100 rounded-full flex items-center justify-center">
-              <Search className="w-12 h-12 text-slate-400" />
-            </div>
-            <h3 className="text-2xl font-semibold text-slate-800 mb-2">No se encontraron articulos</h3>
-            <p className="text-slate-600 mb-6">
-              Intenta ajustar tus filtros de búsqueda
-            </p>
-            <button
-              onClick={() => {
-                setBusqueda('');
-                setCategoriaId('');
-              }}
-              className="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-xl transition-all duration-200"
-            >
-              Ver todos los artículos
-            </button>
-          </div>
-        )}
+            {/* Sin resultados */}
+            {!isLoading && postsFiltrados.length === 0 && (
+              <div className="text-center py-20 bg-white rounded-xl border border-slate-200 shadow-sm">
+                <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center">
+                  <Search className="w-10 h-10 text-slate-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-slate-800 mb-1">No se encontraron artículos</h3>
+                <p className="text-slate-600 text-sm mb-5">
+                  Intenta ajustar tus filtros de búsqueda
+                </p>
+                <button
+                  onClick={() => {
+                    setBusqueda('');
+                    setCategoriaId('');
+                  }}
+                  className="px-5 py-2.5 bg-gradient-to-r from-[#0891b2] to-[#06b6d4] hover:shadow-lg text-white text-sm font-semibold rounded-lg transition-all duration-200"
+                >
+                  Ver todos los artículos
+                </button>
+              </div>
+            )}
+          </main>
         </div>
       </div>
     </div>

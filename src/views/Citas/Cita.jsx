@@ -263,10 +263,10 @@ const Cita = () => {
             <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium shadow-sm transition-all duration-200 ${
               form.isPaid 
                 ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-green-200' 
-                : 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-orange-200'
+                : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-cyan-200'
             }`}>
               <div className={`w-2 h-2 rounded-full ${
-                form.isPaid ? 'bg-green-200' : 'bg-orange-200'
+                form.isPaid ? 'bg-green-200' : 'bg-cyan-200'
               } animate-pulse`} />
               {form.isPaid ? 'Pagada' : 'Pendiente'}
             </div>
@@ -293,7 +293,7 @@ const Cita = () => {
                 </svg>
               </div>
             </div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Paciente</p>
+            <p className="text-xs font-medium text-slate-500  tracking-wider mb-1">usuario</p>
             <p className="font-semibold text-slate-800 text-lg mb-1">{ev?.patient_name} {ev?.patient_lastname}</p>
             <p className="text-sm text-slate-600">{ev?.patient_email || ev?.patient_phone || '-'}</p>
           </div>
@@ -306,7 +306,7 @@ const Cita = () => {
                 </svg>
               </div>
             </div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Doctor</p>
+            <p className="text-xs font-medium text-slate-500  tracking-wider mb-1">diseño</p>
             <p className="font-semibold text-slate-800 text-lg mb-1">
               {selectedDoctor?.name || [ev?.doctor_name, ev?.doctor_lastname].filter(Boolean).join(' ')}
             </p>
@@ -321,7 +321,7 @@ const Cita = () => {
                 </svg>
               </div>
             </div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Inicio</p>
+            <p className="text-xs font-medium text-slate-500  tracking-wider mb-1">Inicio</p>
             <p className="font-semibold text-slate-800 text-lg">{formatDate(startSrc, true)}</p>
           </div>
 
@@ -333,7 +333,7 @@ const Cita = () => {
                 </svg>
               </div>
             </div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Fin</p>
+            <p className="text-xs font-medium text-slate-500  tracking-wider mb-1">Fin</p>
             <p className="font-semibold text-slate-800 text-lg">{formatDate(endSrc, true)}</p>
           </div>
         </div>
@@ -459,13 +459,13 @@ const Cita = () => {
               </div>
             </div>
 
-            {/* Doctor Selector */}
+            {/* diseño Selector */}
             <div className="md:col-span-2 space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
                 <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                Doctor asignado
+                diseño asignado
               </label>
               <div className="bg-white/30 backdrop-blur-sm border border-white/20 rounded-xl p-4">
                 <DoctorSelector value={selectedDoctor} onChange={(doc) => setSelectedDoctor(doc)} />
@@ -475,18 +475,18 @@ const Cita = () => {
                   <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                   </svg>
-                  <p className="text-sm text-red-700 font-medium">Seleccioná un doctor para guardar los cambios.</p>
+                  <p className="text-sm text-red-700 font-medium">Seleccioná un diseño para guardar los cambios.</p>
                 </div>
               )}
             </div>
 
-            {/* Paciente ID */}
+            {/* usuario ID */}
             <div className="md:col-span-2 space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
                 <svg className="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
                 </svg>
-                ID Paciente
+                ID usuario
               </label>
               <input
                 type="number"
@@ -539,7 +539,7 @@ const Cita = () => {
               type="button"
               onClick={onCancel}
               disabled={saving}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 disabled:from-slate-400 disabled:to-slate-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl disabled:shadow-sm transition-all duration-200 disabled:cursor-not-allowed group"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 disabled:from-slate-400 disabled:to-slate-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl disabled:shadow-sm transition-all duration-200 disabled:cursor-not-allowed group"
             >
               <svg className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

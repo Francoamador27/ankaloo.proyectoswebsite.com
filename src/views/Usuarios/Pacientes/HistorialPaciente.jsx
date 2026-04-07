@@ -47,7 +47,7 @@ const HistorialPaciente = () => {
       {/* Tabs header */}
       <div
         role="tablist"
-        aria-label="Historial del paciente"
+        aria-label="Historial del usuario"
         onKeyDown={onKeyDown}
         className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2"
       >

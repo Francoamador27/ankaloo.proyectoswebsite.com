@@ -5,7 +5,7 @@ import clienteAxios from "../config/axios";
 const useAuthBase = () => {
   const token = localStorage.getItem("AUTH_TOKEN");
 
-  const { data: user, error, mutate } = useSWR('/api/user', () =>
+  const { data: user, error, mutate } = useSWR(token ? '/api/user' : null, () =>
     clienteAxios('/api/user', {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -16,6 +16,7 @@ const useAuthBase = () => {
       throw new Error(error?.response?.data?.errors || 'Error desconocido');
     })
   );
+
 
   const login = async (datos, setErrores, setLoading) => {
     try {

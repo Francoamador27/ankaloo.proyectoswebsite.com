@@ -49,7 +49,7 @@ const PacientesList = () => {
 
   // 3) key estable con tupla; NO concatenar strings
   const { data, error, isLoading, mutate, isValidating } = useSWR(
-    ["/api/pacientes", params, token],
+    ["/api/usuarios", params, token],
     fetcher,
     {
       revalidateOnFocus: false,
@@ -61,21 +61,20 @@ const PacientesList = () => {
   const eliminarPaciente = async (idpa) => {
     const confirmar = await mostrarConfirmacion(
       "¿Estás seguro que deseas eliminar?",
-      "Esta acción eliminará el paciente de forma permanente."
+      "Esta acción eliminará el usuario de forma permanente."
     );
     if (!confirmar) return;
 
     try {
-      await clienteAxios.delete(`/api/pacientes/${idpa}`, {
+      await clienteAxios.delete(`/api/usuarios/${idpa}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       mutate(); // refrescar lista
     } catch {
-      alert("Error al eliminar el paciente");
+      alert("Error al eliminar el usuario");
     }
   };
-  const pacientes = data?.data || [];
-  console.log("Pacientes:", pacientes);
+  const usuarios = data?.data || [];
   const meta = data?.meta || {};
 
   return (
@@ -83,7 +82,7 @@ const PacientesList = () => {
       <div className="flex justify-start gap-1 items-center mb-6">
         <h2 className="text-2xl font-semibold">Administrar usuarios</h2>
         <Link
-          to="/admin-dash/pacientes/nuevo"
+          to="/admin-dash/usuarios/nuevo"
           className="inline-flex py-2 items-center gap-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +162,7 @@ const PacientesList = () => {
       ) : (
         <div className="overflow-x-auto rounded-xl shadow-lg border border-gray-200">
           <table className="min-w-full text-sm text-gray-800 bg-white">
-            <thead className="bg-gray-100 text-xs text-gray-600 uppercase">
+            <thead className="bg-gray-100 text-xs text-gray-600 ">
               <tr>
                 <th className="px-4 py-3 text-left">DNI</th>
                 <th className="px-4 py-3 text-left">Nombre</th>
@@ -173,22 +172,22 @@ const PacientesList = () => {
               </tr>
             </thead>
             <tbody>
-              {pacientes.map((paciente) => (
-                <tr key={paciente.id} className="hover:bg-gray-50 border-t border-gray-200 transition">
-                  <td className="px-4 py-3">{paciente.user?.dni}</td>
-                  <td className="px-4 py-3">{paciente.user?.name}</td>
-                  <td className="px-4 py-3">{paciente.user?.email}</td>
-                  <td className="px-4 py-3">{paciente.phon}</td>
+              {usuarios.map((usuario) => (
+                <tr key={usuario.id} className="hover:bg-gray-50 border-t border-gray-200 transition">
+                  <td className="px-4 py-3">{usuario.user?.dni}</td>
+                  <td className="px-4 py-3">{usuario.user?.name}</td>
+                  <td className="px-4 py-3">{usuario.user?.email}</td>
+                  <td className="px-4 py-3">{usuario.phon}</td>
 
                   <td className="px-4 py-3 flex gap-2">
                     <Link
-                      to={`/admin-dash/pacientes/historial/${paciente.idpa}`}
+                      to={`/admin-dash/usuarios/historial/${usuario.idpa}`}
                       className="inline-block bg-blue-300 hover:bg-blue-400 text-white text-xs font-semibold px-3 py-2 rounded"
                     >
                       <Stethoscope />
                     </Link>
                     <button
-                      onClick={() => eliminarPaciente(paciente.idpa)}
+                      onClick={() => eliminarPaciente(usuario.idpa)}
                       className="px-3 py-1 text-sm font-semibold bg-red-600 text-white rounded hover:bg-red-700 transition"
                       type="button"
                     >
@@ -197,7 +196,7 @@ const PacientesList = () => {
                   </td>
                 </tr>
               ))}
-              {pacientes.length === 0 && (
+              {usuarios.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-4 py-6 text-center text-gray-500">
                     Sin resultados

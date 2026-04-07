@@ -5,10 +5,6 @@ import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 
 import { useEffect, useState } from 'react';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 
 import img1 from '../assets/img/ejemplos/ejemplo-1.jpg';
 import img2 from '../assets/img/ejemplos/ejemplo-2.jpg';
@@ -31,9 +27,9 @@ export default function Ejemplos() {
   const project = {
     title: "Experiencias de Viaje Inolvidables",
     description:
-      `En ${company.name} somos expertos en crear experiencias turísticas únicas y personalizadas. Ofrecemos paquetes integrales a los mejores destinos del mundo, priorizando tu comodidad, seguridad y satisfacción en cada viaje.`,
+      `En ${company.name} somos expertos en crear experiencias turísticas únicas y personalizadas. Ofrecemos Servicios integrales a los mejores destinos del mundo, priorizando tu comodidad, seguridad y satisfacción en cada viaje.`,
     tags: [
-      "Paquetes Turísticos",
+      "Servicios ",
       "Viajes Personalizados",
       "Destinos Exóticos",
       "All Inclusive",
@@ -55,8 +51,8 @@ export default function Ejemplos() {
         description: "Seleccionamos cuidadosamente los mejores destinos del mundo, desde playas paradisíacas hasta ciudades históricas y aventuras en la naturaleza."
       },
       {
-        title: "Paquetes Premium",
-        description: "Ofrecemos paquetes de primera calidad con alojamientos 4 y 5 estrellas, traslados privados y experiencias VIP en cada destino."
+        title: "Servicios Premium",
+        description: "Ofrecemos Servicios de primera calidad con alojamientos 4 y 5 estrellas, traslados privados y experiencias VIP en cada destino."
       },
       {
         title: "Viajes a Medida",
@@ -72,7 +68,7 @@ export default function Ejemplos() {
       },
       {
         title: "Seguro Completo",
-        description: "Todos nuestros paquetes incluyen seguro de viaje integral, cobertura médica y protección ante imprevistos."
+        description: "Todos nuestros Servicios incluyen seguro de viaje integral, cobertura médica y protección ante imprevistos."
       }
     ]
   };
@@ -84,16 +80,16 @@ export default function Ejemplos() {
       <SEOHead
         priority="high"
         title={`Galeria de imagenes de ${company.name} `}
-        description={`Descubre nuestros paquetes turísticos exclusivos. Experiencias únicas en los mejores destinos del mundo con ${company.name}.`}
+        description={`Descubre nuestros Servicios  exclusivos. Experiencias únicas en los mejores destinos del mundo con ${company.name}.`}
       />
       <p className="text-gray-400 mb-2 flex items-center gap-4 flex-wrap">
         <span className="flex items-center gap-2">
-          <Layout className="w-5 h-5 text-[#dc834e]" />
+          <Layout className="w-5 h-5 text-[#0891b2]" />
           {project.type}
         </span>
       </p>
 
-      <h1 className="text-4xl font-bold thea-amelia">Experiencias de Viaje <span className="text-[#dc834e] thea-amelia text-5xl">Inolvidables</span></h1>
+      <h1 className="text-4xl font-bold thea-amelia">Experiencias de Viaje <span className="text-[#0891b2] thea-amelia text-5xl">Inolvidables</span></h1>
       <p className="text-lg text-gray-400 mt-2">{project.description}</p>
 
       <div className="flex flex-wrap gap-2 mt-4">
@@ -112,7 +108,7 @@ export default function Ejemplos() {
 
       {/* Características */}
       <section className="mt-16">
-        <h2 className="text-2xl font-bold mb-6 thea-amelia">Nuestros <span className="text-[#dc834e] thea-amelia text-3xl">Servicios</span></h2>
+        <h2 className="text-2xl font-bold mb-6 thea-amelia">Nuestros <span className="text-[#0891b2] thea-amelia text-3xl">Servicios</span></h2>
         <div className="grid md:grid-cols-2 gap-8">
           {project.features.map((feature, index) => (
             <div key={index}>

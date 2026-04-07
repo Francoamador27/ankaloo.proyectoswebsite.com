@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, User, ShoppingCart, ChevronDown } from "lucide-react";
+import { Menu, X, Phone, User, ShoppingCart, ChevronDown, Briefcase } from "lucide-react";
 
 import logo from '../../assets/img/logo/logo_blanco.png';
-import logo_azul from '../../assets/img/logo/logo_negro.png';
-import { label } from 'yet-another-react-lightbox';
+import logo_azul from '../../assets/img/logo/logo_ankaloo.png';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -28,14 +27,19 @@ export default function Header() {
 
   const leftNav = [
     { label: "Inicio", href: "/" },
-    { label: "Paquetes", href: "/servicios" },
-    { label: "Galería", href: "/galeria" },
+    { label: "Servicios", href: "/servicios" },
+    { label: "Maquinarias", href: "/maquinarias" },
+   // { label: "Calidad", href: "/calidad" },
   ];
 
+
   const rightNav = [
+   // { label: "Sede", href: "/sede" },
     { label: "Quiénes Somos", href: "/quienes-somos" },
-    {label:"Blog", href:"/blog"},
+
+   //i { label: "Blog", href: "/blog" },
     { label: "Contacto", href: "/contacto" },
+    { label: "Trabaja con Nosotros", href: "/trabaja-con-nosotros" },
   ];
 
   // Determinar si usar estilo claro (para home sin scroll) u oscuro (para home con scroll o cualquier otra página)
@@ -55,33 +59,38 @@ export default function Header() {
             {/* LOGO A LA IZQUIERDA */}
             <Link
               to="/"
-              className="flex-shrink-0 relative group flex items-center"
+              className="relative group flex items-center gap-3"
             >
-              <div className={`absolute -inset-4 bg-[#dc834e]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+              {/* Glow effect */}
+              <div className="absolute -inset-3 bg-[#fdce27]/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+
+              {/* Logo */}
               <img
                 src={useDarkStyle ? logo_azul : logo}
-                alt="RevenantTravel"
-                className="logo-header h-10 md:h-12 w-auto object-contain transition-all duration-500 group-hover:scale-105 relative z-10"
+                alt="Ankaloo"
+                className="h-10 md:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105 relative z-10"
               />
-            </Link>
 
-            {/* NAVEGACION (Desktop) */}
+              
+              </Link>
+
+              {/* NAVEGACION (Desktop) */}
             <ul className="hidden lg:flex items-center gap-1">
               {[...leftNav, ...rightNav].map((item, i) => (
                 <li key={i}>
                   <NavLink
                     to={item.href}
                     className={({ isActive }) => `
-                      relative px-5 py-2 text-[14px] font-bold tracking-tight uppercase transition-all duration-300
+                      relative px-5 py-2 text-[14px] font-bold tracking-tight  transition-all duration-300
                       ${useDarkStyle
-                        ? (isActive ? 'text-[#dc834e]' : 'text-slate-700 hover:text-[#dc834e]')
-                        : (isActive ? 'text-white' : 'text-white/90 hover:text-white')
+                        ? (isActive ? 'text-[#1c1c1c] border-b-2 border-[#fdce27]' : 'text-slate-700 hover:text-[#1c1c1c]')
+                        : (isActive ? 'text-[#fdce27]' : 'text-white/90 hover:text-[#fdce27]')
                       }
                       group
                     `}
                   >
                     {item.label}
-                    <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#dc834e] transition-all duration-300 group-hover:w-3/4 ${({ isActive }) => isActive ? 'w-3/4' : ''}`}></span>
+                    <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#fdce27] transition-all duration-300 group-hover:w-3/4 ${({ isActive }) => isActive ? 'w-3/4' : ''}`}></span>
                   </NavLink>
                 </li>
               ))}
@@ -117,8 +126,8 @@ export default function Header() {
                     className={({ isActive }) => `
                       flex items-center px-6 py-4 rounded-2xl text-base font-bold tracking-tight transition-all
                       ${isActive
-                        ? 'bg-[#dc834e]/10 text-[#dc834e] translate-x-2' 
-                        :  'text-slate-700 hover:bg-slate-50' 
+                        ? 'bg-[#fdce27]/15 text-[#1c1c1c] border-l-4 border-[#fdce27] translate-x-2'
+                        : 'text-slate-700 hover:bg-[#fdce27]/10'
                       }
                     `}
                   >
@@ -127,16 +136,8 @@ export default function Header() {
                 </li>
               ))}
 
-              <li className="pt-4">
-                <Link
-                  to="/contacto"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-3 py-4 bg-[#dc834e] hover:bg-[#c77542] text-white rounded-2xl font-black text-base shadow-xl shadow-[#dc834e]/20 active:scale-95 transition-all"
-                >
-                  <Phone size={18} />
-                  CONTACTANOS
-                </Link>
-              </li>
+
+
             </ul>
           </div>
         </div>

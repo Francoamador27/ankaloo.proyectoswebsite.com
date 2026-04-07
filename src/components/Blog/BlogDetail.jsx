@@ -83,7 +83,7 @@ export default function BlogDetail() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-[#dc834e] border-t-transparent mb-4"></div>
+          <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-[#0891b2] border-t-transparent mb-4"></div>
           <p className="text-slate-600 font-medium text-lg">Cargando artículo...</p>
         </div>
       </div>
@@ -103,7 +103,7 @@ export default function BlogDetail() {
           </p>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#dc834e] hover:bg-[#c77542] text-white font-semibold rounded-xl transition-all duration-200"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#0891b2] hover:bg-[#0e7490] text-white font-semibold rounded-xl transition-all duration-200"
           >
             <ArrowLeft size={20} />
             Volver al blog
@@ -147,7 +147,7 @@ export default function BlogDetail() {
               {/* Categoría */}
               {post.categoria && (
                 <div className="mb-6">
-                  <span className="inline-flex items-center gap-2 bg-[#dc834e]/90 backdrop-blur-md text-white text-sm font-black uppercase tracking-widest px-6 py-3 rounded-full shadow-lg border border-white/20">
+                  <span className="inline-flex items-center gap-2 bg-[#0891b2]/90 backdrop-blur-md text-white text-sm font-black  tracking-widest px-6 py-3 rounded-full shadow-lg border border-white/20">
                     <Tag size={16} />
                     {post.categoria.nombre}
                   </span>
@@ -189,12 +189,12 @@ export default function BlogDetail() {
               prose-headings:font-black prose-headings:text-slate-900 prose-headings:tracking-tight
               prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl
               prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-lg
-              prose-a:text-[#dc834e] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+              prose-a:text-[#0891b2] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
               prose-strong:text-slate-900 prose-strong:font-bold
               prose-ul:list-disc prose-ol:list-decimal
-              prose-li:text-slate-700 prose-li:marker:text-[#dc834e]
-              prose-blockquote:border-l-4 prose-blockquote:border-[#dc834e] prose-blockquote:bg-orange-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic
-              prose-code:bg-slate-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-[#dc834e] prose-code:font-mono prose-code:text-sm
+              prose-li:text-slate-700 prose-li:marker:text-[#0891b2]
+              prose-blockquote:border-l-4 prose-blockquote:border-[#0891b2] prose-blockquote:bg-cyan-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic
+              prose-code:bg-slate-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-[#0891b2] prose-code:font-mono prose-code:text-sm
               prose-pre:bg-slate-900 prose-pre:text-slate-100
               prose-img:rounded-2xl prose-img:shadow-xl"
             dangerouslySetInnerHTML={{ __html: post.contenido }}
@@ -223,7 +223,7 @@ export default function BlogDetail() {
                     href={rawUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#dc834e] hover:bg-[#c77542] text-white font-semibold rounded-xl transition-all duration-200"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#0891b2] hover:bg-[#0e7490] text-white font-semibold rounded-xl transition-all duration-200"
                   >
                     Ver video en YouTube
                     <ArrowLeft size={20} className="rotate-180" />
@@ -240,7 +240,7 @@ export default function BlogDetail() {
               {post.categoria && (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-slate-600">Categoría:</span>
-                  <span className="inline-flex items-center gap-2 bg-orange-100 text-[#dc834e] px-4 py-2 rounded-full text-sm font-semibold">
+                  <span className="inline-flex items-center gap-2 bg-cyan-100 text-[#0891b2] px-4 py-2 rounded-full text-sm font-semibold">
                     <Tag size={14} />
                     {post.categoria.nombre}
                   </span>
@@ -250,7 +250,7 @@ export default function BlogDetail() {
               {/* Compartir */}
               <button
                 onClick={handleShare}
-                className="flex items-center gap-2 px-6 py-3 bg-[#dc834e] hover:bg-[#c77542] text-white font-semibold rounded-xl transition-all duration-200"
+                className="flex items-center gap-2 px-6 py-3 bg-[#0891b2] hover:bg-[#0e7490] text-white font-semibold rounded-xl transition-all duration-200"
               >
                 <Share2 size={18} />
                 Compartir artículo
@@ -259,14 +259,14 @@ export default function BlogDetail() {
           </div>
 
           {/* CTA Final */}
-          <div className="mt-16 bg-gradient-to-r from-[#dc834e] to-[#c77542] rounded-3xl p-10 text-white text-center">
+          <div className="mt-16 bg-gradient-to-r from-[#0891b2] to-[#0e7490] rounded-3xl p-10 text-white text-center">
             <h3 className="text-3xl font-black mb-4">¿Te gustó este artículo?</h3>
             <p className="text-amber-50 text-lg mb-6">
               Descubre más historias y consejos de viaje en nuestro blog
             </p>
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#dc834e] hover:bg-amber-50 font-bold rounded-xl transition-all duration-200 shadow-lg"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#0891b2] hover:bg-cyan-50 font-bold rounded-xl transition-all duration-200 shadow-lg"
             >
               Ver más artículos
               <ArrowLeft size={20} className="rotate-180" />

@@ -57,26 +57,25 @@ const DoctoresList = () => {
     }
   );
 
-  const eliminarDoctor = async (doctor) => {
+  const eliminarDoctor = async (diseño) => {
     const confirmar = await mostrarConfirmacion(
       "¿Estás seguro que deseas eliminar?",
-      "Esta acción eliminará el doctor de forma permanente."
+      "Esta acción eliminará el diseño de forma permanente."
     );
     if (!confirmar) return;
 
     try {
-      await clienteAxios.delete(`/api/doctores/${doctor.id}`, {
+      await clienteAxios.delete(`/api/doctores/${diseño.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       mutate(); // refrescar lista
     } catch {
-      alert("Error al eliminar el doctor");
+      alert("Error al eliminar el diseño");
     }
   };
 
   const doctores = data?.data || [];
   const meta = data?.meta || {};
-console.log('doctores', doctores)
   return (
     <div className="p-4">
       <div className="flex justify-start gap-1 items-center mb-6">
@@ -88,7 +87,7 @@ console.log('doctores', doctores)
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
           </svg>
-          Nuevo Doctor
+          Nuevo diseño
         </Link>
       </div>
 
@@ -162,7 +161,7 @@ console.log('doctores', doctores)
       ) : (
         <div className="overflow-x-auto rounded-xl shadow-lg border border-gray-200">
           <table className="min-w-full text-sm text-gray-800 bg-white">
-            <thead className="bg-gray-100 text-xs text-gray-600 uppercase">
+            <thead className="bg-gray-100 text-xs text-gray-600 ">
               <tr>
                 <th className="px-4 py-3 text-left">ID</th>
                 <th className="px-4 py-3 text-left">Nombre</th>
@@ -174,18 +173,18 @@ console.log('doctores', doctores)
               </tr>
             </thead>
             <tbody>
-              {doctores.map((doctor) => (
-                <tr key={doctor.id} className="hover:bg-gray-50 border-t border-gray-200 transition">
-                  <td className="px-4 py-3">{doctor.id}</td>
-                  <td className="px-4 py-3">{doctor.name}</td>
-                  <td className="px-4 py-3">{doctor.email}</td>
-                  <td className="px-4 py-3">{doctor.dni}</td>
-                  <td className="px-4 py-3">{doctor.specialty}</td>
+              {doctores.map((diseño) => (
+                <tr key={diseño.id} className="hover:bg-gray-50 border-t border-gray-200 transition">
+                  <td className="px-4 py-3">{diseño.id}</td>
+                  <td className="px-4 py-3">{diseño.name}</td>
+                  <td className="px-4 py-3">{diseño.email}</td>
+                  <td className="px-4 py-3">{diseño.dni}</td>
+                  <td className="px-4 py-3">{diseño.specialty}</td>
                   <td className="px-4 py-3">
-                    {doctor.color ? (
+                    {diseño.color ? (
                       <span
                         className="inline-block w-6 h-6 rounded-full border"
-                        style={{ backgroundColor: doctor.color }}
+                        style={{ backgroundColor: diseño.color }}
                       />
                     ) : (
                       <span className="text-gray-400 italic">Sin color</span>
@@ -193,13 +192,13 @@ console.log('doctores', doctores)
                   </td>
                   <td className="px-4 py-3 flex gap-2">
                     <Link
-                      to={`/admin-dash/doctores/${doctor.id}`}
+                      to={`/admin-dash/doctores/${diseño.id}`}
                       className="px-3 py-1 text-sm font-semibold bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                     >
                       Ver más
                     </Link>
                     <button
-                      onClick={() => eliminarDoctor(doctor)}
+                      onClick={() => eliminarDoctor(diseño)}
                       className="px-3 py-1 text-sm font-semibold bg-red-600 text-white rounded hover:bg-red-700 transition"
                       type="button"
                     >

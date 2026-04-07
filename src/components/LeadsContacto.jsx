@@ -1,26 +1,31 @@
 import React, { useState, useMemo } from 'react';
 import useSWR, { mutate } from 'swr';
 import clienteAxios from '../config/axios';
-import { Eye, Trash2, Search, Filter } from 'lucide-react';
+import { Eye, Trash2, Search, Filter, MessageCircle, Copy, Mail, Download, Check } from 'lucide-react';
 
 const LeadsContacto = () => {
   const token = localStorage.getItem('AUTH_TOKEN');
 
   const [busqueda, setBusqueda] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
+  const [fechaInicio, setFechaInicio] = useState('');
+  const [fechaFin, setFechaFin] = useState('');
   const [pagina, setPagina] = useState(1);
   const [perPage] = useState(15);
   const [leadSeleccionado, setLeadSeleccionado] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
+  const [copiado, setCopiado] = useState(null);
 
   const query = useMemo(() => {
     const p = new URLSearchParams();
     if (busqueda.length >= 3) p.append('q', busqueda);
     if (filtroEstado) p.append('estado', filtroEstado);
+    if (fechaInicio) p.append('fecha_inicio', fechaInicio);
+    if (fechaFin) p.append('fecha_fin', fechaFin);
     if (pagina) p.append('page', pagina);
     if (perPage) p.append('per_page', perPage);
     return p.toString();
-  }, [busqueda, filtroEstado, pagina, perPage]);
+  }, [busqueda, filtroEstado, fechaInicio, fechaFin, pagina, perPage]);
 
   const fetcher = () =>
     clienteAxios(`/api/leads-contacto?${query}`, {
@@ -104,91 +109,144 @@ const LeadsContacto = () => {
     }
   };
 
-  const getEstadoBadge = (estado) => {
-    const badges = {
-      nuevo: 'bg-green-100 text-green-800 border-green-200',
-      en_proceso: 'bg-blue-100 text-blue-800 border-blue-200',
-      contactado: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-      cerrado: 'bg-gray-100 text-gray-800 border-gray-200',
-    };
-    const labels = {
-      nuevo: 'Nuevo',
-      en_proceso: 'En Proceso',
-      contactado: 'Contactado',
-      cerrado: 'Cerrado',
-    };
-    return (
-      <span className={`px-3 py-1 rounded-full text-xs font-bold border ${badges[estado] || 'bg-gray-100 text-gray-800'}`}>
-        {labels[estado] || estado}
-      </span>
-    );
+  const handleCopiarTelefono = (telefono, leadId) => {
+    navigator.clipboard.writeText(telefono);
+    setCopiado(leadId);
+    setTimeout(() => setCopiado(null), 2000);
+  };
+
+  const handleDescargarArchivo = async (id, nombreArchivo) => {
+    try {
+      const response = await clienteAxios.get(`/api/leads-contacto/${id}/descargar`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        responseType: 'blob',
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', nombreArchivo || 'archivo.pdf');
+      document.body.appendChild(link);
+      link.click();
+      link.parentElement.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert('Error al descargar el archivo.');
+    }
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-4 lg:p-8 max-w-[90rem] mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-black text-slate-900 mb-2">
-          Leads de <span className="text-[#dc834e]">Contacto</span>
-        </h1>
-        <p className="text-slate-600">Gestiona las consultas recibidas desde el formulario de contacto.</p>
+      <div className="mb-10 bg-white p-6 lg:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl lg:text-4xl font-black text-[#1c1c1c] mb-2 uppercase tracking-tight">
+            Leads de <span className="text-[#fdce27]">Contacto</span>
+          </h1>
+          <p className="text-gray-500 font-medium">Gestiona consultas recibidas desde el formulario de contacto.</p>
+        </div>
       </div>
 
       {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-            <div className="text-3xl font-black text-slate-900">{stats.total}</div>
-            <div className="text-sm text-slate-600 font-medium mt-1">Total</div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+          <div className="bg-[#1c1c1c] rounded-2xl p-6 shadow-lg border border-transparent">
+            <div className="text-4xl font-black text-[#fdce27]">{stats.total}</div>
+            <div className="text-xs text-gray-300 font-bold tracking-widest uppercase mt-2">Total</div>
           </div>
-          <div className="bg-green-50 rounded-xl p-6 shadow-sm border border-green-200">
-            <div className="text-3xl font-black text-green-800">{stats.nuevos}</div>
-            <div className="text-sm text-green-700 font-medium mt-1">Nuevos</div>
+          <div className="bg-white rounded-2xl p-6 shadow-sm border-2 border-green-100 hover:border-green-300 transition-colors">
+            <div className="text-4xl font-black text-green-600">{stats.nuevos}</div>
+            <div className="text-xs text-green-600 font-bold tracking-widest uppercase mt-2">Nuevos</div>
           </div>
-          <div className="bg-blue-50 rounded-xl p-6 shadow-sm border border-blue-200">
-            <div className="text-3xl font-black text-blue-800">{stats.en_proceso}</div>
-            <div className="text-sm text-blue-700 font-medium mt-1">En Proceso</div>
+          <div className="bg-white rounded-2xl p-6 shadow-sm border-2 border-blue-100 hover:border-blue-300 transition-colors">
+            <div className="text-4xl font-black text-blue-600">{stats.en_proceso}</div>
+            <div className="text-xs text-blue-600 font-bold tracking-widest uppercase mt-2">En Proceso</div>
           </div>
-          <div className="bg-yellow-50 rounded-xl p-6 shadow-sm border border-yellow-200">
-            <div className="text-3xl font-black text-yellow-800">{stats.contactados}</div>
-            <div className="text-sm text-yellow-700 font-medium mt-1">Contactados</div>
+          <div className="bg-white rounded-2xl p-6 shadow-sm border-2 border-yellow-100 hover:border-yellow-300 transition-colors">
+            <div className="text-4xl font-black text-yellow-500">{stats.contactados}</div>
+            <div className="text-xs text-yellow-600 font-bold tracking-widest uppercase mt-2">Contactados</div>
           </div>
-          <div className="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="text-3xl font-black text-gray-800">{stats.cerrados}</div>
-            <div className="text-sm text-gray-700 font-medium mt-1">Cerrados</div>
+          <div className="bg-white rounded-2xl p-6 shadow-sm border-2 border-gray-100 hover:border-gray-300 transition-colors">
+            <div className="text-4xl font-black text-gray-400">{stats.cerrados}</div>
+            <div className="text-xs text-gray-500 font-bold tracking-widest uppercase mt-2">Cerrados</div>
           </div>
         </div>
       )}
 
       {/* Filtros */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 mb-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Buscar por nombre, email, teléfono..."
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#dc834e]/20 focus:border-[#dc834e]"
-            />
+      <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm border-2 border-gray-100 mb-6">
+        <div className="space-y-6">
+          {/* Búsqueda y Estado */}
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Buscar por nombre, email, teléfono, asunto..."
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#fdce27]/10 focus:border-[#fdce27] outline-none transition-all font-medium text-[#1c1c1c]"
+              />
+            </div>
+            <div className="flex items-center gap-3">
+              <Filter size={20} className="text-gray-400 hidden sm:block" />
+              <select
+                value={filtroEstado}
+                onChange={(e) => setFiltroEstado(e.target.value)}
+                className="w-full lg:w-auto px-6 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#fdce27]/10 focus:border-[#fdce27] outline-none transition-all font-bold text-gray-600 appearance-none bg-white"
+              >
+                <option value="">Todos los estados</option>
+                <option value="nuevo">Nuevos</option>
+                <option value="en_proceso">En Proceso</option>
+                <option value="contactado">Contactados</option>
+                <option value="cerrado">Cerrados</option>
+              </select>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Filter size={20} className="text-gray-400" />
-            <select
-              value={filtroEstado}
-              onChange={(e) => setFiltroEstado(e.target.value)}
-              className="px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#dc834e]/20 focus:border-[#dc834e]"
+
+          {/* Filtros por Fecha */}
+          <div className="flex flex-col md:flex-row gap-4 items-end">
+            <div className="flex-1">
+              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Desde</label>
+              <input
+                type="date"
+                value={fechaInicio}
+                onChange={(e) => setFechaInicio(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#fdce27]/10 focus:border-[#fdce27] outline-none transition-all font-medium text-gray-600"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Hasta</label>
+              <input
+                type="date"
+                value={fechaFin}
+                onChange={(e) => setFechaFin(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#fdce27]/10 focus:border-[#fdce27] outline-none transition-all font-medium text-gray-600"
+              />
+            </div>
+            <button
+              onClick={() => {
+                setFechaInicio('');
+                setFechaFin('');
+              }}
+              className="px-8 py-3.5 bg-gray-100 text-gray-500 font-black uppercase text-xs tracking-widest rounded-xl hover:bg-[#1c1c1c] hover:text-[#fdce27] transition-colors border-2 border-transparent"
             >
-              <option value="">Todos los estados</option>
-              <option value="nuevo">Nuevos</option>
-              <option value="en_proceso">En Proceso</option>
-              <option value="contactado">Contactados</option>
-              <option value="cerrado">Cerrados</option>
-            </select>
+              Limpiar
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Resumen de filtro por fecha */}
+      {(fechaInicio || fechaFin) && (
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+          <p className="text-sm font-bold text-blue-900">
+            Mostrando leads desde {fechaInicio ? new Date(fechaInicio).toLocaleDateString('es-AR') : 'inicio'} hasta {fechaFin ? new Date(fechaFin).toLocaleDateString('es-AR') : 'hoy'}
+            {leads.length > 0 && ` • Total: ${leads.length} lead${leads.length !== 1 ? 's' : ''}`}
+          </p>
+        </div>
+      )}
 
       {/* Tabla */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -196,22 +254,22 @@ const LeadsContacto = () => {
           <table className="w-full">
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-slate-700">
+                <th className="px-6 py-4 text-left text-xs font-black  tracking-wider text-slate-700">
                   Fecha
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-slate-700">
+                <th className="px-6 py-4 text-left text-xs font-black  tracking-wider text-slate-700">
                   Nombre
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-slate-700">
+                <th className="px-6 py-4 text-left text-xs font-black  tracking-wider text-slate-700">
                   Contacto
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-slate-700">
-                  Mensaje
+                <th className="px-6 py-4 text-left text-xs font-black  tracking-wider text-slate-700">
+                  Asunto
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-slate-700">
+                <th className="px-6 py-4 text-left text-xs font-black  tracking-wider text-slate-700">
                   Estado
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-black uppercase tracking-wider text-slate-700">
+                <th className="px-6 py-4 text-right text-xs font-black  tracking-wider text-slate-700">
                   Acciones
                 </th>
               </tr>
@@ -234,28 +292,67 @@ const LeadsContacto = () => {
                     <div className="text-xs text-slate-500">{lead.telefono}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-slate-600 line-clamp-2 max-w-md">
-                      {lead.mensaje}
+                    <div className="text-sm text-slate-600 line-clamp-1">
+                      {lead.asunto || '--'}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    {getEstadoBadge(lead.estado)}
+                    <select
+                      value={lead.estado}
+                      onChange={(e) => handleActualizarEstado(lead.id, e.target.value)}
+                      className="text-[11px] font-black uppercase tracking-wider border-2 border-gray-200 rounded-lg py-1.5 px-2 focus:ring-4 focus:ring-[#fdce27]/10 focus:border-[#fdce27] outline-none cursor-pointer text-[#1c1c1c] bg-white hover:border-gray-300 transition-all shadow-sm"
+                    >
+                      <option value="nuevo">NUEVO</option>
+                      <option value="en_proceso">EN PROCESO</option>
+                      <option value="contactado">CONTACTADO</option>
+                      <option value="cerrado">CERRADO</option>
+                    </select>
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex justify-end gap-2">
+                  <td className="px-6 py-4">
+                    <div className="flex justify-end gap-1 flex-wrap">
+                      <button
+                        onClick={() => window.open(`https://wa.me/${lead.telefono.replace(/\D/g, '')}?text=Hola%20${encodeURIComponent(lead.nombre)}`)}
+                        title="Contactar por WhatsApp"
+                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                      >
+                        <MessageCircle size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleCopiarTelefono(lead.telefono, lead.id)}
+                        title="Copiar teléfono"
+                        className={`p-2 rounded-lg transition-colors ${copiado === lead.id ? 'text-green-600 bg-green-50' : 'text-blue-600 hover:bg-blue-50'}`}
+                      >
+                        {copiado === lead.id ? <Check size={16} /> : <Copy size={16} />}
+                      </button>
+                      <a
+                        href={`mailto:${lead.email}`}
+                        title="Enviar correo"
+                        className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                      >
+                        <Mail size={16} />
+                      </a>
+                      {lead.archivo && (
+                        <button
+                          onClick={() => handleDescargarArchivo(lead.id, lead.archivo.split('/').pop())}
+                          title="Descargar archivo"
+                          className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                        >
+                          <Download size={16} />
+                        </button>
+                      )}
                       <button
                         onClick={() => handleVerDetalle(lead.id)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Ver detalle"
+                        className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                       >
-                        <Eye size={18} />
+                        <Eye size={16} />
                       </button>
                       <button
                         onClick={() => handleEliminar(lead.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         title="Eliminar"
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                       >
-                        <Trash2 size={18} />
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   </td>
@@ -282,8 +379,8 @@ const LeadsContacto = () => {
           >
             Anterior
           </button>
-          <span className="px-4 py-2 bg-[#dc834e] text-white rounded-lg font-bold">
-            Página {currentPage} de {lastPage}
+          <span className="px-6 py-2 bg-[#1c1c1c] text-[#fdce27] rounded-xl font-black uppercase tracking-widest text-xs flex items-center">
+            Pág {currentPage} / {lastPage}
           </span>
           <button
             onClick={() => setPagina(currentPage + 1)}
@@ -320,17 +417,48 @@ const LeadsContacto = () => {
               {/* Información de Contacto */}
               <div>
                 <h4 className="font-black text-slate-700 mb-3">Información de Contacto</h4>
-                <div className="space-y-2 bg-slate-50 rounded-xl p-4">
+                <div className="space-y-3 bg-slate-50 rounded-xl p-4">
                   <div>
-                    <span className="text-xs font-bold text-slate-500 uppercase">Email:</span>
-                    <p className="text-sm text-slate-900">{leadSeleccionado.email}</p>
+                    <span className="text-xs font-bold text-slate-500 ">Email:</span>
+                    <p className="text-sm text-slate-900 flex items-center gap-2">
+                      {leadSeleccionado.email}
+                      <a href={`mailto:${leadSeleccionado.email}`} className="text-purple-600 hover:text-purple-700">
+                        <Mail size={15} />
+                      </a>
+                    </p>
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-slate-500 uppercase">Teléfono:</span>
-                    <p className="text-sm text-slate-900">{leadSeleccionado.telefono}</p>
+                    <span className="text-xs font-bold text-slate-500 ">Teléfono:</span>
+                    <p className="text-sm text-slate-900 flex items-center gap-2">
+                      {leadSeleccionado.telefono}
+                      <button 
+                        onClick={() => handleCopiarTelefono(leadSeleccionado.telefono, 'modal')}
+                        className={`${copiado === 'modal' ? 'text-green-600' : 'text-blue-600 hover:text-blue-700'}`}
+                      >
+                        {copiado === 'modal' ? <Check size={15} /> : <Copy size={15} />}
+                      </button>
+                      <a 
+                        href={`https://wa.me/${leadSeleccionado.telefono.replace(/\D/g, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-green-600 hover:text-green-700"
+                      >
+                        <MessageCircle size={15} />
+                      </a>
+                    </p>
                   </div>
                 </div>
               </div>
+
+              {/* Asunto */}
+              {leadSeleccionado.asunto && (
+                <div>
+                  <h4 className="font-black text-slate-700 mb-3">Asunto</h4>
+                  <div className="bg-slate-50 rounded-xl p-4">
+                    <p className="text-sm text-slate-700">{leadSeleccionado.asunto}</p>
+                  </div>
+                </div>
+              )}
 
               {/* Mensaje */}
               <div>
@@ -342,13 +470,32 @@ const LeadsContacto = () => {
                 </div>
               </div>
 
+              {/* Archivo */}
+              {leadSeleccionado.archivo && (
+                <div>
+                  <h4 className="font-black text-slate-700 mb-3">Archivo Adjunto</h4>
+                  <div className="bg-orange-50 rounded-xl p-4 flex items-center justify-between">
+                    <span className="text-sm text-slate-700">
+                      📎 {leadSeleccionado.archivo.split('/').pop()}
+                    </span>
+                    <button
+                      onClick={() => handleDescargarArchivo(leadSeleccionado.id, leadSeleccionado.archivo.split('/').pop())}
+                      className="px-4 py-2 bg-orange-600 text-white rounded-lg font-bold hover:bg-orange-700 transition-colors flex items-center gap-2"
+                    >
+                      <Download size={16} />
+                      Descargar
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Estado */}
               <div>
                 <h4 className="font-black text-slate-700 mb-3">Estado</h4>
                 <select
                   value={leadSeleccionado.estado}
                   onChange={(e) => handleActualizarEstado(leadSeleccionado.id, e.target.value)}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#dc834e]/20 focus:border-[#dc834e] font-medium"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2] font-medium"
                 >
                   <option value="nuevo">Nuevo</option>
                   <option value="en_proceso">En Proceso</option>
@@ -365,7 +512,7 @@ const LeadsContacto = () => {
                   onBlur={(e) => handleActualizarNotas(leadSeleccionado.id, e.target.value)}
                   rows="4"
                   placeholder="Agregar notas internas sobre este lead..."
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#dc834e]/20 focus:border-[#dc834e] resize-none"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#0891b2]/20 focus:border-[#0891b2] resize-none"
                 />
               </div>
             </div>

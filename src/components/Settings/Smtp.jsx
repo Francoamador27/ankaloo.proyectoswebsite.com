@@ -12,6 +12,8 @@ const Smtp = ({ token, onSaved }) => {
   const [fromEmail, setFromEmail] = useState("");
   const [fromName, setFromName] = useState("");
   const [adminEmail, setAdminEmail] = useState("");
+  const [rrhhEmail, setRrhhEmail] = useState("");
+  const [saveRrhhPdf, setSaveRrhhPdf] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
   const [loading, setLoading] = useState(true);
@@ -37,6 +39,8 @@ const Smtp = ({ token, onSaved }) => {
       setFromEmail(data?.from_email || "");
       setFromName(data?.from_name || "");
       setAdminEmail(data?.admin_email || "");
+      setRrhhEmail(data?.rrhh_email || "");
+      setSaveRrhhPdf(data?.save_rrhh_pdf || false);
     } catch (e) {
       console.error(e);
       setErr("No se pudo cargar la configuración SMTP.");
@@ -60,6 +64,7 @@ const Smtp = ({ token, onSaved }) => {
     if (!username.trim()) return setErr("Ingresá el usuario SMTP.");
     if (fromEmail && !EMAIL_RE.test(fromEmail)) return setErr("El email de remitente no es válido.");
     if (adminEmail && !EMAIL_RE.test(adminEmail)) return setErr("El email del administrador no es válido.");
+    if (rrhhEmail && !EMAIL_RE.test(rrhhEmail)) return setErr("El email de RRHH no es válido.");
 
     const payload = {
       host: host.trim(),
@@ -70,6 +75,8 @@ const Smtp = ({ token, onSaved }) => {
       from_email: fromEmail || null,
       from_name: fromName || null,
       admin_email: adminEmail || null,
+      rrhh_email: rrhhEmail || null,
+      save_rrhh_pdf: saveRrhhPdf,
     };
 
     try {
@@ -166,11 +173,29 @@ const Smtp = ({ token, onSaved }) => {
 
         {/* EMAIL DESTINO */}
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Email de destino (formularios)</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Email de destino (formularios generales)</label>
           <input type="email" value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)}
                  placeholder="admin@tu-dominio.com"
                  className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
           <p className="text-xs text-slate-500 mt-1">A este correo llegarán los mensajes de formularios de contacto.</p>
+        </div>
+
+        {/* EMAIL RRHH */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-slate-700 mb-1">Email de destino (RRHH)</label>
+          <input type="email" value={rrhhEmail} onChange={(e) => setRrhhEmail(e.target.value)}
+                 placeholder="rrhh@tu-dominio.com"
+                 className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+          <p className="text-xs text-slate-500 mt-1">A este correo llegarán los CVs y solicitudes de "Trabaja con nosotros".</p>
+        </div>
+
+        {/* GUARDAR PDF */}
+        <div className="md:col-span-2">
+          <label className="flex items-center gap-2 cursor-pointer w-max">
+            <input type="checkbox" checked={saveRrhhPdf} onChange={(e) => setSaveRrhhPdf(e.target.checked)} className="rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+            <span className="text-sm font-medium text-slate-700">Guardar PDFs de CV en el servidor</span>
+          </label>
+          <p className="text-xs text-slate-500 mt-1 ml-6">Si se activa, los CVs enviados se almacenarán en la base de datos (se verá en Leads) y ocuparán espacio local.</p>
         </div>
       </div>
 

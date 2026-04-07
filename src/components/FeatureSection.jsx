@@ -1,176 +1,162 @@
 import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Pagination, Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/effect-fade';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 import clienteAxios from '../config/axios';
 import useCont from '../hooks/useCont';
 import WhatsappHref from '../utils/WhatsappUrl';
 
+function getYoutubeVideoId(url = '') {
+  try {
+    const parsedUrl = new URL(url);
+    if (parsedUrl.hostname.includes('youtu.be')) {
+      return parsedUrl.pathname.replace('/', '');
+    }
+    if (parsedUrl.pathname.startsWith('/embed/')) {
+      return parsedUrl.pathname.split('/embed/')[1];
+    }
+    return parsedUrl.searchParams.get('v') || '';
+  } catch {
+    return '';
+  }
+}
+
+function SlideBackground({ slide }) {
+  if (slide.background_type === 'youtube' && slide.youtube_url) {
+    const videoId = getYoutubeVideoId(slide.youtube_url);
+    const src = videoId
+      ? `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0&playsinline=1`
+      : slide.youtube_url;
+
+    return (
+      <div className="absolute inset-0 overflow-hidden">
+        <iframe
+          className="w-full h-full scale-125 pointer-events-none"
+          src={src}
+          title={slide.title}
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
+  if (slide.image) {
+    return (
+      <img
+        src={slide.image}
+        alt={slide.title}
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+    );
+  }
+
+  return <div className="absolute inset-0 bg-black" />;
+}
+
 // Componente separado que siempre renderiza Swiper para mantener consistencia de hooks
-function HeroSwiper({ slides, company, contact }) {
+function HeroSwiper({ slides }) {
   return (
-    <Swiper
-      modules={[Autoplay, EffectFade, Pagination, Navigation]}
-      effect="fade"
-      fadeEffect={{ crossFade: true }}
-      autoplay={{
-        delay: 5000,
-        disableOnInteraction: false,
-      }}
-      pagination={{ clickable: true }}
-      navigation
-      loop={slides.length > 1}
-      className="hero-swiper w-full h-full"
-    >
-      {slides.map((slide, index) => (
-        <SwiperSlide key={slide.id} className="h-full">
-          <div className="relative w-full h-full flex items-center justify-center">
-            {slide.image ? (
-              <img
-                src={slide.image}
-                alt={slide.title || "Hero"}
-                className="absolute inset-0 w-full h-full object-cover"
-                loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-                fetchPriority={index === 0 ? "high" : "auto"}
-              />
-            ) : null}
-            {/* Overlay con gradiente */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#003366]/80 via-black/40 to-black/30" />
+    <div className="relative w-full h-full">
 
-            {/* Content */}
-            <div className="relative z-10 w-full max-w-6xl px-6 lg:px-12 mx-auto text-center">
-              <span className="inline-block mb-6 px-5 py-2 text-sm font-black tracking-wider bg-white/10 backdrop-blur-md text-white rounded-full border border-white/20 thea-amelia">
-                {company?.name || "RevenantTravel"}
-              </span>
 
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black  text-white mb-8 leading-[1.1] tracking-tight">
-                {slide.title}
-              </h1>
+      <Swiper
+        modules={[Autoplay, EffectFade, Pagination, Navigation]}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: true,
+        }}
+        pagination={{ clickable: true }}
+        navigation
+        loop={slides.length > 1}
+        className="hero-swiper w-full h-full"
+      >
+        {slides.map((slide) => (
+          <SwiperSlide key={slide.id} className="h-full">
+            <div className="relative w-full h-full flex items-center justify-center bg-black">
+              <SlideBackground slide={slide} />
+              <div className="absolute inset-0 bg-black/50" />
+              {/* Content */}
+              <div className="relative z-10 w-full max-w-5xl px-16 lg:px-24 mx-auto text-center">
 
-              <p className="max-w-2xl mx-auto text-xl md:text-2xl text-white/80 mb-12 font-light leading-relaxed">
-                {slide.description}
-              </p>
+                {/* Label corporativo */}
+                <p className="text-[#fdce27] text-xs font-bold tracking-[0.35em]  mb-5">
+                  ANKALOO CONSTRUCCIONES
+                </p>
 
-              <div className="flex flex-wrap justify-center gap-6">
-                <a
-                  href={`tel:${contact?.phone || contact?.whatsapp || ""}`}
-                  className="px-10 py-5 font-black text-[#003366] bg-white rounded-2xl hover:bg-slate-100 transition-all shadow-xl hover:-translate-y-1 active:scale-95 text-lg"
-                >
-                  LLAMAR AHORA
-                </a>
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-[1.15] tracking-[0.02em] drop-shadow-lg">
+                  {slide.title}
+                </h1>
 
-                <a
-                  href={WhatsappHref({
-                    message: `Hola, me interesa saber más sobre "${slide.title}". Quisiera pedir un presupuesto.`,
-                  })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-10 py-5 font-black text-white border-2 border-white/60 rounded-2xl hover:bg-white/10 backdrop-blur-sm transition-all text-lg"
-                >
-                  WHATSAPP
-                </a>
+
+                <p className="max-w-xl mx-auto text-base md:text-lg text-white/75 font-light leading-relaxed">
+                  {slide.description}
+                </p>
+
+
               </div>
             </div>
-          </div>
-        </SwiperSlide>
-      ))}
-    </Swiper>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
 }
 
 export default function HeroFeatures() {
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { company, contact } = useCont();
+  const { contact } = useCont();
 
+  // Fetch sliders
   useEffect(() => {
-    let cancelled = false;
+    let mounted = true;
 
     const fetchSlides = async () => {
       try {
         const { data } = await clienteAxios.get('/api/sliders');
-        if (!cancelled && Array.isArray(data?.data) && data.data.length > 0) {
+        if (mounted && Array.isArray(data?.data) && data.data.length > 0) {
           setSlides(data.data);
         }
       } catch (error) {
         console.error('Error cargando sliders', error);
       } finally {
-        if (!cancelled) {
+        if (mounted) {
           setLoading(false);
         }
       }
     };
 
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(fetchSlides);
-    } else {
-      setTimeout(fetchSlides, 1500);
-    }
+    // Ejecutar inmediatamente sin esperar
+    fetchSlides();
 
     return () => {
-      cancelled = true;
+      mounted = false;
     };
   }, []);
 
   return (
-    <section className="relative w-full h-[85vh] min-h-[600px] overflow-hidden">
-      <style>{`
-        .hero-swiper,
-        .hero-swiper .swiper-wrapper,
-        .hero-swiper .swiper-slide {
-          width: 100% !important;
-          height: 100% !important;
-        }
+    <section className="relative w-full h-[85vh] min-h-screen overflow-hidden">
 
-        .hero-swiper .swiper-button-next,
-        .hero-swiper .swiper-button-prev {
-          color: white;
-          width: 48px;
-          height: 48px;
-          background: rgba(0,0,0,.45);
-          border-radius: 9999px;
-          transition: all .25s ease;
-        }
-
-        .hero-swiper .swiper-button-next:hover,
-        .hero-swiper .swiper-button-prev:hover {
-          background: rgba(0,0,0,.7);
-          transform: scale(1.05);
-        }
-
-        .hero-swiper .swiper-button-next::after,
-        .hero-swiper .swiper-button-prev::after {
-          font-size: 20px;
-          font-weight: bold;
-        }
-        
-        .hero-swiper .swiper-pagination-bullet {
-          background: white;
-          opacity: 0.5;
-        }
-        
-        .hero-swiper .swiper-pagination-bullet-active {
-          background: #003366;
-          opacity: 1;
-          width: 12px;
-          border-radius: 6px;
-          transition: width 0.3s;
-        }
-      `}</style>
-
+      {/* Contenido encima */}
       {loading ? (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 to-[#dc834e]">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-white text-lg font-semibold thea-amelia">Cargando experiencias...</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20">
+          <div className="relative z-10 text-center">
+            {/* Spinner corporativo */}
+            <div className="relative w-16 h-16 mx-auto mb-6">
+              {/* Borde gold */}
+              <div className="absolute inset-0 border-transparent border-t-[#fdce27] border-r-[#fdce27]/50 rounded-full animate-spin"></div>
+              {/* Centro */}
+              <div className="absolute inset-3 bg-[#fdce27]/20 rounded-full"></div>
+            </div>
+            <p className="text-white text-sm font-bold tracking-[0.3em] ">Cargando...</p>
           </div>
         </div>
       ) : slides.length > 0 ? (
-        <HeroSwiper slides={slides} company={company} contact={contact} />
+        <div className="absolute inset-0 z-10">
+          <HeroSwiper slides={slides} contact={contact} />
+        </div>
       ) : null}
     </section>
   );

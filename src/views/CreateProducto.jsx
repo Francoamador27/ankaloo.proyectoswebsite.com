@@ -49,7 +49,7 @@ const CreateProducto = () => {
       // Importante: si tu backend espera otro nombre, cambia 'imagenes[]' por el que uses.
       form.imagenes.forEach((file) => fd.append('imagenes[]', file));
 
-      const { data } = await clienteAxios.post('/api/productos', fd, {
+      await clienteAxios.post('/api/productos', fd, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -64,7 +64,6 @@ const CreateProducto = () => {
         disponible: true,
         imagenes: [],
       });
-      console.log('Producto creado:', data);
     } catch (err) {
       console.error(err);
       if (err.response?.status === 422) {

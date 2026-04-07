@@ -43,7 +43,7 @@ const SortableImage = ({ img, onDelete }) => {
       </div>
       <img
         src={`${import.meta.env.VITE_API_URL}/storage/uploads${img.imagen}`}
-        alt="Aberturas de aluminio a medida en Córdoba – calidad, diseño y durabilidad"
+        alt="Galería de proyectos de Ankaloo Construcciones – soluciones tecnológicas innovadoras"
         className="object-cover w-full h-full"
       />
       <button

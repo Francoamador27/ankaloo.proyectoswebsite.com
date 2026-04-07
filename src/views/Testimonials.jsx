@@ -21,7 +21,7 @@ const Testimonials = () => {
 
         // 2. Cargamos el script de TrustIndex
         const script = document.createElement('script');
-        script.src = 'https://cdn.trustindex.io/loader.js?c98894b64a7541282a96c1bca2b';
+        script.src = 'https://cdn.trustindex.io/loader.js?7b7af9d6023024804e8687b608c';
         script.defer = true;
         script.async = true;
 
@@ -45,7 +45,7 @@ const Testimonials = () => {
         <section className="py-12 bg-gray-50 sm:py-16 lg:py-20" id="testimonios">
             <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div className="text-center mb-10">
-                    <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl font-comfortaa">
+                    <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl">
                         Lo que dicen nuestros clientes
                     </h2>
                 </div>

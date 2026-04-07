@@ -16,7 +16,7 @@ export default function PagoResultado() {
             Hemos recibido tu pago correctamente. Ahora estamos verificando los datos de tu pedido.
           </p>
           <p className="text-gray-800 mb-2">
-            En breve comenzaremos a preparar tu envío. Te mantendremos informado/a por correo electrónico o WhatsApp una vez que el paquete haya sido despachado.
+            En breve comenzaremos a preparar tu envío. Te mantendremos informado/a por correo electrónico o WhatsApp una vez que el servicio haya sido despachado.
           </p>
           <p className="text-gray-800">
             ¡Gracias por confiar en nosotros para crear tus imanes personalizados!

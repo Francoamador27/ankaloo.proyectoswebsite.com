@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import clienteAxios from "../../config/axios";
+import TiptapEditor from "../TiptapEditor/TiptapEditor";
 
 // =========================
 // UTILS
@@ -111,7 +112,7 @@ export default function EditServicios() {
 
             } catch (err) {
                 console.error(err);
-                setError("No se pudo cargar el Paquete.");
+                setError("No se pudo cargar el servicio.");
             }
         };
 
@@ -228,10 +229,10 @@ export default function EditServicios() {
                 },
             });
 
-            setMensaje("Paquete actualizado correctamente.");
+            setMensaje("servicio actualizado correctamente.");
         } catch (err) {
             console.error(err);
-            setError("Error al actualizar el Paquete.");
+            setError("Error al actualizar el servicio.");
         } finally {
             setCargando(false);
         }
@@ -245,7 +246,7 @@ export default function EditServicios() {
             <div className="max-w-5xl mx-auto">
 
                 <div className="bg-white shadow-lg border border-slate-200 rounded-xl p-8">
-                    <h1 className="text-2xl font-bold mb-6">Editar Paquete #{id}</h1>
+                    <h1 className="text-2xl font-bold mb-6">Editar servicio #{id}</h1>
 
                     <form onSubmit={handleSubmit} className="space-y-8">
 
@@ -263,17 +264,16 @@ export default function EditServicios() {
                         {/* ===== DESCRIPCION ===== */}
                         <div>
                             <label className="font-semibold">Descripcion</label>
-                            <textarea
-                                rows={5}
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                className="w-full mt-1 border p-3 rounded-lg"
+                            <TiptapEditor 
+                                content={description}
+                                onChange={setDescription}
+                                placeholder="Describe el servicio/obra..."
                             />
                         </div>
 
                         {/* ===== CATEGORIA ===== */}
                         <div>
-                            <label className="font-semibold">Categoria del Paquete</label>
+                            <label className="font-semibold">Categoria del servicio</label>
                             <select
                                 className="w-full mt-1 border p-3 rounded-lg"
                                 value={category}
@@ -523,7 +523,7 @@ export default function EditServicios() {
                             disabled={cargando}
                             className="px-8 py-4 bg-blue-600 text-white rounded-xl"
                         >
-                            {cargando ? "Actualizando..." : "Actualizar Paquete"}
+                            {cargando ? "Actualizando..." : "Actualizar servicio"}
                         </button>
 
                         {mensaje && (

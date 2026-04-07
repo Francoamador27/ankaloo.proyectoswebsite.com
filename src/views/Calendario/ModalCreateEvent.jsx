@@ -213,14 +213,14 @@ export default function ModalCreateEvent({ dateStr, dateObj, onCreate, onClose, 
   const [amount, setAmount] = useState("");
   const [isPaid, setIsPaid] = useState(false);
 
-  // ---- Buscar y seleccionar paciente ----
+  // ---- Buscar y seleccionar usuario ----
   const [patientQuery, setPatientQuery] = useState("");
   const [patientResults, setPatientResults] = useState([]);
   const [loadingPatients, setLoadingPatients] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [showPatientDropdown, setShowPatientDropdown] = useState(false);
 
-  // ---- Buscar y seleccionar doctor ----
+  // ---- Buscar y seleccionar diseño ----
   const [doctorQuery, setDoctorQuery] = useState("");
   const [doctorResults, setDoctorResults] = useState([]);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
@@ -300,7 +300,7 @@ export default function ModalCreateEvent({ dateStr, dateObj, onCreate, onClose, 
       const items = arr
         .map((u) => {
           if (kind === "patient") {
-            // Paciente: shape con idpa/nompa/apepa y user anidado
+            // usuario: shape con idpa/nompa/apepa y user anidado
             const id = u?.idpa ?? null;
             const name = [u?.nompa, u?.apepa].filter(Boolean).join(" ").trim() || "(Sin nombre)";
             const email = u?.user?.email ?? "";
@@ -310,7 +310,7 @@ export default function ModalCreateEvent({ dateStr, dateObj, onCreate, onClose, 
             const line2 = email || dni || phone || "";
             return id ? { id, name, line2, email } : null;
           } else {
-            // Doctor: shape simple con id/name/specialty/email/phone
+            // diseño: shape simple con id/name/specialty/email/phone
             const id = u?.id ?? null;
             const name = u?.name || "(Sin nombre)";
             const email = u?.email ?? "";
@@ -333,14 +333,14 @@ export default function ModalCreateEvent({ dateStr, dateObj, onCreate, onClose, 
     }
   }, []);
 
-  // Búsqueda de pacientes con debounce
+  // Búsqueda de usuarios con debounce
   useEffect(() => {
     if (patientDebounceTimer.current) clearTimeout(patientDebounceTimer.current);
 
     patientDebounceTimer.current = setTimeout(() => {
       searchUsers(
         patientQuery,
-        "/api/pacientes",
+        "/api/usuarios",
         "patient",
         setPatientResults,
         setLoadingPatients,
@@ -357,7 +357,7 @@ export default function ModalCreateEvent({ dateStr, dateObj, onCreate, onClose, 
       searchUsers(
         doctorQuery,
         "/api/doctores",
-        "doctor",
+        "diseño",
         setDoctorResults,
         setLoadingDoctors,
         setShowDoctorDropdown
@@ -381,8 +381,8 @@ export default function ModalCreateEvent({ dateStr, dateObj, onCreate, onClose, 
   // Crear cita
   const handleCreate = useCallback(() => {
     if (!title.trim()) return alert("Por favor ingresa un motivo");
-    if (!selectedPatient) return alert("Por favor selecciona un paciente");
-    if (!selectedDoctor) return alert("Por favor selecciona un doctor");
+    if (!selectedPatient) return alert("Por favor selecciona un usuario");
+    if (!selectedDoctor) return alert("Por favor selecciona un diseño");
     if (!time) return alert("Por favor selecciona un horario");
     setCreating(true);
 
@@ -540,9 +540,9 @@ export default function ModalCreateEvent({ dateStr, dateObj, onCreate, onClose, 
               />
             </label>
 
-            {/* Selector de Paciente */}
+            {/* Selector de usuario */}
             <UserSelector
-              label="Seleccionar Paciente"
+              label="Seleccionar usuario"
               query={patientQuery}
               setQuery={setPatientQuery}
               results={patientResults}
@@ -553,12 +553,12 @@ export default function ModalCreateEvent({ dateStr, dateObj, onCreate, onClose, 
               setSelectedUser={setSelectedPatient}
               inputRef={patientInputRef}
               containerRef={patientContainerRef}
-              placeholder="Buscar paciente por nombre, email o DNI"
+              placeholder="Buscar usuario por nombre, email o DNI"
             />
 
-            {/* Selector de Doctor */}
+            {/* Selector de diseño */}
             <UserSelector
-              label="Seleccionar Doctor"
+              label="Seleccionar diseño"
               query={doctorQuery}
               setQuery={setDoctorQuery}
               results={doctorResults}
@@ -569,7 +569,7 @@ export default function ModalCreateEvent({ dateStr, dateObj, onCreate, onClose, 
               setSelectedUser={setSelectedDoctor}
               inputRef={doctorInputRef}
               containerRef={doctorContainerRef}
-              placeholder="Buscar doctor por nombre o especialidad"
+              placeholder="Buscar diseño por nombre o especialidad"
             />
 
             {/* Horario y Duración */}

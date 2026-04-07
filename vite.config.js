@@ -2,9 +2,16 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
+import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
+  assetsInclude: ["**/*.glb", "**/*.gltf"],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   plugins: [
     {
       name: "async-css",
@@ -16,6 +23,12 @@ export default defineConfig({
         return html.replace(cssLinkRegex, (match, attrs) => {
           const hrefMatch = attrs.match(/href="([^"]+)"/);
           if (!hrefMatch) return match;
+
+          // Excluir archivos de Swiper del preload agresivo
+          const href = hrefMatch[1];
+          if (href.includes('effect-coverflow') || href.includes('swiper')) {
+            return match; // Dejar como stylesheet normal
+          }
 
           const safeAttrs = attrs.replace(/\s+rel="stylesheet"/g, "");
           const preloadTag = `<link rel="preload" as="style" ${safeAttrs} onload="this.onload=null;this.rel='stylesheet'">`;
@@ -31,6 +44,20 @@ export default defineConfig({
       injectRegister: false,
       workbox: {
         maximumFileSizeToCacheInBytes: 3000000, // 3 MB
+        runtimeCaching: [
+          {
+            urlPattern: /\.js$/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "js-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 1 week
+              },
+            },
+          },
+        ],
+        globIgnores: ["**/node_modules/**/*", "**/*.map"],
       },
       includeAssets: [
         "favicon.ico",
@@ -38,9 +65,9 @@ export default defineConfig({
         "robots.txt",
       ],
       manifest: {
-        name: "RevenanTravel",
-        short_name: "RevenanTravel",
-        description:"Tu agencia de viajes confiable para experiencias inolvidables",
+        name: "Ankaloo Construcciones",
+        short_name: "Ankaloo Construcciones",
+        description:"Transformamos tu negocio con soluciones tecnológicas integrales",
                 theme_color: "#1f2937", // gris oscuro elegante (podés cambiarlo por tu color de marca)
         background_color: "#ffffff",
         display: "standalone",

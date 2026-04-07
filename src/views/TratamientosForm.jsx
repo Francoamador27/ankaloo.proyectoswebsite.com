@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import clienteAxios from "../config/axios";
+import TiptapEditor from "../components/TiptapEditor/TiptapEditor";
 
 // Utilidad para crear slug
 const slugify = (str) =>
@@ -216,11 +217,11 @@ const TratamientosForm = () => {
         setError(null);
 
         // Validaciones mínimas
-        if (!title.trim()) return setError("El nombre del Paquete es obligatorio.");
+        if (!title.trim()) return setError("El nombre del servicio es obligatorio.");
         if (!description.trim())
-            return setError("La descripcion del Paquete es obligatoria.");
+            return setError("La descripcion del servicio es obligatoria.");
         if (categorias.length > 0 && !category)
-            return setError("Selecciona una categoria para el Paquete.");
+            return setError("Selecciona una categoria para el servicio.");
         if (!mainImage) return setError("Subí la imagen principal.");
 
         // features: opcional, pero si hay vacías, las filtramos
@@ -266,7 +267,7 @@ const TratamientosForm = () => {
             });
 
             if (response.status === 200 || response.status === 201) {
-                setMensaje("Paquete registrado correctamente");
+                setMensaje("servicio registrado correctamente");
 
                 // Reset del formulario
                 setTitle("");
@@ -310,12 +311,12 @@ const TratamientosForm = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <div className="lg:col-span-2 space-y-2">
                                 <label className="block text-sm font-semibold text-slate-700">
-                                    Nombre del Paquete
+                                    Nombre del servicio
                                 </label>
                                 <input
                                     type="text"
                                     className="w-full border border-slate-300 p-3 rounded-lg focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all duration-200 bg-white"
-                                    placeholder="Ej: Risotto de hongos, Milanesa, Ensalada Cesar"
+                                    placeholder="Obra hidraulica, Viales, etc"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
@@ -337,21 +338,19 @@ const TratamientosForm = () => {
                         {/* Descripción */}
                         <div className="space-y-2">
                             <label className="block text-sm font-semibold text-slate-700">
-                                Descripcion del Paquete
+                                Descripcion del servicio
                             </label>
-                            <textarea
-                                className="w-full border border-slate-300 p-4 rounded-lg focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all duration-200 bg-white resize-none"
-                                placeholder="Describe el Paquete, ingredientes principales y estilo de preparacion..."
-                                rows={5}
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
+                            <TiptapEditor 
+                                content={description}
+                                onChange={setDescription}
+                                placeholder="Describe el servicio, ingredientes principales y estilo de preparacion..."
                             />
                         </div>
 
                         {/* Categoria */}
                         <div className="space-y-2">
                             <label className="block text-sm font-semibold text-slate-700">
-                                Categoria del Paquete
+                                Categoria de la obra
                             </label>
                             <select
                                 className="w-full border border-slate-300 p-3 rounded-lg bg-white"
@@ -418,7 +417,7 @@ const TratamientosForm = () => {
                         {/* Tags */}
                         <div className="space-y-3">
                             <label className="block text-sm font-semibold text-slate-700">
-                                Palabras Clave del Paquete
+                                Palabras Clave del servicio
                             </label>
                             <div className="flex gap-3">
                                 <input
@@ -474,7 +473,7 @@ const TratamientosForm = () => {
                             onDrop={onMainDrop}
                         >
                             <label className="block text-sm font-semibold text-slate-700">
-                                Imagen Principal del Paquete
+                                Imagen Principal del servicio
                                 <span className="text-xs text-slate-500 font-normal ml-2">
                                     (JPG/PNG/WEBP, máximo {MAX_MB}MB)
                                 </span>
@@ -594,7 +593,7 @@ const TratamientosForm = () => {
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <label className="block text-sm font-semibold text-slate-700">
-                                    Caracteristicas del Paquete
+                                    Caracteristicas del servicio
                                 </label>
                                 <button
                                     type="button"
@@ -660,7 +659,7 @@ const TratamientosForm = () => {
                                         Guardando...
                                     </span>
                                 ) : (
-                                    "Registrar Paquete"
+                                    "Registrar servicio"
                                 )}
                             </button>
 

@@ -7,10 +7,10 @@ const Comparacion = () => {
       <div className="max-w-7xl mx-auto px-6 py-24">
         <div className="text-center mb-20">
           <h2 className="text-5xl lg:text-6xl font-black text-slate-900 mb-6">
-            Evolución en tus <span className="text-[#003366]">Aberturas</span>
+            Transformación Digital con <span className="text-[#003366]">Ankaloo Construcciones</span>
           </h2>
           <p className="text-2xl text-slate-600 font-light max-w-2xl mx-auto">
-            Descubre la diferencia entre las aberturas convencionales y la tecnología de nuestra fábrica.
+            Descubre la diferencia entre sistemas heredados y soluciones tecnológicas modernas.
           </p>
         </div>
 
@@ -20,19 +20,19 @@ const Comparacion = () => {
             <div className="absolute top-0 left-0 w-2 h-full bg-red-400"></div>
             <div className="flex items-center gap-4 mb-10">
               <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center">
-                <span className="text-3xl">🏚️</span>
+                <span className="text-3xl">⚙️</span>
               </div>
-              <h3 className="text-3xl font-black text-slate-900">Aberturas Antiguas</h3>
+              <h3 className="text-3xl font-black text-slate-900">Sistemas Heredados</h3>
             </div>
             <ul className="space-y-6">
               {[
-                'Filtraciones de aire y agua constantes',
-                'Pérdida de temperatura (calor/frío)',
-                'Ruidos del exterior molestos',
-                'Mantenimiento costoso y frecuente',
-                'Cierres deficientes y poca seguridad',
-                'Materiales que se corroen o deforman',
-                'Estética anticuada que desvaloriza tu hogar'
+                'Procesos manuales y lentitud operativa',
+                'Pérdida de datos y falta de seguridad',
+                'Sistemas desconectados e incompatibles',
+                'Mantenimiento costoso y problemas frecuentes',
+                'Escalabilidad limitada y restrictiva',
+                'Tecnología obsoleta que se degrada',
+                'Bajo ROI y competitividad limitada'
               ].map((item, idx) => (
                 <li key={idx} className="flex items-start gap-4 text-slate-600 group-hover:translate-x-1 transition-transform">
                   <div className="mt-1 flex-shrink-0">
@@ -51,19 +51,19 @@ const Comparacion = () => {
             </div>
             <div className="flex items-center gap-4 mb-10">
               <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
-                <span className="text-3xl">🏗️</span>
+                <span className="text-3xl">🚀</span>
               </div>
-              <h3 className="text-3xl font-black text-white">RevenanTravel</h3>
+              <h3 className="text-3xl font-black text-white">Ankaloo Construcciones</h3>
             </div>
             <ul className="space-y-6">
               {[
-                'Cierre hermético total (Anti-filtraciones)',
-                'Eficiencia energética (Ahorro en climatización)',
-                'Aislamiento acústico de alta prestación',
-                'Cero mantenimiento, aluminio inalterable',
-                'Sistemas de seguridad reforzados',
-                'Diseños modernos y minimalistas',
-                'Valorización inmediata de tu propiedad'
+                'Automatización y optimización de procesos',
+                'Seguridad integral y backup garantizado',
+                'Integración completa de sistemas',
+                'Soporte técnico proactivo y confiable',
+                'Escalabilidad infinita y flexible',
+                'Tecnología de punta y actualizada',
+                'ROI inmediato y ventaja competitiva'
               ].map((item, idx) => (
                 <li key={idx} className="flex items-start gap-4 text-blue-50 group-hover:translate-x-1 transition-transform">
                   <div className="mt-1 flex-shrink-0">

@@ -84,7 +84,7 @@ export default function Odontograma() {
     }
     try {
       if (!idpa) {
-        alert("Falta el id del paciente en la URL.");
+        alert("Falta el id del usuario en la URL.");
         return;
       }
       const fecha_modificacion = new Date().toISOString();
@@ -223,7 +223,7 @@ export default function Odontograma() {
   return (
     <section className="w-full max-w-[1000px] mx-auto">
       <h3 className="text-xl font-semibold text-slate-800 mb-3">
-        Odontograma del Paciente
+        Odontograma del usuario
       </h3>
 
       {/* Toolbar */}

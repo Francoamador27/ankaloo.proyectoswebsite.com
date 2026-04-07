@@ -19,7 +19,7 @@ const DetalleOrden = () => {
             },
         }).then(res => res.data);
 
-    const { data: pedido, error, isLoading } = useSWR(`/api/pedidos/${id}`, fetcher);
+    const { data: pedido, isLoading } = useSWR(`/api/pedidos/${id}`, () => fetcher());
     const [nuevoEstado, setNuevoEstado] = useState('');
 
     const generarPDF = async (carritoId) => {
@@ -66,7 +66,6 @@ const DetalleOrden = () => {
 
     if (isLoading) return <p className="p-4 text-gray-600">Cargando pedido...</p>;
     if (error) return <p className="p-4 text-red-600">Error al cargar el pedido.</p>;
-    console.log(pedido);
     return (
         <div className="max-w-6xl mx-auto p-6 space-y-8">
 

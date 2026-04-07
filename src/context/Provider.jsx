@@ -1,6 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import clienteAxios from "../config/axios";
-import useAuthBase from "../hooks/useBaseAuth";
 
 const ProviderContext = createContext();
 
@@ -8,7 +7,6 @@ const LOGIN_PATH = "/auth/login";
 const AUTH_TOKEN_KEY = "AUTH_TOKEN";
 
 const Provider = ({ children }) => {
-  const { mutate } = useAuthBase();
   
   const auth = {
     isAuthenticated: false,
@@ -121,7 +119,10 @@ const Provider = ({ children }) => {
     logo: logoUrl,
     address: settings?.address || "",
     business_hours: settings?.business_hours || "",
+    video_principal: settings?.video_principal || "",
+    imagen_corporativa: settings?.imagen_corporativa || "",
   };
+
 
   const contact = {
     email: settings?.contact_email || "",
@@ -129,6 +130,17 @@ const Provider = ({ children }) => {
     phone: settings?.phone || "",
     sender_name: settings?.sender_name || "",
     map_iframe: settings?.google_map_iframe || "",
+  };
+
+  const footer = {
+    bg_type: settings?.footer_bg_type || 'color',
+    bg_color: settings?.footer_bg_color || '#f8fafc',
+    text_color: settings?.footer_text_color || '#1c1c1c',
+    greyscale: !!settings?.footer_greyscale,
+    bg_image: settings?.footer_bg_image ? (settings.footer_bg_image.startsWith('http') ? settings.footer_bg_image : `${API_BASE}${settings.footer_bg_image}`) : null,
+    logo: settings?.footer_logo ? (settings.footer_logo.startsWith('http') ? settings.footer_logo : `${API_BASE}${settings.footer_logo}`) : null,
+    logo1: settings?.footer_logo1 ? (settings.footer_logo1.startsWith('http') ? settings.footer_logo1 : `${API_BASE}${settings.footer_logo1}`) : null,
+    logo2: settings?.footer_logo2 ? (settings.footer_logo2.startsWith('http') ? settings.footer_logo2 : `${API_BASE}${settings.footer_logo2}`) : null,
   };
 
   const social = {
@@ -146,6 +158,7 @@ const Provider = ({ children }) => {
         reloadSettings,
         company,
         contact,
+        footer,
         social,
         logoUrl,
       }}
