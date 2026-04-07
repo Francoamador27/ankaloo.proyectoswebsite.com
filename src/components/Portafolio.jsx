@@ -1,10 +1,10 @@
-import { useEffect, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import useCont from '../hooks/useCont';
-import SEOHead from './Head/Head';
-import PortafolioCard from './PortafolioCard';
-import { Loader, ChevronLeft, ChevronRight } from 'lucide-react';
-import clienteAxios from '../config/axios';
+import { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import useCont from "../hooks/useCont";
+import SEOHead from "./Head/Head";
+import PortafolioCard from "./PortafolioCard";
+import { Loader, ChevronLeft, ChevronRight } from "lucide-react";
+import clienteAxios from "../config/axios";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
 
@@ -14,20 +14,20 @@ export default function Portafolio() {
   const { company } = useCont();
   const [portafolios, setPortafolios] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [pagina, setPagina] = useState(1);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
     fetchPortafolios();
   }, []);
 
   const fetchPortafolios = async () => {
     try {
-      const { data } = await clienteAxios.get('/api/portafolios');
+      const { data } = await clienteAxios.get("/api/portafolios");
       setPortafolios(data.data || []);
     } catch (error) {
-      console.error('Error al obtener portafolios:', error);
+      console.error("Error al obtener portafolios:", error);
     } finally {
       setLoading(false);
     }
@@ -37,10 +37,13 @@ export default function Portafolio() {
   const portafoliosFiltrados = useMemo(() => {
     if (!searchQuery.trim()) return portafolios;
     return portafolios.filter((proyecto) => {
-      const titulo = proyecto.titulo || proyecto.title || '';
-      const descripcion = proyecto.descripcion || proyecto.description || '';
+      const titulo = proyecto.titulo || proyecto.title || "";
+      const descripcion = proyecto.descripcion || proyecto.description || "";
       const query = searchQuery.toLowerCase();
-      return titulo.toLowerCase().includes(query) || descripcion.toLowerCase().includes(query);
+      return (
+        titulo.toLowerCase().includes(query) ||
+        descripcion.toLowerCase().includes(query)
+      );
     });
   }, [portafolios, searchQuery]);
 
@@ -53,19 +56,37 @@ export default function Portafolio() {
 
   const irAPagina = (n) => {
     setPagina(n);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <>
       <SEOHead
-        title={`Portafolio - ${company.name || 'Ankaloo Construcciones'}`}
+        title={`Portafolio - ${company.name || "Ankaloo Construcciones"}`}
         description="Descubre nuestros proyectos y casos de éxito"
       />
 
       <div className="min-h-screen bg-[#f4f4f4] lg: relative overflow-hidden">
-        <div aria-hidden="true" className="hidden lg:block pointer-events-none absolute left-0 top-0 h-full w-48 select-none z-0 opacity-60" style={{ backgroundImage: `url(${lineasDer})`, backgroundRepeat: 'repeat-y', backgroundSize: 'contain', backgroundPosition: 'left top' }} />
-        <div aria-hidden="true" className="hidden lg:block pointer-events-none absolute right-0 top-0 h-full w-48 select-none z-0 opacity-60" style={{ backgroundImage: `url(${lineasIzq})`, backgroundRepeat: 'repeat-y', backgroundSize: 'contain', backgroundPosition: 'right top' }} />
+        <div
+          aria-hidden="true"
+          className="hidden lg:block pointer-events-none absolute left-0 top-0 h-full w-48 select-none z-0 opacity-60"
+          style={{
+            backgroundImage: `url(${lineasDer})`,
+            backgroundRepeat: "repeat-y",
+            backgroundSize: "contain",
+            backgroundPosition: "left top",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="hidden lg:block pointer-events-none absolute right-0 top-0 h-full w-48 select-none z-0 opacity-60"
+          style={{
+            backgroundImage: `url(${lineasIzq})`,
+            backgroundRepeat: "repeat-y",
+            backgroundSize: "contain",
+            backgroundPosition: "right top",
+          }}
+        />
         {/* Efectos de fondo */}
         <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
           <div className="absolute top-20 left-10 w-64 h-64 bg-[#fdce27] rounded-full blur-3xl"></div>
@@ -80,10 +101,14 @@ export default function Portafolio() {
             </h1>
 
             <p className="max-w-7xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
-              En <strong className="text-[#1c1c1c]">{company.name || 'Ankaloo Construcciones'}</strong> brindamos soluciones de infraestructura con tecnología de vanguardia y equipos especializados.
+              En{" "}
+              <strong className="text-[#1c1c1c]">
+                {company.name || "Ankaloo Construcciones"}
+              </strong>{" "}
+              brindamos soluciones de infraestructura con tecnología de
+              vanguardia y equipos especializados.
             </p>
           </header>
-
 
           {/* Grid de proyectos */}
           {loading ? (
@@ -109,19 +134,21 @@ export default function Portafolio() {
                     <ChevronLeft className="w-4 h-4" />
                   </button>
 
-                  {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((n) => (
-                    <button
-                      key={n}
-                      onClick={() => irAPagina(n)}
-                      className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-black transition-colors ${
-                        n === pagina
-                          ? 'bg-[#fdce27] text-[#1c1c1c] border border-[#fdce27]'
-                          : 'bg-white border border-slate-200 text-[#1c1c1c] hover:border-[#fdce27] hover:text-[#fdce27]'
-                      }`}
-                    >
-                      {n}
-                    </button>
-                  ))}
+                  {Array.from({ length: totalPaginas }, (_, i) => i + 1).map(
+                    (n) => (
+                      <button
+                        key={n}
+                        onClick={() => irAPagina(n)}
+                        className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-black transition-colors ${
+                          n === pagina
+                            ? "bg-[#fdce27] text-[#1c1c1c] border border-[#fdce27]"
+                            : "bg-white border border-slate-200 text-[#1c1c1c] hover:border-[#fdce27] hover:text-[#fdce27]"
+                        }`}
+                      >
+                        {n}
+                      </button>
+                    ),
+                  )}
 
                   <button
                     onClick={() => irAPagina(pagina + 1)}
@@ -136,7 +163,9 @@ export default function Portafolio() {
           ) : (
             <div className="text-center py-12 bg-white rounded-xl border border-slate-200 shadow-sm">
               <p className="text-base lg:text-lg text-slate-500">
-                {searchQuery ? 'No hay proyectos que coincidan con tu búsqueda' : 'No hay proyectos disponibles en el portafolio'}
+                {searchQuery
+                  ? "No hay proyectos que coincidan con tu búsqueda"
+                  : "No hay proyectos disponibles en el portafolio"}
               </p>
             </div>
           )}

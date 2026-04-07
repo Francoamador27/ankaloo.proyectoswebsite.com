@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
 import clienteAxios from "../config/axios";
-import CategoriaServicioCard from './CategoriaServicioCard';
+import CategoriaServicioCard from "./CategoriaServicioCard";
 
 export default function CategoriasServicios() {
   const [categorias, setCategorias] = useState([]);
@@ -16,7 +16,7 @@ export default function CategoriasServicios() {
     {
       revalidateOnFocus: false,
       keepPreviousData: true,
-    }
+    },
   );
 
   useEffect(() => {
@@ -24,8 +24,8 @@ export default function CategoriasServicios() {
     const items = Array.isArray(data?.data)
       ? data.data
       : Array.isArray(data)
-      ? data
-      : [];
+        ? data
+        : [];
     setCategorias(items);
   }, [data]);
 
@@ -62,18 +62,13 @@ export default function CategoriasServicios() {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-5xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight ">
-            Nuestros{" "}
-            <span className="text-[#fdce27]">
-              Servicios
-            </span>
+          <h2 className="text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight ">
+            Nuestros <span className="text-[#fdce27]">Servicios</span>
           </h2>
 
           <p className="text-slate-600 max-w-2xl mx-auto text-xl leading-relaxed font-light">
             Conoce los tipos de obras en los que nos especializamos
           </p>
-
-
         </div>
 
         {/* Grid */}
@@ -82,8 +77,6 @@ export default function CategoriasServicios() {
             <CategoriaServicioCard key={categoria.id} categoria={categoria} />
           ))}
         </div>
-
-
       </div>
     </section>
   );

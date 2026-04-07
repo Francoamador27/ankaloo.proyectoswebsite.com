@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Link, useSearchParams, useParams, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useSearchParams,
+  useParams,
+  useNavigate,
+} from "react-router-dom";
 import useSWR from "swr";
 import clienteAxios from "../config/axios";
 import SEOHead from "./Head/Head";
@@ -28,9 +33,10 @@ export default function ServiciosGrid() {
       if (categoriaSlug === "todas-nuestras-obras") {
         setSelectedCategory("all");
       } else {
-        const cat = categorias.find(c => 
-          c.nombre?.toLowerCase().replace(/\s+/g, "-") === categoriaSlug.toLowerCase() ||
-          String(c.id) === categoriaSlug
+        const cat = categorias.find(
+          (c) =>
+            c.nombre?.toLowerCase().replace(/\s+/g, "-") ===
+              categoriaSlug.toLowerCase() || String(c.id) === categoriaSlug,
         );
         if (cat) {
           setSelectedCategory(String(cat.id));
@@ -47,8 +53,10 @@ export default function ServiciosGrid() {
     if (slug === "all") {
       navigate("/servicios/todas-nuestras-obras");
     } else {
-      const cat = categorias.find(c => String(c.id) === slug);
-      const catSlug = cat ? cat.nombre.toLowerCase().replace(/\s+/g, "-") : slug;
+      const cat = categorias.find((c) => String(c.id) === slug);
+      const catSlug = cat
+        ? cat.nombre.toLowerCase().replace(/\s+/g, "-")
+        : slug;
       navigate(`/servicios/${catSlug}`);
     }
   };
@@ -62,7 +70,7 @@ export default function ServiciosGrid() {
     {
       revalidateOnFocus: false,
       keepPreviousData: true,
-    }
+    },
   );
 
   const serviciosUrl = useMemo(() => {
@@ -93,8 +101,8 @@ export default function ServiciosGrid() {
     const items = Array.isArray(dataCategorias?.data)
       ? dataCategorias.data
       : Array.isArray(dataCategorias)
-      ? dataCategorias
-      : [];
+        ? dataCategorias
+        : [];
     setCategorias(items);
   }, [dataCategorias]);
 
@@ -103,11 +111,10 @@ export default function ServiciosGrid() {
     const items = Array.isArray(data?.data)
       ? data.data
       : Array.isArray(data)
-      ? data
-      : [];
+        ? data
+        : [];
     setServiciosApi(items);
   }, [data]);
-
 
   // ---- Datos finales ----
   const servicios = useMemo(() => {
@@ -117,7 +124,9 @@ export default function ServiciosGrid() {
       titulo: s.titulo ?? s.title ?? "Servicio especializado",
       descripcion: s.descripcion ?? s.description ?? "",
       highlight: s.highlight ?? s.tagline ?? "",
-      slug: s.slug ?? (s.titulo ?? s.title ?? "").toLowerCase().replace(/\s+/g, "-"),
+      slug:
+        s.slug ??
+        (s.titulo ?? s.title ?? "").toLowerCase().replace(/\s+/g, "-"),
       image: s.image ?? null,
       categoria: s.categoria?.nombre ?? null,
     }));
@@ -132,13 +141,31 @@ export default function ServiciosGrid() {
 
   const irAPagina = (n) => {
     setPagina(n);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <section className="relative bg-[#f4f4f4] py-12 lg:py-16 px-6 lg:px-20 overflow-hidden">
-      <div aria-hidden="true" className="hidden lg:block pointer-events-none absolute left-0 top-0 h-full w-48 select-none z-0 opacity-60" style={{ backgroundImage: `url(${lineasDer})`, backgroundRepeat: 'repeat-y', backgroundSize: 'contain', backgroundPosition: 'left top' }} />
-      <div aria-hidden="true" className="hidden lg:block pointer-events-none absolute right-0 top-0 h-full w-48 select-none z-0 opacity-60" style={{ backgroundImage: `url(${lineasIzq})`, backgroundRepeat: 'repeat-y', backgroundSize: 'contain', backgroundPosition: 'right top' }} />
+      <div
+        aria-hidden="true"
+        className="hidden lg:block pointer-events-none absolute left-0 top-0 h-full w-48 select-none z-0 opacity-60"
+        style={{
+          backgroundImage: `url(${lineasDer})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "contain",
+          backgroundPosition: "left top",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="hidden lg:block pointer-events-none absolute right-0 top-0 h-full w-48 select-none z-0 opacity-60"
+        style={{
+          backgroundImage: `url(${lineasIzq})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "contain",
+          backgroundPosition: "right top",
+        }}
+      />
       <SEOHead
         priority="high"
         title={`Ankaloo Construcciones | Obras e Infraestructura en Córdoba`}
@@ -155,31 +182,44 @@ export default function ServiciosGrid() {
         {/* Header Compacto */}
         <div className="text-center mb-8 lg:mb-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#1c1c1c] mb-3 lg:mb-4 tracking-tight ">
-            {selectedCategory === "all" 
-              ? "Nuestras Obras" 
-              : categorias.find(c => String(c.id) === selectedCategory)?.nombre || "Nuestras Obras"}
+            {selectedCategory === "all"
+              ? "Nuestras Obras"
+              : categorias.find((c) => String(c.id) === selectedCategory)
+                  ?.nombre || "Nuestras Obras"}
           </h2>
 
           <p className="text-[#5a5a5a] mx-auto text-sm md:text-base lg:text-lg leading-relaxed font-light">
-            En <strong className="text-[#1c1c1c]">Ankaloo Construcciones</strong> brindamos servicios de infraestructura con profesionales especializados y tecnología de última generación.
+            En{" "}
+            <strong className="text-[#1c1c1c]">Ankaloo Construcciones</strong>{" "}
+            brindamos servicios de infraestructura con profesionales
+            especializados y tecnología de última generación.
           </p>
-
-
         </div>
 
         {/* Main Layout con Sidebar */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-16 lg:mb-20">
-          
           {/* Sidebar Filtros */}
           <aside className="lg:col-span-1">
             <div className="sticky top-6 space-y-4">
               {/* Search Box */}
               <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-2 mb-2">
-                  <svg className="w-5 h-5 text-[#fdce27]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <svg
+                    className="w-5 h-5 text-[#fdce27]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
                   </svg>
-                  <label className="text-sm font-semibold text-slate-900">Buscar obra</label>
+                  <label className="text-sm font-semibold text-slate-900">
+                    Buscar obra
+                  </label>
                 </div>
                 <input
                   type="text"
@@ -193,10 +233,22 @@ export default function ServiciosGrid() {
               {/* Categorías Filter */}
               <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-2 mb-3">
-                  <svg className="w-5 h-5 text-[#fdce27]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  <svg
+                    className="w-5 h-5 text-[#fdce27]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                    />
                   </svg>
-                  <label className="text-sm font-semibold text-slate-900">Tipo de Obra</label>
+                  <label className="text-sm font-semibold text-slate-900">
+                    Tipo de Obra
+                  </label>
                 </div>
                 <div className="space-y-2">
                   <button
@@ -230,7 +282,10 @@ export default function ServiciosGrid() {
               {/* Results Counter */}
               <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
                 <p className="text-xs text-slate-600">
-                  <span className="font-black text-[#1c1c1c]">{servicios.length}</span> obras disponibles
+                  <span className="font-black text-[#1c1c1c]">
+                    {servicios.length}
+                  </span>{" "}
+                  obras disponibles
                 </p>
               </div>
             </div>
@@ -238,7 +293,6 @@ export default function ServiciosGrid() {
 
           {/* Main Content */}
           <main className="lg:col-span-3">
-
             {/* Carga o error */}
             {isLoading && (
               <div className="text-center text-slate-500 mb-12 animate-pulse">
@@ -269,19 +323,21 @@ export default function ServiciosGrid() {
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
-                    {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((n) => (
-                      <button
-                        key={n}
-                        onClick={() => irAPagina(n)}
-                        className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-black transition-colors ${
-                          n === pagina
-                            ? 'bg-[#fdce27] text-[#1c1c1c] border border-[#fdce27]'
-                            : 'bg-white border border-slate-200 text-[#1c1c1c] hover:border-[#fdce27] hover:text-[#fdce27]'
-                        }`}
-                      >
-                        {n}
-                      </button>
-                    ))}
+                    {Array.from({ length: totalPaginas }, (_, i) => i + 1).map(
+                      (n) => (
+                        <button
+                          key={n}
+                          onClick={() => irAPagina(n)}
+                          className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-black transition-colors ${
+                            n === pagina
+                              ? "bg-[#fdce27] text-[#1c1c1c] border border-[#fdce27]"
+                              : "bg-white border border-slate-200 text-[#1c1c1c] hover:border-[#fdce27] hover:text-[#fdce27]"
+                          }`}
+                        >
+                          {n}
+                        </button>
+                      ),
+                    )}
                     <button
                       onClick={() => irAPagina(pagina + 1)}
                       disabled={pagina === totalPaginas}
@@ -295,11 +351,25 @@ export default function ServiciosGrid() {
             ) : (
               !isLoading && (
                 <div className="text-center py-12 bg-white rounded-xl border border-slate-200 shadow-sm">
-                  <svg className="w-12 h-12 mx-auto mb-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-12 h-12 mx-auto mb-4 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
-                  <h3 className="text-xl font-semibold text-slate-800 mb-1">No se encontraron servicios</h3>
-                  <p className="text-slate-600 text-sm">Intenta ajustar tus filtros de búsqueda</p>
+                  <h3 className="text-xl font-semibold text-slate-800 mb-1">
+                    No se encontraron servicios
+                  </h3>
+                  <p className="text-slate-600 text-sm">
+                    Intenta ajustar tus filtros de búsqueda
+                  </p>
                 </div>
               )
             )}

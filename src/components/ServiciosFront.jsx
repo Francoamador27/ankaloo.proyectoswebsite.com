@@ -3,7 +3,7 @@ import WhatsappHref from "../utils/WhatsappUrl";
 import useSWR from "swr";
 import clienteAxios from "../config/axios";
 import SEOHead from "./Head/Head";
-import {ServicioCard} from './Cards/ServicioCard';
+import { ServicioCard } from "./Cards/ServicioCard";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
 
@@ -24,7 +24,7 @@ export default function ServiciosSwiper() {
     {
       revalidateOnFocus: false,
       keepPreviousData: true,
-    }
+    },
   );
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function ServiciosSwiper() {
         highlight: "Tecnología",
       },
     ],
-    []
+    [],
   );
 
   // ---- Datos finales ----
@@ -94,7 +94,9 @@ export default function ServiciosSwiper() {
       titulo: s.titulo ?? s.title ?? "Servicio especializado",
       descripcion: s.descripcion ?? s.description ?? "",
       highlight: s.highlight ?? s.tagline ?? "",
-      slug: s.slug ?? (s.titulo ?? s.title ?? "").toLowerCase().replace(/\s+/g, "-"),
+      slug:
+        s.slug ??
+        (s.titulo ?? s.title ?? "").toLowerCase().replace(/\s+/g, "-"),
       image: s.image ?? null,
       categoria: s.categoria?.nombre ?? null,
     }));
@@ -107,14 +109,14 @@ export default function ServiciosSwiper() {
     setVisibleCards((prev) => {
       const next = new Set(prev);
 
-      const slidesPerView = swiper.params.slidesPerView === 'auto'
-        ? swiper.slides.length
-        : (swiper.params.slidesPerView || 1);
+      const slidesPerView =
+        swiper.params.slidesPerView === "auto"
+          ? swiper.slides.length
+          : swiper.params.slidesPerView || 1;
 
       const activeIndex = swiper.activeIndex || 0;
-      const numVisibleSlides = typeof slidesPerView === 'number'
-        ? Math.ceil(slidesPerView)
-        : 1;
+      const numVisibleSlides =
+        typeof slidesPerView === "number" ? Math.ceil(slidesPerView) : 1;
 
       for (let i = 0; i < numVisibleSlides; i++) {
         const index = activeIndex + i;
@@ -129,8 +131,26 @@ export default function ServiciosSwiper() {
 
   return (
     <section className="relative bg-[#f4f4f4] py-24 px-6 lg:px-20 overflow-hidden">
-      <div aria-hidden="true" className="hidden lg:block pointer-events-none absolute left-0 top-0 h-full w-48 select-none z-0 opacity-60" style={{ backgroundImage: `url(${lineasDer})`, backgroundRepeat: 'repeat-y', backgroundSize: 'contain', backgroundPosition: 'left top' }} />
-      <div aria-hidden="true" className="hidden lg:block pointer-events-none absolute right-0 top-0 h-full w-48 select-none z-0 opacity-60" style={{ backgroundImage: `url(${lineasIzq})`, backgroundRepeat: 'repeat-y', backgroundSize: 'contain', backgroundPosition: 'right top' }} />
+      <div
+        aria-hidden="true"
+        className="hidden lg:block pointer-events-none absolute left-0 top-0 h-full w-48 select-none z-0 opacity-60"
+        style={{
+          backgroundImage: `url(${lineasDer})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "contain",
+          backgroundPosition: "left top",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="hidden lg:block pointer-events-none absolute right-0 top-0 h-full w-48 select-none z-0 opacity-60"
+        style={{
+          backgroundImage: `url(${lineasIzq})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "contain",
+          backgroundPosition: "right top",
+        }}
+      />
       <SEOHead
         priority="high"
         title={`Ankaloo Construcciones | Obras e Infraestructura en Córdoba`}
@@ -146,14 +166,16 @@ export default function ServiciosSwiper() {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-20">
-          <h2 className="text-4xl lg:text-5xl font-black text-[#1c1c1c] mb-6 tracking-tight ">
+          <h2 className="text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight ">
             Nuestras <span className="text-[#fdce27]">Obras</span>
           </h2>
 
           <p className="max-w-2xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
-            En <strong className="text-[#1c1c1c]">Ankaloo Construcciones</strong> brindamos servicios de infraestructura con profesionales especializados y tecnología de vanguardia.
+            En{" "}
+            <strong className="text-[#1c1c1c]">Ankaloo Construcciones</strong>{" "}
+            brindamos servicios de infraestructura con profesionales
+            especializados y tecnología de vanguardia.
           </p>
-
         </div>
 
         {/* Carga o error */}
@@ -191,15 +213,16 @@ export default function ServiciosSwiper() {
             {servicios.map((item, idx) => (
               <SwiperSlide key={idx} className="h-auto">
                 <div className="h-full">
-                  <ServicioCard item={item} idx={idx} isVisible={visibleCards.has(String(idx))} />
+                  <ServicioCard
+                    item={item}
+                    idx={idx}
+                    isVisible={visibleCards.has(String(idx))}
+                  />
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
-
-
-
       </div>
     </section>
   );
