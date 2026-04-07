@@ -116,7 +116,9 @@ const Login = () => {
           className={`transition-transform duration-700 relative w-full transform-style-preserve-3d ${showReset ? "rotate-y-180" : ""}`}
         >
           {/* Login */}
-          <div className={`relative backface-hidden bg-white border border-slate-200 border-b-4 border-b-[#fdce27] shadow-md p-8 ${showReset ? "pointer-events-none" : ""}`}>
+          <div
+            className={`relative backface-hidden bg-white border border-slate-200 border-b-4 border-b-[#fdce27] shadow-md p-8 ${showReset ? "pointer-events-none" : ""}`}
+          >
             <div className="flex flex-col justify-center items-center space-y-2 mb-6">
               <div className="flex items-center gap-3 mb-2">
                 <div className="h-1 w-8 bg-[#fdce27]"></div>
@@ -156,7 +158,11 @@ const Login = () => {
                     verPassword ? "Ocultar contraseña" : "Mostrar contraseña"
                   }
                 >
-                  {verPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {verPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
 

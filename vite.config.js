@@ -11,6 +11,19 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-swiper': ['swiper'],
+          'vendor-gsap': ['gsap', '@gsap/react'],
+          'vendor-icons': ['lucide-react', 'react-icons', '@heroicons/react'],
+          'vendor-swr': ['swr', 'axios'],
+        },
+      },
+    },
+  },
   plugins: [
     {
       name: "async-css",
