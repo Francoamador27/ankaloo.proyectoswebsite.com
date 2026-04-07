@@ -25,14 +25,18 @@ export default function ServiciosGrid() {
 
     // Si viene de /servicios/:categoria (slug)
     if (categoriaSlug) {
-      const cat = categorias.find(c => 
-        c.nombre?.toLowerCase().replace(/\s+/g, "-") === categoriaSlug.toLowerCase() ||
-        String(c.id) === categoriaSlug
-      );
-      if (cat) {
-        setSelectedCategory(String(cat.id));
-      } else {
+      if (categoriaSlug === "todas-nuestras-obras") {
         setSelectedCategory("all");
+      } else {
+        const cat = categorias.find(c => 
+          c.nombre?.toLowerCase().replace(/\s+/g, "-") === categoriaSlug.toLowerCase() ||
+          String(c.id) === categoriaSlug
+        );
+        if (cat) {
+          setSelectedCategory(String(cat.id));
+        } else {
+          setSelectedCategory("all");
+        }
       }
     } else {
       setSelectedCategory("all");
@@ -41,7 +45,7 @@ export default function ServiciosGrid() {
 
   const handleCategorySelect = (slug) => {
     if (slug === "all") {
-      navigate("/servicios");
+      navigate("/servicios/todas-nuestras-obras");
     } else {
       const cat = categorias.find(c => String(c.id) === slug);
       const catSlug = cat ? cat.nombre.toLowerCase().replace(/\s+/g, "-") : slug;
