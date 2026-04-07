@@ -5,8 +5,15 @@ import useCont from "../../hooks/useCont";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
-  const { company, contact, social, footer } = useCont();
+  const { company, contact, social, footer, settings } = useCont();
   const currentYear = new Date().getFullYear();
+
+  // No renderizar hasta que settings cargue para evitar layout shift
+  if (!settings) {
+    return (
+      <footer className="relative border-t border-slate-200 min-h-[400px] bg-[#f8fafc]" />
+    );
+  }
 
   const footerStyle = {
     backgroundColor:
