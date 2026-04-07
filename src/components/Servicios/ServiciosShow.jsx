@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import clienteAxios from "../../config/axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import Hyperspeed from "@/components/hyperspeed";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import SEOHead from "../Head/Head";

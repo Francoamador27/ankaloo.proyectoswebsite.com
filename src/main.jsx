@@ -2,7 +2,6 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import router from "./Router";
 import { Provider } from "./context/Provider";
-import { registerSW } from "virtual:pwa-register";
 
 import "./index.css";
 
@@ -12,26 +11,6 @@ import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 
 import GTMBody from "./components/BodyVerification/GTMBody";
-import InstallPWAButton from "./components/InstallPWAButton";
-import { IOSInstallHint } from "./components/IOSInstallHint";
-
-// 👉 nuevos imports
-
-// Registrar Service Worker con manejo de errores
-try {
-  registerSW({
-    onNeedRefresh() {
-      // Mostrar notificación de actualización disponible
-    },
-    onOfflineReady() {
-      // La app está lista para usar offline
-    },
-    immediate: true,
-  });
-} catch (error) {
-  console.warn('Error al registrar Service Worker:', error);
-  // No lanzar error, dejar que la app funcione sin SW
-}
 
 createRoot(document.getElementById("root")).render(
     <Provider>
@@ -40,23 +19,5 @@ createRoot(document.getElementById("root")).render(
 
       {/* App con router */}
       <RouterProvider router={router} />
-
-      {/* Botón flotante para instalar la PWA (Android / Desktop) */}
-      <InstallPWAButton />
-
-      {/* Mensajito opcional para iOS (Agregar a pantalla de inicio) */}
-      <IOSInstallHint />
     </Provider>
 );
-
-const registerServiceWorker = () => {
-  registerSW({
-    immediate: false,
-  });
-};
-
-if ("requestIdleCallback" in window) {
-  requestIdleCallback(registerServiceWorker);
-} else {
-  setTimeout(registerServiceWorker, 2000);
-}
