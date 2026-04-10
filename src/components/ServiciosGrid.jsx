@@ -24,39 +24,46 @@ export default function ServiciosGrid() {
   const [searchQuery, setSearchQuery] = useState("");
   const [pagina, setPagina] = useState(1);
 
+  // Busca una categoría (o subcategoría) por id o slug en el árbol completo
+  const findCatInTree = (list, pred) => {
+    for (const cat of list) {
+      if (pred(cat)) return cat;
+      const child = (cat.children || []).find(pred);
+      if (child) return child;
+    }
+    return null;
+  };
+
   // Capturar parámetro 'categoria' de la URL (slug o param)
   useEffect(() => {
     if (!categorias.length) return;
 
-    // Si viene de /servicios/:categoria (slug)
     if (categoriaSlug) {
       if (categoriaSlug === "todas-nuestras-obras") {
         setSelectedCategory("all");
       } else {
-        const cat = categorias.find(
+        const found = findCatInTree(
+          categorias,
           (c) =>
             c.nombre?.toLowerCase().replace(/\s+/g, "-") ===
               categoriaSlug.toLowerCase() || String(c.id) === categoriaSlug,
         );
-        if (cat) {
-          setSelectedCategory(String(cat.id));
-        } else {
-          setSelectedCategory("all");
-        }
+        setSelectedCategory(found ? String(found.id) : "all");
       }
     } else {
       setSelectedCategory("all");
     }
+    setPagina(1);
   }, [categoriaSlug, categorias]);
 
-  const handleCategorySelect = (slug) => {
-    if (slug === "all") {
+  const handleCategorySelect = (id) => {
+    if (id === "all") {
       navigate("/servicios/todas-nuestras-obras");
     } else {
-      const cat = categorias.find((c) => String(c.id) === slug);
-      const catSlug = cat
-        ? cat.nombre.toLowerCase().replace(/\s+/g, "-")
-        : slug;
+      const found = findCatInTree(categorias, (c) => String(c.id) === id);
+      const catSlug = found
+        ? found.nombre.toLowerCase().replace(/\s+/g, "-")
+        : id;
       navigate(`/servicios/${catSlug}`);
     }
   };
@@ -184,7 +191,7 @@ export default function ServiciosGrid() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#1c1c1c] mb-3 lg:mb-4 tracking-tight ">
             {selectedCategory === "all"
               ? "Nuestras Obras"
-              : categorias.find((c) => String(c.id) === selectedCategory)
+              : findCatInTree(categorias, (c) => String(c.id) === selectedCategory)
                   ?.nombre || "Nuestras Obras"}
           </h2>
 
@@ -263,18 +270,35 @@ export default function ServiciosGrid() {
                     Todos
                   </button>
                   {categorias.map((cat) => (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => handleCategorySelect(String(cat.id))}
-                      className={`w-full px-3 py-2 text-xs font-black transition-all text-left ${
-                        selectedCategory === String(cat.id)
-                          ? "bg-[#1c1c1c] text-[#fdce27] border-l-2 border-[#fdce27]"
-                          : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                      }`}
-                    >
-                      {cat.nombre}
-                    </button>
+                    <React.Fragment key={cat.id}>
+                      <button
+                        type="button"
+                        onClick={() => handleCategorySelect(String(cat.id))}
+                        className={`w-full px-3 py-2 text-xs font-black transition-all text-left ${
+                          selectedCategory === String(cat.id)
+                            ? "bg-[#1c1c1c] text-[#fdce27] border-l-2 border-[#fdce27]"
+                            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        }`}
+                      >
+                        {cat.nombre}
+                      </button>
+                      {(cat.children || []).map((subcat) => (
+                        <button
+                          key={subcat.id}
+                          type="button"
+                          onClick={() =>
+                            handleCategorySelect(String(subcat.id))
+                          }
+                          className={`w-full px-3 py-2 text-xs font-black transition-all text-left pl-6 border-l-2 ${
+                            selectedCategory === String(subcat.id)
+                              ? "bg-[#1c1c1c] text-[#fdce27] border-[#fdce27]"
+                              : "bg-slate-100 text-slate-700 hover:bg-slate-200 border-transparent"
+                          }`}
+                        >
+                          └ {subcat.nombre}
+                        </button>
+                      ))}
+                    </React.Fragment>
                   ))}
                 </div>
               </div>
