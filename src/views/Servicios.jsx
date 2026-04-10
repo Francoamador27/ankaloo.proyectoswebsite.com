@@ -1,12 +1,24 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import TratamientosForm from './TratamientosForm';
-import ServiciosList from '../components/Servicios/ServiciosList';
-import ServiciosCategorias from '../components/Servicios/ServiciosCategorias';
+import React, { useState, useMemo, useCallback } from "react";
+import ServiciosList from "../components/Servicios/ServiciosList";
+import ServiciosCategorias from "../components/Servicios/ServiciosCategorias";
+import ServiciosForm from "./ServiciosForm";
 
 // Reemplaza estos por tus componentes reales
-const CrearServicio = () => <div className="text-slate-700"><TratamientosForm /></div>;
-const ListaServicios = () => <div className="text-slate-700"><ServiciosList /></div>;
-const ListaCategorias = () => <div className="text-slate-700"><ServiciosCategorias /></div>;
+const CrearServicio = () => (
+  <div className="text-slate-700">
+    <ServiciosForm />
+  </div>
+);
+const ListaServicios = () => (
+  <div className="text-slate-700">
+    <ServiciosList />
+  </div>
+);
+const ListaCategorias = () => (
+  <div className="text-slate-700">
+    <ServiciosCategorias />
+  </div>
+);
 
 const ServiciosManager = () => {
   const [active, setActive] = useState(0);
@@ -17,18 +29,30 @@ const ServiciosManager = () => {
       { key: "servicios", label: "Obras", element: <ListaServicios /> },
       { key: "categorias", label: "Categorias", element: <ListaCategorias /> },
     ],
-    []
+    [],
   );
 
   const onKeyDown = useCallback(
     (e) => {
       const last = tabs.length - 1;
-      if (e.key === "ArrowRight") { e.preventDefault(); setActive((i) => (i >= last ? 0 : i + 1)); }
-      if (e.key === "ArrowLeft")  { e.preventDefault(); setActive((i) => (i <= 0 ? last : i - 1)); }
-      if (e.key === "Home")       { e.preventDefault(); setActive(0); }
-      if (e.key === "End")        { e.preventDefault(); setActive(last); }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setActive((i) => (i >= last ? 0 : i + 1));
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setActive((i) => (i <= 0 ? last : i - 1));
+      }
+      if (e.key === "Home") {
+        e.preventDefault();
+        setActive(0);
+      }
+      if (e.key === "End") {
+        e.preventDefault();
+        setActive(last);
+      }
     },
-    [tabs.length]
+    [tabs.length],
   );
 
   const prev = () => setActive((i) => Math.max(0, i - 1));
@@ -65,7 +89,7 @@ const ServiciosManager = () => {
                 "rounded-t-xl px-8 py-4 text-sm font-black outline-none transition-all duration-300 transform translate-y-1 relative",
                 selected
                   ? "bg-[#1c1c1c] text-[#fdce27] shadow-lg z-10 scale-105 border-b-4 border-[#fdce27]"
-                  : "bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-[#1c1c1c]"
+                  : "bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-[#1c1c1c]",
               ].join(" ")}
             >
               {t.label}

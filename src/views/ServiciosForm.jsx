@@ -26,7 +26,7 @@ const extractYouTubeID = (url) => {
   return match && match[7].length === 11 ? match[7] : "";
 };
 
-const TratamientosForm = () => {
+const ServiciosForm = () => {
   const token = localStorage.getItem("AUTH_TOKEN");
 
   const [title, setTitle] = useState("");
@@ -753,4 +753,4 @@ const TratamientosForm = () => {
   );
 };
 
-export default TratamientosForm;
+export default ServiciosForm;
