@@ -332,7 +332,7 @@ const ServiciosForm = () => {
                 <input
                   type="text"
                   className="w-full border border-slate-300 p-3 rounded-lg focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all duration-200 bg-white"
-                  placeholder="Obra hidraulica, Viales, etc"
+                  placeholder="Obra hidráulica, Viales, etc"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />

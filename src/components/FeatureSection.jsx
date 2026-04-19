@@ -1,27 +1,27 @@
-import { useEffect, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectFade, Pagination, Navigation } from 'swiper/modules';
-import clienteAxios from '../config/axios';
-import useCont from '../hooks/useCont';
-import WhatsappHref from '../utils/WhatsappUrl';
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade, Pagination, Navigation } from "swiper/modules";
+import clienteAxios from "../config/axios";
+import useCont from "../hooks/useCont";
+import WhatsappHref from "../utils/WhatsappUrl";
 
-function getYoutubeVideoId(url = '') {
+function getYoutubeVideoId(url = "") {
   try {
     const parsedUrl = new URL(url);
-    if (parsedUrl.hostname.includes('youtu.be')) {
-      return parsedUrl.pathname.replace('/', '');
+    if (parsedUrl.hostname.includes("youtu.be")) {
+      return parsedUrl.pathname.replace("/", "");
     }
-    if (parsedUrl.pathname.startsWith('/embed/')) {
-      return parsedUrl.pathname.split('/embed/')[1];
+    if (parsedUrl.pathname.startsWith("/embed/")) {
+      return parsedUrl.pathname.split("/embed/")[1];
     }
-    return parsedUrl.searchParams.get('v') || '';
+    return parsedUrl.searchParams.get("v") || "";
   } catch {
-    return '';
+    return "";
   }
 }
 
 function SlideBackground({ slide }) {
-  if (slide.background_type === 'youtube' && slide.youtube_url) {
+  if (slide.background_type === "youtube" && slide.youtube_url) {
     const videoId = getYoutubeVideoId(slide.youtube_url);
     const src = videoId
       ? `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0&playsinline=1`
@@ -57,8 +57,6 @@ function SlideBackground({ slide }) {
 function HeroSwiper({ slides }) {
   return (
     <div className="relative w-full h-full">
-
-
       <Swiper
         modules={[Autoplay, EffectFade, Pagination, Navigation]}
         effect="fade"
@@ -79,22 +77,18 @@ function HeroSwiper({ slides }) {
               <div className="absolute inset-0 bg-black/50" />
               {/* Content */}
               <div className="relative z-10 w-full max-w-5xl px-16 lg:px-24 mx-auto text-center">
-
                 {/* Label corporativo */}
                 <p className="text-[#fdce27] text-xs font-bold tracking-[0.35em]  mb-5">
-                  ANKALOO CONSTRUCCIONES
+                  ANKA LOO CONSTRUCCIONES
                 </p>
 
                 <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-[1.15] tracking-[0.02em] drop-shadow-lg">
                   {slide.title}
                 </h1>
 
-
                 <p className="max-w-xl mx-auto text-base md:text-lg text-white/75 font-light leading-relaxed">
                   {slide.description}
                 </p>
-
-
               </div>
             </div>
           </SwiperSlide>
@@ -115,12 +109,12 @@ export default function HeroFeatures() {
 
     const fetchSlides = async () => {
       try {
-        const { data } = await clienteAxios.get('/api/sliders');
+        const { data } = await clienteAxios.get("/api/sliders");
         if (mounted && Array.isArray(data?.data) && data.data.length > 0) {
           setSlides(data.data);
         }
       } catch (error) {
-        console.error('Error cargando sliders', error);
+        console.error("Error cargando sliders", error);
       } finally {
         if (mounted) {
           setLoading(false);
@@ -138,7 +132,6 @@ export default function HeroFeatures() {
 
   return (
     <section className="relative w-full h-[85vh] min-h-screen overflow-hidden">
-
       {/* Contenido encima */}
       {loading ? (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20">
@@ -150,7 +143,9 @@ export default function HeroFeatures() {
               {/* Centro */}
               <div className="absolute inset-3 bg-[#fdce27]/20 rounded-full"></div>
             </div>
-            <p className="text-white text-sm font-bold tracking-[0.3em] ">Cargando...</p>
+            <p className="text-white text-sm font-bold tracking-[0.3em] ">
+              Cargando...
+            </p>
           </div>
         </div>
       ) : slides.length > 0 ? (

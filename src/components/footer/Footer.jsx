@@ -233,7 +233,7 @@ export default function Footer() {
             <p>
               © {currentYear}{" "}
               <span className="font-black" style={{ color: footer.text_color }}>
-                Ankaloo Construcciones
+                Anka Loo Construcciones
               </span>{" "}
               — Todos los derechos reservados
             </p>
@@ -249,7 +249,7 @@ export default function Footer() {
       {/* FloatingWhatsApp */}
       {/* <FloatingWhatsApp
                 phoneNumber={contact.whatsapp || "+5493510000000"}
-                accountName={company.name || "Ankaloo Construcciones"}
+                accountName={company.name || "Anka Loo Construcciones"}
                 avatar={logo_blanco}
                 statusMessage="Construcción e Infraestructura"
                 chatMessage="¡Hola! 👋 ¿En qué podemos ayudarte hoy?"

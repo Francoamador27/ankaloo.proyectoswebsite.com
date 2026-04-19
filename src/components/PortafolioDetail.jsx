@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Loader } from 'lucide-react';
-import useCont from '../hooks/useCont';
-import SEOHead from './Head/Head';
-import clienteAxios from '../config/axios';
-import './Posts/TiptapEditor.css';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Thumbs } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/thumbs';
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { ArrowLeft, Loader } from "lucide-react";
+import useCont from "../hooks/useCont";
+import SEOHead from "./Head/Head";
+import clienteAxios from "../config/axios";
+import "./Posts/TiptapEditor.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Thumbs } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
 
 export default function PortafolioDetail() {
   const { company } = useCont();
@@ -20,16 +20,24 @@ export default function PortafolioDetail() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const getImageUrl = (path) => {
-    if (!path) return '';
-    if (path.startsWith('http') || path.startsWith('blob:') || path.startsWith('data:')) return path;
+    if (!path) return "";
+    if (
+      path.startsWith("http") ||
+      path.startsWith("blob:") ||
+      path.startsWith("data:")
+    )
+      return path;
 
-    const cleanPath = String(path).replace(/^\/+/, '');
+    const cleanPath = String(path).replace(/^\/+/, "");
 
-    if (cleanPath.startsWith('storage/')) {
+    if (cleanPath.startsWith("storage/")) {
       return `${import.meta.env.VITE_API_URL}/${cleanPath}`;
     }
 
-    if (cleanPath.startsWith('portafolio/') || cleanPath.startsWith('portafolio-galeria/')) {
+    if (
+      cleanPath.startsWith("portafolio/") ||
+      cleanPath.startsWith("portafolio-galeria/")
+    ) {
       return `${import.meta.env.VITE_API_URL}/storage/uploads/${cleanPath}`;
     }
 
@@ -37,7 +45,7 @@ export default function PortafolioDetail() {
   };
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
     fetchProyecto();
   }, [id]);
 
@@ -46,7 +54,7 @@ export default function PortafolioDetail() {
       const { data } = await clienteAxios.get(`/api/portafolios/${id}`);
       setProyecto(data.data);
     } catch (error) {
-      console.error('Error al obtener proyecto:', error);
+      console.error("Error al obtener proyecto:", error);
     } finally {
       setLoading(false);
     }
@@ -54,7 +62,9 @@ export default function PortafolioDetail() {
 
   const galleryImages = [
     proyecto?.imagen,
-    ...(Array.isArray(proyecto?.galeria) ? proyecto.galeria.map((img) => img?.imagen) : []),
+    ...(Array.isArray(proyecto?.galeria)
+      ? proyecto.galeria.map((img) => img?.imagen)
+      : []),
   ].filter(Boolean);
 
   const uniqueGalleryImages = Array.from(new Set(galleryImages));
@@ -70,7 +80,9 @@ export default function PortafolioDetail() {
   if (!proyecto) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-white">
-        <h1 className="text-3xl font-bold text-slate-900 mb-4">Proyecto no encontrado</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mb-4">
+          Proyecto no encontrado
+        </h1>
         <Link
           to="/portafolio"
           className="inline-flex items-center gap-2 text-[#0891b2] font-bold hover:underline"
@@ -85,7 +97,7 @@ export default function PortafolioDetail() {
   return (
     <>
       <SEOHead
-        title={`${proyecto.titulo} - Portafolio | ${company.name || 'Ankaloo Construcciones'}`}
+        title={`${proyecto.titulo} - Portafolio | ${company.name || "Anka Loo Construcciones"}`}
         description={proyecto.descripcion}
       />
 
@@ -96,22 +108,28 @@ export default function PortafolioDetail() {
           className="fixed top-6 left-6 z-50 inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-lg border border-slate-200 hover:bg-slate-50 transition-all group"
         >
           <ArrowLeft className="w-5 h-5 text-slate-700 group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm font-medium text-slate-700 hidden sm:inline">Volver</span>
+          <span className="text-sm font-medium text-slate-700 hidden sm:inline">
+            Volver
+          </span>
         </button>
 
         <div className="max-w-5xl mx-auto px-6 py-20">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-slate-600 mb-8">
-            <Link to="/portafolio" className="hover:text-[#0891b2] transition-colors">
+            <Link
+              to="/portafolio"
+              className="hover:text-[#0891b2] transition-colors"
+            >
               Portafolio
             </Link>
             <span>/</span>
-            <span className="text-slate-900 font-medium">{proyecto.titulo}</span>
+            <span className="text-slate-900 font-medium">
+              {proyecto.titulo}
+            </span>
           </div>
 
           {/* Header */}
           <div className="mb-12">
-
             <h1 className="text-5xl md:text-6xl font-black text-slate-900">
               {proyecto.titulo}
             </h1>
@@ -123,7 +141,12 @@ export default function PortafolioDetail() {
               <Swiper
                 modules={[Navigation, Thumbs]}
                 navigation
-                thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                thumbs={{
+                  swiper:
+                    thumbsSwiper && !thumbsSwiper.destroyed
+                      ? thumbsSwiper
+                      : null,
+                }}
                 spaceBetween={12}
                 className="rounded-3xl overflow-hidden shadow-2xl border border-slate-200"
               >
@@ -146,9 +169,15 @@ export default function PortafolioDetail() {
                   spaceBetween={10}
                   slidesPerView={Math.min(uniqueGalleryImages.length, 5)}
                   breakpoints={{
-                    320: { slidesPerView: Math.min(uniqueGalleryImages.length, 3) },
-                    768: { slidesPerView: Math.min(uniqueGalleryImages.length, 4) },
-                    1024: { slidesPerView: Math.min(uniqueGalleryImages.length, 5) },
+                    320: {
+                      slidesPerView: Math.min(uniqueGalleryImages.length, 3),
+                    },
+                    768: {
+                      slidesPerView: Math.min(uniqueGalleryImages.length, 4),
+                    },
+                    1024: {
+                      slidesPerView: Math.min(uniqueGalleryImages.length, 5),
+                    },
                   }}
                   className="mt-4"
                 >
@@ -192,7 +221,8 @@ export default function PortafolioDetail() {
                 ¿Quieres un proyecto así?
               </h2>
               <p className="text-slate-600 text-lg mb-8 max-w-2xl mx-auto">
-                Contáctanos para conocer cómo podemos transformar tu visión en realidad
+                Contáctanos para conocer cómo podemos transformar tu visión en
+                realidad
               </p>
               <Link
                 to="/contacto"

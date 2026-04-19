@@ -1,26 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import clienteAxios from '../../config/axios';
-import {
-  DndContext,
-  closestCenter,
-} from '@dnd-kit/core';
+import React, { useState, useEffect } from "react";
+import clienteAxios from "../../config/axios";
+import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
   useSortable,
   rectSortingStrategy,
   arrayMove,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVertical } from 'lucide-react';
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical } from "lucide-react";
 
 const SortableImage = ({ img, onDelete }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id: img.id });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: img.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -43,7 +35,7 @@ const SortableImage = ({ img, onDelete }) => {
       </div>
       <img
         src={`${import.meta.env.VITE_API_URL}/storage/uploads${img.imagen}`}
-        alt="Galería de proyectos de Ankaloo Construcciones – soluciones tecnológicas innovadoras"
+        alt="Galería de proyectos de Anka Loo Construcciones – soluciones tecnológicas innovadoras"
         className="object-cover w-full h-full"
       />
       <button
@@ -57,7 +49,7 @@ const SortableImage = ({ img, onDelete }) => {
 };
 
 const GaleriaPanel = () => {
-  const token = localStorage.getItem('AUTH_TOKEN');
+  const token = localStorage.getItem("AUTH_TOKEN");
 
   const [imagen, setImagen] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -75,17 +67,17 @@ const GaleriaPanel = () => {
 
   const obtenerImagenes = async () => {
     try {
-      const { data } = await clienteAxios.get('/api/ejemplos');
+      const { data } = await clienteAxios.get("/api/ejemplos");
       setImagenesSubidas(data.data);
     } catch (err) {
-      console.error('Error al cargar imágenes:', err);
+      console.error("Error al cargar imágenes:", err);
     }
   };
 
   const handleChange = (e) => {
     const file = e.target.files[0];
     if (file && file.size > 2097152) {
-      setError('La imagen no puede pesar más de 2MB');
+      setError("La imagen no puede pesar más de 2MB");
       setImagen(null);
       setPreview(null);
       return;
@@ -99,9 +91,9 @@ const GaleriaPanel = () => {
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
+    if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
-    } else if (e.type === 'dragleave') {
+    } else if (e.type === "dragleave") {
       setDragActive(false);
     }
   };
@@ -112,7 +104,7 @@ const GaleriaPanel = () => {
     setDragActive(false);
     const file = e.dataTransfer.files[0];
     if (file && file.size > 2097152) {
-      setError('La imagen no puede pesar más de 2MB');
+      setError("La imagen no puede pesar más de 2MB");
       setImagen(null);
       setPreview(null);
       return;
@@ -134,28 +126,28 @@ const GaleriaPanel = () => {
     setError(null);
 
     if (!imagen) {
-      setError('Debés seleccionar una imagen');
+      setError("Debés seleccionar una imagen");
       return;
     }
 
     const formData = new FormData();
-    formData.append('imagen', imagen);
+    formData.append("imagen", imagen);
 
     try {
       setCargando(true);
-      await clienteAxios.post('/api/ejemplos', formData, {
+      await clienteAxios.post("/api/ejemplos", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
 
-      setMensaje('Imagen subida correctamente');
+      setMensaje("Imagen subida correctamente");
       setImagen(null);
       setPreview(null);
       obtenerImagenes(); // actualizar galería
     } catch (err) {
-      setError('Error al subir la imagen');
+      setError("Error al subir la imagen");
       console.error(err);
     } finally {
       setCargando(false);
@@ -163,17 +155,17 @@ const GaleriaPanel = () => {
   };
 
   const handleEliminar = async (id) => {
-    if (!confirm('¿Estás seguro que querés eliminar esta imagen?')) return;
+    if (!confirm("¿Estás seguro que querés eliminar esta imagen?")) return;
     try {
       await clienteAxios.delete(`/api/ejemplos/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setMensaje('Imagen eliminada');
+      setMensaje("Imagen eliminada");
       obtenerImagenes(); // refrescar lista
     } catch (err) {
-      setError('Error al eliminar la imagen');
+      setError("Error al eliminar la imagen");
       console.error(err);
     }
   };
@@ -190,7 +182,7 @@ const GaleriaPanel = () => {
 
     try {
       await clienteAxios.post(
-        '/api/ejemplos/reorder',
+        "/api/ejemplos/reorder",
         {
           order: newOrder.map((img, index) => ({
             id: img.id,
@@ -201,12 +193,12 @@ const GaleriaPanel = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       setOrdenError(null);
     } catch (err) {
       console.error(err);
-      setOrdenError('Error guardando el orden.');
+      setOrdenError("Error guardando el orden.");
     }
   };
 
@@ -222,7 +214,9 @@ const GaleriaPanel = () => {
           onDragLeave={handleDrag}
           onDrop={handleDrop}
         >
-          <label className="block text-sm font-medium mb-1 text-gray-700">Imagen</label>
+          <label className="block text-sm font-medium mb-1 text-gray-700">
+            Imagen
+          </label>
 
           {preview ? (
             <div className="relative w-full h-40 rounded-md overflow-hidden border border-gray-300">
@@ -243,7 +237,7 @@ const GaleriaPanel = () => {
             <label
               htmlFor="imagen"
               className={`flex items-center justify-center w-full h-40 px-4 transition bg-white border-2 ${
-                dragActive ? 'border-blue-500 bg-blue-50' : 'border-dashed'
+                dragActive ? "border-blue-500 bg-blue-50" : "border-dashed"
               } border-gray-300 rounded-md cursor-pointer hover:border-blue-400 focus:outline-none`}
             >
               <div className="text-center">
@@ -261,7 +255,10 @@ const GaleriaPanel = () => {
                   />
                 </svg>
                 <p className="mt-2 text-sm text-gray-600">
-                  <span className="font-medium text-blue-600">Seleccioná un archivo</span> o arrastralo aquí
+                  <span className="font-medium text-blue-600">
+                    Seleccioná un archivo
+                  </span>{" "}
+                  o arrastralo aquí
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   Solo JPG, PNG o WEBP. Máx 2MB.
@@ -284,7 +281,7 @@ const GaleriaPanel = () => {
           disabled={cargando}
           className="bg-[#008DD2] text-white px-4 py-2 rounded hover:bg-[#0070aa] disabled:opacity-50"
         >
-          {cargando ? 'Subiendo...' : 'Subir'}
+          {cargando ? "Subiendo..." : "Subir"}
         </button>
 
         {mensaje && <p className="text-green-600 text-sm mt-2">{mensaje}</p>}
@@ -303,18 +300,27 @@ const GaleriaPanel = () => {
             Refrescar orden
           </button>
         </div>
-        {ordenError && <p className="text-red-600 text-sm mb-2">{ordenError}</p>}
+        {ordenError && (
+          <p className="text-red-600 text-sm mb-2">{ordenError}</p>
+        )}
         {imagenesSubidas.length === 0 ? (
           <p className="text-gray-500 text-sm">No hay imágenes subidas aún.</p>
         ) : (
-          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
             <SortableContext
               items={imagenesSubidas.map((img) => img.id)}
               strategy={rectSortingStrategy}
             >
               <div className="flex flex-wrap gap-4">
                 {imagenesSubidas.map((img) => (
-                  <SortableImage key={img.id} img={img} onDelete={handleEliminar} />
+                  <SortableImage
+                    key={img.id}
+                    img={img}
+                    onDelete={handleEliminar}
+                  />
                 ))}
               </div>
             </SortableContext>

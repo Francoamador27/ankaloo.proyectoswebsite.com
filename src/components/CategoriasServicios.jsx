@@ -65,10 +65,6 @@ export default function CategoriasServicios() {
           <h2 className="text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight ">
             Nuestros <span className="text-[#fdce27]">Servicios</span>
           </h2>
-
-          <p className="text-slate-600 max-w-2xl mx-auto text-xl leading-relaxed font-light">
-            Conoce los tipos de obras en los que nos especializamos
-          </p>
         </div>
 
         {/* Grid */}

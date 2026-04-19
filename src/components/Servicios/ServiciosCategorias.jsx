@@ -15,14 +15,15 @@ import { GripVertical } from "lucide-react";
 const MAX_MB = 5;
 const MAX_BYTES = MAX_MB * 1024 * 1024;
 
-function SortableCategoryCard({ cat, level, onEdit, onDelete, renderChildren }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id: cat.id });
+function SortableCategoryCard({
+  cat,
+  level,
+  onEdit,
+  onDelete,
+  renderChildren,
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: cat.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -30,7 +31,11 @@ function SortableCategoryCard({ cat, level, onEdit, onDelete, renderChildren }) 
   };
 
   return (
-    <div ref={setNodeRef} style={style} className={`${level > 0 ? "ml-8 mt-2" : ""}`}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`${level > 0 ? "ml-8 mt-2" : ""}`}
+    >
       <div className="border rounded-lg p-4 flex gap-4 bg-white">
         <button
           type="button"
@@ -61,13 +66,17 @@ function SortableCategoryCard({ cat, level, onEdit, onDelete, renderChildren }) 
             )}
           </div>
           {cat.descripcion ? (
-            <div className="text-sm text-slate-600 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: cat.descripcion }} />
+            <div
+              className="text-sm text-slate-600 prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: cat.descripcion }}
+            />
           ) : (
             <p className="text-sm text-slate-600">Sin descripcion</p>
           )}
           {cat.children && cat.children.length > 0 && (
             <p className="text-xs text-slate-500 mt-1">
-              {cat.children.length} subcategoria{cat.children.length !== 1 ? "s" : ""}
+              {cat.children.length} subcategoria
+              {cat.children.length !== 1 ? "s" : ""}
             </p>
           )}
           <div className="mt-3 flex gap-2">
@@ -108,11 +117,13 @@ export default function ServiciosCategorias() {
   const [orderedCategorias, setOrderedCategorias] = useState([]);
 
   const fetcher = (url) => clienteAxios(url).then((res) => res.data);
-  const { data, error: loadError, isLoading } = useSWR(
-    "/api/servicios-categorias",
-    fetcher,
-    { revalidateOnFocus: false }
-  );
+  const {
+    data,
+    error: loadError,
+    isLoading,
+  } = useSWR("/api/servicios-categorias", fetcher, {
+    revalidateOnFocus: false,
+  });
 
   const categorias = useMemo(() => {
     if (Array.isArray(data?.data)) return data.data;
@@ -128,7 +139,7 @@ export default function ServiciosCategorias() {
   const flattenedCategories = useMemo(() => {
     const flatten = (cats, level = 0) => {
       let result = [];
-      cats.forEach(cat => {
+      cats.forEach((cat) => {
         result.push({ ...cat, level });
         if (cat.children && cat.children.length > 0) {
           result = [...result, ...flatten(cat.children, level + 1)];
@@ -206,7 +217,7 @@ export default function ServiciosCategorias() {
               Authorization: `Bearer ${token}`,
               "Content-Type": "multipart/form-data",
             },
-          }
+          },
         );
         setMensaje("Categoria actualizada correctamente.");
       } else {
@@ -266,7 +277,7 @@ export default function ServiciosCategorias() {
         },
         {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }
+        },
       );
       mutate("/api/servicios-categorias");
     } catch (err) {
@@ -299,13 +310,17 @@ export default function ServiciosCategorias() {
             )}
           </div>
           {cat.descripcion ? (
-            <div className="text-sm text-slate-600 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: cat.descripcion }} />
+            <div
+              className="text-sm text-slate-600 prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: cat.descripcion }}
+            />
           ) : (
             <p className="text-sm text-slate-600">Sin descripcion</p>
           )}
           {cat.children && cat.children.length > 0 && (
             <p className="text-xs text-slate-500 mt-1">
-              {cat.children.length} subcategoria{cat.children.length !== 1 ? "s" : ""}
+              {cat.children.length} subcategoria
+              {cat.children.length !== 1 ? "s" : ""}
             </p>
           )}
           <div className="mt-3 flex gap-2">
@@ -327,7 +342,9 @@ export default function ServiciosCategorias() {
         </div>
       </div>
       {cat.children && cat.children.length > 0 && (
-        <div className="space-y-2">{cat.children.map((child) => renderCategory(child, level + 1))}</div>
+        <div className="space-y-2">
+          {cat.children.map((child) => renderCategory(child, level + 1))}
+        </div>
       )}
     </div>
   );
@@ -336,7 +353,7 @@ export default function ServiciosCategorias() {
     <div className="p-4 space-y-8">
       <div className="bg-white border rounded-xl shadow-sm p-6">
         <h2 className="text-2xl font-semibold mb-4">
-          {editingId ? "Editar categoria" : "Nueva categoria"}
+          {editingId ? "Editar categoría" : "Nueva categoría"}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -349,7 +366,7 @@ export default function ServiciosCategorias() {
               className="w-full border p-3 rounded-lg"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              placeholder="Ej: Obras viales, hidraulicas, etc"
+              placeholder="Ej: Obras viales, hidráulicas , etc"
             />
           </div>
 
@@ -364,27 +381,35 @@ export default function ServiciosCategorias() {
             >
               <option value="">-- Sin categoría padre (Principal) --</option>
               {flattenedCategories
-                .filter(cat => cat.id !== editingId) // No puede ser su propia subcategoría
+                .filter((cat) => cat.id !== editingId) // No puede ser su propia subcategoría
                 .map((cat) => (
                   <option key={cat.id} value={cat.id}>
-                    {'\u00A0'.repeat(cat.level * 4)}{cat.nombre}
+                    {"\u00A0".repeat(cat.level * 4)}
+                    {cat.nombre}
                   </option>
-              ))}
+                ))}
             </select>
             <p className="text-xs text-slate-500 mt-1">
-              Deja vacío para crear una categoría principal, o selecciona una para crear una subcategoría
+              Deja vacío para crear una categoría principal, o selecciona una
+              para crear una subcategoría
             </p>
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Descripcion
+              Descripción
             </label>
-            <Suspense fallback={<div className="border rounded-lg p-4 text-slate-400">Cargando editor...</div>}>
+            <Suspense
+              fallback={
+                <div className="border rounded-lg p-4 text-slate-400">
+                  Cargando editor...
+                </div>
+              }
+            >
               <TiptapEditor
                 content={descripcion}
                 onChange={setDescripcion}
-                placeholder="Breve descripcion de la categoria"
+                placeholder="Breve descripción de la categoría"
               />
             </Suspense>
           </div>
@@ -413,11 +438,7 @@ export default function ServiciosCategorias() {
               disabled={cargando}
               className="bg-blue-600 text-white px-5 py-2 rounded-lg disabled:opacity-50"
             >
-              {cargando
-                ? "Guardando..."
-                : editingId
-                ? "Actualizar"
-                : "Crear"}
+              {cargando ? "Guardando..." : editingId ? "Actualizar" : "Crear"}
             </button>
             {editingId && (
               <button
@@ -436,34 +457,40 @@ export default function ServiciosCategorias() {
             </div>
           )}
           {error && (
-            <div className="p-3 bg-red-50 text-red-700 rounded-lg">
-              {error}
-            </div>
+            <div className="p-3 bg-red-50 text-red-700 rounded-lg">{error}</div>
           )}
         </form>
       </div>
 
       <div className="bg-white border rounded-xl shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold">Categorias</h3>
-          {isLoading && <span className="text-sm text-slate-500">Cargando...</span>}
+          <h3 className="text-xl font-semibold">Categorías</h3>
+          {isLoading && (
+            <span className="text-sm text-slate-500">Cargando...</span>
+          )}
         </div>
 
         {loadError && (
           <div className="text-sm text-red-600 mb-4">
-            No se pudieron cargar las categorias.
+            No se pudieron cargar las categorías.
           </div>
         )}
 
         {categorias.length === 0 && !isLoading && (
-          <div className="text-sm text-slate-500">No hay categorias creadas.</div>
+          <div className="text-sm text-slate-500">
+            No hay categorías creadas.
+          </div>
         )}
 
         <p className="text-xs text-slate-500 mb-3">
-          Arrastra las categorias principales desde el icono para definir su orden de visualizacion en el front.
+          Arrastra las categorías principales desde el icono para definir su
+          orden de visualización en el front.
         </p>
 
-        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
           <SortableContext
             items={orderedCategorias.map((cat) => cat.id)}
             strategy={verticalListSortingStrategy}
@@ -478,7 +505,9 @@ export default function ServiciosCategorias() {
                   onDelete={handleDelete}
                   renderChildren={
                     cat.children && cat.children.length > 0 ? (
-                      <div className="space-y-2">{cat.children.map((child) => renderCategory(child, 1))}</div>
+                      <div className="space-y-2">
+                        {cat.children.map((child) => renderCategory(child, 1))}
+                      </div>
                     ) : null
                   }
                 />

@@ -62,7 +62,7 @@ export default function Portafolio() {
   return (
     <>
       <SEOHead
-        title={`Portafolio - ${company.name || "Ankaloo Construcciones"}`}
+        title={`Portafolio - ${company.name || "Anka Loo Construcciones"}`}
         description="Descubre nuestros proyectos y casos de éxito"
       />
 
@@ -103,7 +103,7 @@ export default function Portafolio() {
             <p className="max-w-7xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
               En{" "}
               <strong className="text-[#1c1c1c]">
-                {company.name || "Ankaloo Construcciones"}
+                {company.name || "Anka Loo Construcciones"}
               </strong>{" "}
               brindamos soluciones de infraestructura con tecnología de
               vanguardia y equipos especializados.

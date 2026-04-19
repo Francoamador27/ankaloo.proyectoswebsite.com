@@ -19,7 +19,7 @@ export default function ServiciosPorCategoria() {
     {
       revalidateOnFocus: false,
       keepPreviousData: true,
-    }
+    },
   );
 
   // Buscar categoría por slug o ID
@@ -35,7 +35,8 @@ export default function ServiciosPorCategoria() {
     const cat = dataCategorias.data.find(
       (c) =>
         c.id === parseInt(categoria) ||
-        c.nombre?.toLowerCase().replace(/\s+/g, "-") === categoria?.toLowerCase()
+        c.nombre?.toLowerCase().replace(/\s+/g, "-") ===
+          categoria?.toLowerCase(),
     );
 
     if (cat) {
@@ -57,7 +58,7 @@ export default function ServiciosPorCategoria() {
     {
       revalidateOnFocus: false,
       keepPreviousData: true,
-    }
+    },
   );
 
   useEffect(() => {
@@ -65,8 +66,8 @@ export default function ServiciosPorCategoria() {
     const items = Array.isArray(data?.data)
       ? data.data
       : Array.isArray(data)
-      ? data
-      : [];
+        ? data
+        : [];
     setServiciosApi(items);
   }, [data]);
 
@@ -188,11 +189,16 @@ export default function ServiciosPorCategoria() {
     <section className="relative bg-slate-50 py-24 px-6 lg:px-20 overflow-hidden">
       <SEOHead
         priority="high"
-        title={isOverview ? "Nuestros Servicios | Ankaloo Construcciones" : `${categoriaInfo?.nombre || "Solución"} | Ankaloo Construcciones`}
+        title={
+          isOverview
+            ? "Nuestros Servicios | Anka Loo Construcciones"
+            : `${categoriaInfo?.nombre || "Solución"} | Anka Loo Construcciones`
+        }
         description={
-          isOverview 
+          isOverview
             ? "Explora nuestras categorías de servicios especializados en construcción e infraestructura."
-            : (categoriaInfo?.descripcion || "Descubre nuestros Servicios exclusivos.")
+            : categoriaInfo?.descripcion ||
+              "Descubre nuestros Servicios exclusivos."
         }
       />
 
@@ -240,7 +246,8 @@ export default function ServiciosPorCategoria() {
                 Nuestros <span className="text-[#0891b2]">Servicios</span>
               </h1>
               <p className="text-slate-600 max-w-3xl mx-auto text-xl leading-relaxed font-light">
-                Brindamos soluciones integrales en ingeniería e infraestructura con los más altos estándares de calidad y tecnología.
+                Brindamos soluciones integrales en ingeniería e infraestructura
+                con los más altos estándares de calidad y tecnología.
               </p>
             </>
           ) : (
@@ -360,8 +367,7 @@ export default function ServiciosPorCategoria() {
 
           <div className="relative z-10">
             <h4 className="text-4xl font-black text-white mb-6">
-              ¿Listo para tu próxima{" "}
-              <span className="text-5xl">aventura</span>?
+              ¿Listo para tu próxima <span className="text-5xl">aventura</span>?
             </h4>
             <p className="text-white/90 text-lg mb-10 font-light leading-relaxed max-w-2xl mx-auto">
               Consultanos por disponibilidad, Servicios personalizados y
@@ -370,7 +376,8 @@ export default function ServiciosPorCategoria() {
 
             <a
               href={WhatsappHref({
-                message: `Hola, vengo desde la web de Ankaloo Construcciones y me gustaría información sobre ${                  categoriaInfo?.nombre || "los Servicios "
+                message: `Hola, vengo desde la web de Anka Loo Construcciones y me gustaría información sobre ${
+                  categoriaInfo?.nombre || "los Servicios "
                 }.`,
               })}
               className="inline-block bg-white text-[#0891b2] px-12 py-5 rounded-2xl font-black text-lg shadow-xl hover:bg-slate-50 hover:scale-105 transition-all active:scale-95"

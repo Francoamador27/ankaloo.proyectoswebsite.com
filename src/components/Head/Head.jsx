@@ -10,7 +10,7 @@ export default function SEOHead(props) {
     title: pTitle,
     description: pDesc,
     keywords,
-    author = company?.name ?? "Ankaloo Construcciones",
+    author = company?.name ?? "Anka Loo Construcciones",
     canonical: pCanonical,
     robots = "index, follow",
     og = {},
@@ -36,13 +36,13 @@ export default function SEOHead(props) {
   } = props;
 
   // ---- Datos derivados
-  const siteName = company?.name ?? "Ankaloo Construcciones";
+  const siteName = company?.name ?? "Anka Loo Construcciones";
   const defaultTitle = `${siteName} | Soluciones Tecnológicas Integrales`;
   const defaultDesc =
     pDesc ??
     (company
       ? `${company.name}: Soluciones de desarrollo de sistemas, software, hardware y marketing digital. Transformamos tu negocio con tecnología. ${company.address ?? ""} ${company.business_hours ? `· Horario de atención: ${company.business_hours}` : ""}`.trim()
-      : "Ankaloo Construcciones: Acompañamos a las empresas en su transformación digital con soluciones integrales de desarrollo, software, hardware y marketing digital.");
+      : "Anka Loo Construcciones: Acompañamos a las empresas en su transformación digital con soluciones integrales de desarrollo, software, hardware y marketing digital.");
 
   const title = pTitle ?? defaultTitle;
   const description = pDesc ?? defaultDesc;
@@ -66,43 +66,44 @@ export default function SEOHead(props) {
   const autoJsonLd =
     !jsonLd && (company?.name || company?.address)
       ? {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        name: siteName,
-        image: company?.logo || undefined,
-        "@id": canonical || undefined,
-        url: canonical || undefined,
-        telephone: contact?.phone || contact?.whatsapp || undefined,
-        address: company?.address
-          ? {
-            "@type": "PostalAddress",
-            streetAddress: company.address,
-            addressLocality: "Córdoba", // Ajustar si es otra ciudad
-            addressRegion: "AR-X",
-            addressCountry: "AR",
-          }
-          : undefined,
-        description:
-          "Soluciones tecnológicas integrales de desarrollo, software, hardware y marketing digital. Transformamos tu negocio con tecnología moderna.",
-        openingHoursSpecification: [
-          {
-            "@type": "OpeningHoursSpecification",
-            dayOfWeek: [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday"
-            ],
-            opens: "08:00",
-            closes: "18:00"
-          }
-        ]
-      }
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: siteName,
+          image: company?.logo || undefined,
+          "@id": canonical || undefined,
+          url: canonical || undefined,
+          telephone: contact?.phone || contact?.whatsapp || undefined,
+          address: company?.address
+            ? {
+                "@type": "PostalAddress",
+                streetAddress: company.address,
+                addressLocality: "Córdoba", // Ajustar si es otra ciudad
+                addressRegion: "AR-X",
+                addressCountry: "AR",
+              }
+            : undefined,
+          description:
+            "Soluciones tecnológicas integrales de desarrollo, software, hardware y marketing digital. Transformamos tu negocio con tecnología moderna.",
+          openingHoursSpecification: [
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+              ],
+              opens: "08:00",
+              closes: "18:00",
+            },
+          ],
+        }
       : jsonLd;
 
   const jsonLdString = autoJsonLd ? JSON.stringify(autoJsonLd, null, 2) : null;
-  const precedence = priority === "high" ? "high" : priority === "low" ? "low" : "default";
+  const precedence =
+    priority === "high" ? "high" : priority === "low" ? "low" : "default";
 
   return (
     <>
@@ -110,12 +111,18 @@ export default function SEOHead(props) {
       <title data-priority={precedence}>{title}</title>
 
       {/* Meta básicos */}
-      {description && <meta name="description" content={description} data-priority={precedence} />}
+      {description && (
+        <meta
+          name="description"
+          content={description}
+          data-priority={precedence}
+        />
+      )}
       <meta
         name="keywords"
         content={
           keywords ||
-          "desarrollo de software, transformación digital, soluciones tecnológicas, sistemas personalizados, marketing digital, desarrollo web, aplicaciones móviles, consultoría IT, Ankaloo Construcciones"
+          "desarrollo de software, transformación digital, soluciones tecnológicas, sistemas personalizados, marketing digital, desarrollo web, aplicaciones móviles, consultoría IT, Anka Loo Construcciones"
         }
         data-priority={precedence}
       />
@@ -123,27 +130,65 @@ export default function SEOHead(props) {
       {robots && <meta name="robots" content={robots} />}
 
       {/* Canonical */}
-      {canonical && <link rel="canonical" href={canonical} precedence={precedence} />}
+      {canonical && (
+        <link rel="canonical" href={canonical} precedence={precedence} />
+      )}
 
       {/* Open Graph */}
-      {ogSite && <meta property="og:site_name" content={ogSite} data-priority={precedence} />}
+      {ogSite && (
+        <meta
+          property="og:site_name"
+          content={ogSite}
+          data-priority={precedence}
+        />
+      )}
       <meta property="og:title" content={ogTitle} data-priority={precedence} />
-      <meta property="og:description" content={ogDesc} data-priority={precedence} />
-      {ogImage && <meta property="og:image" content={ogImage} data-priority={precedence} />}
-      {ogUrl && <meta property="og:url" content={ogUrl} data-priority={precedence} />}
+      <meta
+        property="og:description"
+        content={ogDesc}
+        data-priority={precedence}
+      />
+      {ogImage && (
+        <meta
+          property="og:image"
+          content={ogImage}
+          data-priority={precedence}
+        />
+      )}
+      {ogUrl && (
+        <meta property="og:url" content={ogUrl} data-priority={precedence} />
+      )}
       <meta property="og:type" content={ogType} data-priority={precedence} />
 
       {/* Twitter */}
       <meta name="twitter:card" content={twCard} data-priority={precedence} />
       <meta name="twitter:title" content={twTitle} data-priority={precedence} />
-      <meta name="twitter:description" content={twDesc} data-priority={precedence} />
-      {twImage && <meta name="twitter:image" content={twImage} data-priority={precedence} />}
+      <meta
+        name="twitter:description"
+        content={twDesc}
+        data-priority={precedence}
+      />
+      {twImage && (
+        <meta
+          name="twitter:image"
+          content={twImage}
+          data-priority={precedence}
+        />
+      )}
 
       {/* Verificaciones */}
-      {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
-      {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
-      {yandexVerification && <meta name="yandex-verification" content={yandexVerification} />}
-      {pinterestVerification && <meta name="p:domain_verify" content={pinterestVerification} />}
+      {googleVerification && (
+        <meta name="google-site-verification" content={googleVerification} />
+      )}
+      {bingVerification && (
+        <meta name="msvalidate.01" content={bingVerification} />
+      )}
+      {yandexVerification && (
+        <meta name="yandex-verification" content={yandexVerification} />
+      )}
+      {pinterestVerification && (
+        <meta name="p:domain_verify" content={pinterestVerification} />
+      )}
 
       {/* Geo */}
       {geo.region && <meta name="geo.region" content={geo.region} />}
@@ -152,13 +197,25 @@ export default function SEOHead(props) {
       {geo.icbm && <meta name="ICBM" content={geo.icbm} />}
 
       {/* Favicon / CSS */}
-      {favicon && <link rel="icon" type="image/png" href={favicon} precedence={precedence} />}
-      {stylesheet && <link rel="stylesheet" href={stylesheet} precedence={precedence} />}
+      {favicon && (
+        <link
+          rel="icon"
+          type="image/png"
+          href={favicon}
+          precedence={precedence}
+        />
+      )}
+      {stylesheet && (
+        <link rel="stylesheet" href={stylesheet} precedence={precedence} />
+      )}
 
       {/* Analytics */}
       {ga4Id && !gtmId && (
         <>
-          <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} />
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
+          />
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -200,7 +257,7 @@ export default function SEOHead(props) {
           <meta key={`xm-${i}`} name={m.name} content={m.content} />
         ) : (
           <meta key={`xm-${i}`} property={m.property} content={m.content} />
-        )
+        ),
       )}
       {extraLinks.map((l, i) => (
         <link key={`xl-${i}`} {...l} />
@@ -222,7 +279,7 @@ export default function SEOHead(props) {
             defer={s.defer}
             type={s.type || "text/javascript"}
           />
-        )
+        ),
       )}
     </>
   );

@@ -71,7 +71,7 @@ export default function Header() {
               {/* Logo */}
               <img
                 src={useDarkStyle ? logo_azul : logo}
-                alt="Ankaloo"
+                alt="Anka Loo"
                 width={120}
                 height={48}
                 className="h-10 md:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105 relative z-10"

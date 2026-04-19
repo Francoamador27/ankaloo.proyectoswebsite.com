@@ -21,7 +21,7 @@ const QuienesSomos = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "GeneralContractor",
-    name: company?.name || "Ankaloo Construcciones",
+    name: company?.name || "Anka Loo Construcciones",
     url: window?.location?.origin || "",
     logo: logoUrl || `${window?.location?.origin || ""}/logo.png`,
     description:
@@ -63,8 +63,8 @@ const QuienesSomos = () => {
         }}
       />
       <SEOHead
-        title={`Ankaloo Construcciones | Obras Hidráulicas, Viales y Saneamiento en Córdoba`}
-        description={`Ankaloo Construcciones: empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento y ambientales. Calidad, experiencia y tecnología de vanguardia en cada proyecto.`}
+        title={`Anka Loo Construcciones | Obras Hidráulicas, Viales y Saneamiento en Córdoba`}
+        description={`Anka Loo Construcciones: empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento y ambientales. Calidad, experiencia y tecnología de vanguardia en cada proyecto.`}
       />
 
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-slate-50 to-white" />
@@ -110,7 +110,7 @@ const QuienesSomos = () => {
                 <p className="text-slate-600 text-lg leading-relaxed mb-8">
                   En{" "}
                   <strong className="text-[#fdce27]">
-                    Ankaloo Construcciones
+                    Anka Loo Construcciones
                   </strong>
                   , nuestro objetivo primario es brindar a nuestros clientes
                   servicios de alta calidad, poniendo a su disposición
@@ -127,7 +127,7 @@ const QuienesSomos = () => {
                           ? company.imagen_corporativa
                           : `${import.meta.env.VITE_API_URL}/${company.imagen_corporativa}`
                       }
-                      alt="Equipo e Infraestructura Ankaloo"
+                      alt="Equipo e Infraestructura Anka Loo"
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                     />
                   </div>

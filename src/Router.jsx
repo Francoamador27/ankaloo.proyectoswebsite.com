@@ -75,6 +75,7 @@ const BlogList = lazy(() => import("./components/Blog/BlogList"));
 const BlogDetail = lazy(() => import("./components/Blog/BlogDetail"));
 const Sede = lazy(() => import("./views/Sede"));
 const Calidad = lazy(() => import("./views/Calidad"));
+const Compromiso = lazy(() => import("./views/Compromiso"));
 const AdminCertificadosList = lazy(
   () => import("./views/AdminCertificadosList"),
 );
@@ -122,6 +123,7 @@ const router = createBrowserRouter([
       { path: "/pagos/:estado", element: suspense(<PagoResultado />) },
       { path: "/sede", element: suspense(<Sede />) },
       { path: "/calidad", element: suspense(<Calidad />) },
+      { path: "/compromiso", element: suspense(<Compromiso />) },
     ],
   },
   {

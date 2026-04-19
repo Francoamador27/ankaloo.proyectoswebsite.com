@@ -53,7 +53,7 @@
   font-display: swap;
 }
 
-/* Colores de Ankaloo Construcciones */
+/* Colores de Anka Loo Construcciones */
 :root {
   --revenant-primary: #fdce27;
   --revenant-primary-hover: #e6b800;
@@ -299,44 +299,48 @@ body {
 
 .swiper-button-next,
 .swiper-button-prev {
-    height: 30px;
-    width: 30px;
-    color: #fdce27;
-    background: rgba(0,0,0,0.35);
-    border-radius: 0;
-    border: none;
-    font-size: 5px;
-    padding: 0px 0px;
-    transition: all .25s ease;
-    margin: 0;
-    top: 50%;
-    transform: translateY(-50%);
+  height: 30px;
+  width: 30px;
+  color: #fdce27;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 0;
+  border: none;
+  font-size: 5px;
+  padding: 0px 0px;
+  transition: all 0.25s ease;
+  margin: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
- .swiper-button-next,
+.swiper-button-next,
 .swiper-button-prev {
   color: #fdce27;
   width: 30px;
   font-size: 5px;
   height: 40px;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.35);
   border-radius: 0;
   border: none;
- padding: 10px 5px;
-  transition: all .25s ease;
+  padding: 10px 5px;
+  transition: all 0.25s ease;
   margin: 0;
   top: 50%;
   transform: translateY(-50%);
 }
-.swiper-pagination-bullet-active{
+.swiper-pagination-bullet-active {
   background: #fdce27;
 }
 
-.hero-swiper .swiper-button-prev { left: 0; }
-.hero-swiper .swiper-button-next { right: 0; }
+.hero-swiper .swiper-button-prev {
+  left: 0;
+}
+.hero-swiper .swiper-button-next {
+  right: 0;
+}
 
 .hero-swiper .swiper-button-next:hover,
 .hero-swiper .swiper-button-prev:hover {
-  background: rgba(253,206,39,0.25);
+  background: rgba(253, 206, 39, 0.25);
   color: #fdce27;
 }
 
@@ -347,7 +351,7 @@ body {
 }
 
 .hero-swiper .swiper-pagination-bullet {
-  background: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.5);
   opacity: 1;
   width: 8px;
   height: 3px;
@@ -576,8 +580,9 @@ img.logo-header {
     @apply bg-background text-foreground;
   }
 }
-.swiper-button-prev, .swiper-button-next {
-    color: #fdce27 !important;
+.swiper-button-prev,
+.swiper-button-next {
+  color: #fdce27 !important;
 }
 /* SplitText Styles */
 .split-parent {

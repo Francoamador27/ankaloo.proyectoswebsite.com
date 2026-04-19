@@ -153,7 +153,7 @@ export default function ServiciosSwiper() {
       />
       <SEOHead
         priority="high"
-        title={`Ankaloo Construcciones | Obras e Infraestructura en Córdoba`}
+        title={`Anka Loo Construcciones | Obras e Infraestructura en Córdoba`}
         description="Empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento y urbanizaciones."
       />
 
@@ -172,7 +172,7 @@ export default function ServiciosSwiper() {
 
           <p className="max-w-2xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
             En{" "}
-            <strong className="text-[#1c1c1c]">Ankaloo Construcciones</strong>{" "}
+            <strong className="text-[#1c1c1c]">Anka Loo Construcciones</strong>{" "}
             brindamos servicios de infraestructura con profesionales
             especializados y tecnología de vanguardia.
           </p>

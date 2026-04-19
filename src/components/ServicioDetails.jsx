@@ -1,18 +1,18 @@
-import { useEffect, useState, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import useSWR from 'swr';
-import clienteAxios from '../config/axios';
-import SEOHead from './Head/Head';
-import WhatsappHref from '../utils/WhatsappUrl';
-import { buildImageUrl } from '../utils/imageUrl';
-import useCont from '../hooks/useCont';
-import { CheckCircle, Zap, Shield, TrendingUp, Users, Cpu } from 'lucide-react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/free-mode';
-import 'swiper/css/navigation';
-import 'swiper/css/thumbs';
+import { useEffect, useState, useMemo } from "react";
+import { useParams, Link } from "react-router-dom";
+import useSWR from "swr";
+import clienteAxios from "../config/axios";
+import SEOHead from "./Head/Head";
+import WhatsappHref from "../utils/WhatsappUrl";
+import { buildImageUrl } from "../utils/imageUrl";
+import useCont from "../hooks/useCont";
+import { CheckCircle, Zap, Shield, TrendingUp, Users, Cpu } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
 
 const iconMap = {
   check: CheckCircle,
@@ -31,7 +31,7 @@ export default function ServicioDetails() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const fetcher = (url) => clienteAxios(url).then((res) => res.data);
-  const { data: servicioData } = useSWR(`/api/servicios/${slug}`, fetcher, { 
+  const { data: servicioData } = useSWR(`/api/servicios/${slug}`, fetcher, {
     revalidateOnMount: true,
     revalidateOnFocus: true,
   });
@@ -44,17 +44,17 @@ export default function ServicioDetails() {
 
   useEffect(() => {
     if (!servicioData) return;
-    
+
     // El endpoint /api/servicios/{slug} devuelve { data: {...} }
     const servicioRaw = servicioData?.data || servicioData;
-    
+
     if (servicioRaw) {
       const rawFeatures = servicioRaw.features;
       let parsedFeatures = [];
 
       if (Array.isArray(rawFeatures)) {
         parsedFeatures = rawFeatures;
-      } else if (typeof rawFeatures === 'string') {
+      } else if (typeof rawFeatures === "string") {
         try {
           const parsed = JSON.parse(rawFeatures);
           parsedFeatures = Array.isArray(parsed) ? parsed : [];
@@ -64,17 +64,36 @@ export default function ServicioDetails() {
       }
       const servicioNormalizado = {
         icon: servicioRaw.icon ?? "🛠️",
-        titulo: servicioRaw.title ?? servicioRaw.titulo ?? "Servicio especializado",
+        titulo:
+          servicioRaw.title ?? servicioRaw.titulo ?? "Servicio especializado",
         descripcion: servicioRaw.description ?? servicioRaw.descripcion ?? "",
         highlight: servicioRaw.highlight ?? servicioRaw.tagline ?? "",
-        slug: servicioRaw.slug ?? (servicioRaw.title ?? servicioRaw.titulo ?? "").toLowerCase().replace(/\s+/g, "-"),
+        slug:
+          servicioRaw.slug ??
+          (servicioRaw.title ?? servicioRaw.titulo ?? "")
+            .toLowerCase()
+            .replace(/\s+/g, "-"),
         image: buildImageUrl(servicioRaw.image ?? servicioRaw.mainImage_url),
-        gallery: Array.isArray(servicioRaw.gallery) ? servicioRaw.gallery.map(img => buildImageUrl(img)) : [],
+        gallery: Array.isArray(servicioRaw.gallery)
+          ? servicioRaw.gallery.map((img) => buildImageUrl(img))
+          : [],
         video: servicioRaw.video ?? servicioRaw.youtube_url ?? null,
-        tags: Array.isArray(servicioRaw.tags) ? servicioRaw.tags : (servicioRaw.tags ? servicioRaw.tags.split(',').map(t => t.trim()) : []),
+        tags: Array.isArray(servicioRaw.tags)
+          ? servicioRaw.tags
+          : servicioRaw.tags
+            ? servicioRaw.tags.split(",").map((t) => t.trim())
+            : [],
         price: servicioRaw.price ?? null,
         categoria: servicioRaw.categoria?.nombre ?? "OBRA",
-        categoriaSlug: servicioRaw.categoria?.slug ?? (servicioRaw.categoria?.nombre ? servicioRaw.categoria.nombre.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '') : null),
+        categoriaSlug:
+          servicioRaw.categoria?.slug ??
+          (servicioRaw.categoria?.nombre
+            ? servicioRaw.categoria.nombre
+                .toLowerCase()
+                .replace(/\s+/g, "-")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+            : null),
         features: parsedFeatures,
       };
       setServicio(servicioNormalizado);
@@ -85,24 +104,27 @@ export default function ServicioDetails() {
   const detalles = useMemo(() => {
     if (!servicio) return [];
 
-    const icons = ['zap', 'shield', 'trending', 'users', 'cpu', 'check'];
+    const icons = ["zap", "shield", "trending", "users", "cpu", "check"];
     const features = Array.isArray(servicio.features) ? servicio.features : [];
 
     return features
       .map((feature, index) => {
-        if (typeof feature === 'string') {
+        if (typeof feature === "string") {
           return {
             icon: icons[index % icons.length],
             titulo: feature,
-            descripcion: '',
+            descripcion: "",
           };
         }
 
-        if (feature && typeof feature === 'object') {
+        if (feature && typeof feature === "object") {
           return {
-            icon: feature.icon && iconMap[feature.icon] ? feature.icon : icons[index % icons.length],
-            titulo: feature.title ?? feature.titulo ?? '',
-            descripcion: feature.description ?? feature.descripcion ?? '',
+            icon:
+              feature.icon && iconMap[feature.icon]
+                ? feature.icon
+                : icons[index % icons.length],
+            titulo: feature.title ?? feature.titulo ?? "",
+            descripcion: feature.description ?? feature.descripcion ?? "",
           };
         }
 
@@ -123,8 +145,13 @@ export default function ServicioDetails() {
     return (
       <div className="min-h-screen bg-[#f4f4f4] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-black text-[#1c1c1c] mb-2  tracking-wide">Servicio no encontrado</h1>
-          <Link to="/servicios" className="text-[#fdce27] font-black hover:underline  text-sm tracking-widest">
+          <h1 className="text-2xl font-black text-[#1c1c1c] mb-2  tracking-wide">
+            Servicio no encontrado
+          </h1>
+          <Link
+            to="/servicios"
+            className="text-[#fdce27] font-black hover:underline  text-sm tracking-widest"
+          >
             Volver a obras
           </Link>
         </div>
@@ -135,8 +162,11 @@ export default function ServicioDetails() {
   return (
     <>
       <SEOHead
-        title={`${servicio?.titulo || 'Servicio'} - Ankaloo Construcciones`}
-        description={servicio?.descripcion || 'Soluciones tecnológicas especializadas de Ankaloo Construcciones'}
+        title={`${servicio?.titulo || "Servicio"} - Anka Loo Construcciones`}
+        description={
+          servicio?.descripcion ||
+          "Soluciones tecnológicas especializadas de Anka Loo Construcciones"
+        }
       />
 
       <div className="min-h-screen bg-[#f4f4f4]">
@@ -148,64 +178,96 @@ export default function ServicioDetails() {
           </div>
 
           <div className="max-w-7xl mx-auto px-6 py-12 lg:py-16">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#1c1c1c] mb-3 tracking-tight leading-none">
-                  {servicio.titulo}
-                </h1>
-                {/* Breadcrumb */}
-                <nav className="flex items-center gap-2 text-sm mb-8">
-                  <Link to="/" className="text-[#5a5a5a] hover:text-[#fdce27] transition-colors font-semibold">
-                    Inicio
-                  </Link>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#1c1c1c] mb-3 tracking-tight leading-none">
+              {servicio.titulo}
+            </h1>
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-sm mb-8">
+              <Link
+                to="/"
+                className="text-[#5a5a5a] hover:text-[#fdce27] transition-colors font-semibold"
+              >
+                Inicio
+              </Link>
+              <span className="text-slate-400">/</span>
+              <Link
+                to="/servicios"
+                className="text-[#5a5a5a] hover:text-[#fdce27] transition-colors font-semibold"
+              >
+                Servicios
+              </Link>
+              {servicio.categoriaSlug && (
+                <>
                   <span className="text-slate-400">/</span>
-                  <Link to="/servicios" className="text-[#5a5a5a] hover:text-[#fdce27] transition-colors font-semibold">
-                    Servicios
+                  <Link
+                    to={`/servicios/${servicio.categoriaSlug}`}
+                    className="text-[#5a5a5a] hover:text-[#fdce27] transition-colors font-semibold truncate max-w-[150px] lg:max-w-none"
+                  >
+                    {servicio.categoria}
                   </Link>
-                  {servicio.categoriaSlug && (
-                    <>
-                      <span className="text-slate-400">/</span>
-                      <Link to={`/servicios/${servicio.categoriaSlug}`} className="text-[#5a5a5a] hover:text-[#fdce27] transition-colors font-semibold truncate max-w-[150px] lg:max-w-none">
-                        {servicio.categoria}
-                      </Link>
-                    </>
-                  )}
-                  <span className="text-slate-400">/</span>
-                  <span className="text-[#fdce27] font-black truncate max-w-[150px] lg:max-w-none">
-                    {servicio.titulo}
-                  </span>
-                </nav>
+                </>
+              )}
+              <span className="text-slate-400">/</span>
+              <span className="text-[#fdce27] font-black truncate max-w-[150px] lg:max-w-none">
+                {servicio.titulo}
+              </span>
+            </nav>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 ">
-              
               {/* Contenido Izquierda (Image/Gallery) */}
               <div className="animate-fadeInLeft flex flex-col gap-4">
                 <div className="relative h-80 sm:h-96 lg:h-[450px] shadow-2xl bg-white border border-slate-200 p-2">
                   <div className="w-full h-full relative overflow-hidden">
-                    {(servicio.image || (servicio.gallery && servicio.gallery.length > 0)) ? (
+                    {servicio.image ||
+                    (servicio.gallery && servicio.gallery.length > 0) ? (
                       <Swiper
                         style={{
-                          '--swiper-navigation-color': '#fdce27',
-                          '--swiper-pagination-color': '#fdce27',
+                          "--swiper-navigation-color": "#fdce27",
+                          "--swiper-pagination-color": "#fdce27",
                         }}
                         spaceBetween={10}
                         navigation={true}
-                        thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                        thumbs={{
+                          swiper:
+                            thumbsSwiper && !thumbsSwiper.destroyed
+                              ? thumbsSwiper
+                              : null,
+                        }}
                         modules={[FreeMode, Navigation, Thumbs]}
                         className="w-full h-full"
                       >
                         {servicio.image && (
                           <SwiperSlide>
-                            <img src={servicio.image} alt={servicio.titulo} className="w-full h-full object-cover" />
+                            <img
+                              src={servicio.image}
+                              alt={servicio.titulo}
+                              className="w-full h-full object-cover"
+                            />
                           </SwiperSlide>
                         )}
-                        {servicio.gallery && servicio.gallery.map((img, index) => (
-                          <SwiperSlide key={index}>
-                            <img src={img} alt={`${servicio.titulo} - Galería ${index + 1}`} className="w-full h-full object-cover" />
-                          </SwiperSlide>
-                        ))}
+                        {servicio.gallery &&
+                          servicio.gallery.map((img, index) => (
+                            <SwiperSlide key={index}>
+                              <img
+                                src={img}
+                                alt={`${servicio.titulo} - Galería ${index + 1}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </SwiperSlide>
+                          ))}
                       </Swiper>
                     ) : (
                       <div className="w-full h-full bg-[#1c1c1c] flex items-center justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
-                        <span className="text-9xl opacity-30 relative z-10 text-[#fdce27]">{servicio.icon || '🛠️'}</span>
+                        <div
+                          className="absolute inset-0 opacity-10"
+                          style={{
+                            backgroundImage:
+                              "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+                            backgroundSize: "24px 24px",
+                          }}
+                        ></div>
+                        <span className="text-9xl opacity-30 relative z-10 text-[#fdce27]">
+                          {servicio.icon || "🛠️"}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -227,13 +289,24 @@ export default function ServicioDetails() {
                     >
                       {servicio.image && (
                         <SwiperSlide className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity [&.swiper-slide-thumb-active]:border-2 [&.swiper-slide-thumb-active]:border-[#fdce27] [&.swiper-slide-thumb-active]:opacity-100">
-                          <img src={servicio.image} alt="Thumbnail Principal" className="w-full h-full object-cover" />
+                          <img
+                            src={servicio.image}
+                            alt="Thumbnail Principal"
+                            className="w-full h-full object-cover"
+                          />
                         </SwiperSlide>
                       )}
                       {servicio.gallery.map((img, index) => (
-                         <SwiperSlide key={index} className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity [&.swiper-slide-thumb-active]:border-2 [&.swiper-slide-thumb-active]:border-[#fdce27] [&.swiper-slide-thumb-active]:opacity-100">
-                           <img src={img} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
-                         </SwiperSlide>
+                        <SwiperSlide
+                          key={index}
+                          className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity [&.swiper-slide-thumb-active]:border-2 [&.swiper-slide-thumb-active]:border-[#fdce27] [&.swiper-slide-thumb-active]:opacity-100"
+                        >
+                          <img
+                            src={img}
+                            alt={`Thumbnail ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </SwiperSlide>
                       ))}
                     </Swiper>
                   </div>
@@ -243,39 +316,45 @@ export default function ServicioDetails() {
               {/* Contenido Derecha */}
               <div className="animate-fadeInRight">
                 <div className="mb-6">
-                    <span className="bg-[#1c1c1c] text-[#fdce27] text-[10px] font-black tracking-[0.2em] px-3 py-1.5  inline-block shadow-sm">
-                      {servicio.categoria || 'Obra Especializada'}
-                    </span>
+                  <span className="bg-[#1c1c1c] text-[#fdce27] text-[10px] font-black tracking-[0.2em] px-3 py-1.5  inline-block shadow-sm">
+                    {servicio.categoria || "Obra Especializada"}
+                  </span>
                 </div>
 
                 {/* Tags */}
                 {servicio.tags && servicio.tags.length > 0 && (
                   <div className="mb-4 flex flex-wrap gap-2">
                     {servicio.tags.map((tag, idx) => (
-                      <span key={idx} className="bg-slate-200 text-[#1c1c1c] text-xs font-bold px-3 py-1 rounded-sm uppercase tracking-wide">
+                      <span
+                        key={idx}
+                        className="bg-slate-200 text-[#1c1c1c] text-xs font-bold px-3 py-1 rounded-sm uppercase tracking-wide"
+                      >
                         #{tag}
                       </span>
                     ))}
                   </div>
                 )}
 
-
                 {/* Descripción (Rich Text) */}
-                <div 
+                <div
                   className="prose prose-slate prose-lg max-w-none text-[#5a5a5a] font-light leading-relaxed mb-8 marker:text-[#fdce27] prose-a:text-[#fdce27] prose-a:font-bold hover:prose-a:text-[#1c1c1c] prose-headings:text-[#1c1c1c] prose-headings:font-black prose-strong:text-[#1c1c1c]"
-                  dangerouslySetInnerHTML={{ __html: servicio.descripcion || 'Servicio de infraestructura de Ankaloo Construcciones.' }}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      servicio.descripcion ||
+                      "Servicio de infraestructura de Anka Loo Construcciones.",
+                  }}
                 />
 
                 {servicio.price && (
                   <div className="mb-8 p-5 bg-white border border-slate-200 border-l-4 border-l-[#fdce27] shadow-sm">
-                    <p className="text-xs font-black tracking-widest text-slate-500  mb-1">Presupuesto inicial</p>
+                    <p className="text-xs font-black tracking-widest text-slate-500  mb-1">
+                      Presupuesto inicial
+                    </p>
                     <p className="text-3xl font-black text-[#1c1c1c]">
                       ${servicio.price}
                     </p>
                   </div>
                 )}
-
-
               </div>
             </div>
           </div>
@@ -294,12 +373,16 @@ export default function ServicioDetails() {
                 </div>
               </div>
               <div className="relative pt-[56.25%] overflow-hidden bg-black shadow-2xl border-4 border-[#fdce27]/20">
-                <iframe 
+                <iframe
                   className="absolute top-0 left-0 w-full h-full"
-                  src={servicio.video.includes('watch?v=') ? servicio.video.replace('watch?v=', 'embed/') : servicio.video} 
-                  title="YouTube video player" 
-                  frameBorder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  src={
+                    servicio.video.includes("watch?v=")
+                      ? servicio.video.replace("watch?v=", "embed/")
+                      : servicio.video
+                  }
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 ></iframe>
               </div>
@@ -329,7 +412,7 @@ export default function ServicioDetails() {
                       className="group relative p-8 bg-[#f9f9f9] border border-slate-200 hover:border-transparent hover:bg-white hover:shadow-xl transition-all duration-300 animate-scaleIn border-b-4 border-b-transparent hover:border-b-[#fdce27]"
                       style={{
                         animationDelay: `${idx * 100}ms`,
-                        animationFillMode: 'both',
+                        animationFillMode: "both",
                       }}
                     >
                       <div className="inline-flex items-center justify-center w-12 h-12 bg-white border border-slate-200 shadow-sm mb-6 transition-all group-hover:-translate-y-1 group-hover:border-[#fdce27]/50">
@@ -344,9 +427,13 @@ export default function ServicioDetails() {
                           <Icon className="w-6 h-6 text-[#1c1c1c] group-hover:text-[#b89200] transition-colors" />
                         )}
                       </div>
-                      <h3 className="text-lg font-black text-[#1c1c1c] tracking-tight mb-3">{detalle.titulo}</h3>
+                      <h3 className="text-lg font-black text-[#1c1c1c] tracking-tight mb-3">
+                        {detalle.titulo}
+                      </h3>
                       {detalle.descripcion && (
-                        <p className="text-[#5a5a5a] text-sm leading-relaxed font-light">{detalle.descripcion}</p>
+                        <p className="text-[#5a5a5a] text-sm leading-relaxed font-light">
+                          {detalle.descripcion}
+                        </p>
                       )}
                     </div>
                   );
@@ -355,7 +442,6 @@ export default function ServicioDetails() {
             </div>
           </div>
         )}
-
       </div>
 
       {/* Animaciones CSS */}
@@ -394,7 +480,8 @@ export default function ServicioDetails() {
         }
 
         @keyframes shimmer {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateX(-100%);
           }
           50% {

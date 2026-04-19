@@ -23,27 +23,40 @@ const TrabajaConNosotros = () => {
 
     try {
       const fd = new FormData(formRef.current);
-      
+
       // Construir FormData con todos los datos incluyendo CV
       const formData = new FormData();
       formData.append("nombre", fd.get("nombre")?.toString().trim() || "");
       formData.append("email", fd.get("email")?.toString().trim() || "");
       formData.append("telefono", fd.get("telefono")?.toString().trim() || "");
-      formData.append("puesto_interes", fd.get("puesto_interes")?.toString().trim() || "");
-      formData.append("experiencia", fd.get("experiencia")?.toString().trim() || "");
+      formData.append(
+        "puesto_interes",
+        fd.get("puesto_interes")?.toString().trim() || "",
+      );
+      formData.append(
+        "experiencia",
+        fd.get("experiencia")?.toString().trim() || "",
+      );
       formData.append("mensaje", fd.get("mensaje")?.toString().trim() || "");
-      formData.append("turnstile_token", isLocal ? "local-bypass" : captchaToken);
-      
+      formData.append(
+        "turnstile_token",
+        isLocal ? "local-bypass" : captchaToken,
+      );
+
       // Agregar CV (obligatorio)
       if (fd.get("cv")) {
         formData.append("cv", fd.get("cv"));
       }
 
-      const res = await clienteAxios.post("/api/trabaja-con-nosotros", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const res = await clienteAxios.post(
+        "/api/trabaja-con-nosotros",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
       const isOk =
         (res.status >= 200 && res.status < 300) || res.data?.success === true;
 
@@ -82,8 +95,8 @@ const TrabajaConNosotros = () => {
     <section className="relative bg-slate-50 py-20 overflow-hidden">
       <SEOHead
         priority="low"
-        title={`Ankaloo Construcciones | Trabaja Con Nosotros`}
-        description={`Envía tu CV y únete al equipo de Ankaloo Construcciones. Buscamos profesionales talentosos para impulsar la transformación digital.`}
+        title={`Anka Loo Construcciones | Trabaja Con Nosotros`}
+        description={`Envía tu CV y únete al equipo de Anka Loo Construcciones. Buscamos profesionales talentosos para impulsar la transformación digital.`}
       />
 
       {/* Glow decorativo */}
@@ -94,37 +107,50 @@ const TrabajaConNosotros = () => {
       <div className="relative max-w-5xl mx-auto px-6">
         {/* Encabezado */}
         <header className="text-center mb-16">
-
           <h1 className="text-2xl md:text-5xl font-black text-[#1c1c1c] mt-6 mb-4 leading-tight">
-            Trabaja con nosotros
+            Trabaja con <span className="text-[#fdce27]">Nosotros</span>
           </h1>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">
-Completá el formulario con tus datos y adjuntá tu CV. Nuestro equipo se pondrá en contacto si hay una vacante disponible. 
+            Completá el formulario con tus datos y adjuntá tu CV. Nuestro equipo
+            se pondrá en contacto si hay una vacante disponible.
           </p>
         </header>
 
         {/* Layout de solicitud */}
         <div className="grid lg:grid-cols-12 gap-12 bg-white rounded-[2rem] shadow-xl border border-slate-200 overflow-hidden">
-
           {/* Info Lateral */}
           <div className="lg:col-span-4 bg-[#1c1c1c] p-10 text-white flex flex-col justify-between relative overflow-hidden border-r-4 border-[#fdce27]">
             <div className="absolute top-0 right-0 w-40 h-40 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
-            
+
             <div className="relative z-10">
-              <h3 className="text-3xl font-black mb-8 text-[#fdce27]  tracking-wide">¿Por Qué Unirse?</h3>
+              <h3 className="text-3xl font-black mb-8 text-[#fdce27]  tracking-wide">
+                ¿Por Qué Unirse?
+              </h3>
               <div className="space-y-8">
                 <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">Crecimiento</p>
-                  <p className="text-lg font-medium text-slate-200">Participación en grandes obras de infraestructura</p>
+                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
+                    Crecimiento
+                  </p>
+                  <p className="text-lg font-medium text-slate-200">
+                    Participación en grandes obras de infraestructura
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">Equipo</p>
-                  <p className="text-lg font-medium text-slate-200">Trabajá con profesionales de la construcción</p>
+                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
+                    Equipo
+                  </p>
+                  <p className="text-lg font-medium text-slate-200">
+                    Trabajá con profesionales de la construcción
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">Tecnología</p>
-                  <p className="text-lg font-medium text-slate-200">Equipos de última generación en cada obra</p>
+                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
+                    Tecnología
+                  </p>
+                  <p className="text-lg font-medium text-slate-200">
+                    Equipos de última generación en cada obra
+                  </p>
                 </div>
               </div>
             </div>
@@ -182,7 +208,8 @@ Completá el formulario con tus datos y adjuntá tu CV. Nuestro equipo se pondr�
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-slate-900 font-black text-sm  tracking-wider">
-                    Puesto de Interés <span className="text-xs">(opcional)</span>
+                    Puesto de Interés{" "}
+                    <span className="text-xs">(opcional)</span>
                   </label>
                   <input
                     type="text"
@@ -193,7 +220,8 @@ Completá el formulario con tus datos y adjuntá tu CV. Nuestro equipo se pondr�
                 </div>
                 <div className="space-y-2">
                   <label className="text-slate-900 font-black text-sm  tracking-wider">
-                    Años de Experiencia <span className="text-xs">(opcional)</span>
+                    Años de Experiencia{" "}
+                    <span className="text-xs">(opcional)</span>
                   </label>
                   <input
                     type="text"
@@ -234,7 +262,10 @@ Completá el formulario con tus datos y adjuntá tu CV. Nuestro equipo se pondr�
 
               {!isLocal && (
                 <div className="py-2">
-                  <TurnstileCaptcha ref={turnstileRef} onVerify={setCaptchaToken} />
+                  <TurnstileCaptcha
+                    ref={turnstileRef}
+                    onVerify={setCaptchaToken}
+                  />
                 </div>
               )}
 
@@ -246,12 +277,13 @@ Completá el formulario con tus datos y adjuntá tu CV. Nuestro equipo se pondr�
                 >
                   {loading ? "ENVIANDO..." : "ENVIAR CV"}
                 </button>
-
               </div>
 
               {estadoMensaje.texto && (
                 <div className="mt-6">
-                  <Alerta tipo={estadoMensaje.tipo}>{estadoMensaje.texto}</Alerta>
+                  <Alerta tipo={estadoMensaje.tipo}>
+                    {estadoMensaje.texto}
+                  </Alerta>
                 </div>
               )}
             </form>

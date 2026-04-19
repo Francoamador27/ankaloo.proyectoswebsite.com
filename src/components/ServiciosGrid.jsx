@@ -175,7 +175,7 @@ export default function ServiciosGrid() {
       />
       <SEOHead
         priority="high"
-        title={`Ankaloo Construcciones | Obras e Infraestructura en Córdoba`}
+        title={`Anka Loo Construcciones | Obras e Infraestructura en Córdoba`}
         description="Empresa constructora de Córdoba: obras hidráulicas, viales, saneamiento, urbanizaciones y obras civiles con tecnología de vanguardia."
       />
 
@@ -191,16 +191,11 @@ export default function ServiciosGrid() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#1c1c1c] mb-3 lg:mb-4 tracking-tight ">
             {selectedCategory === "all"
               ? "Nuestras Obras"
-              : findCatInTree(categorias, (c) => String(c.id) === selectedCategory)
-                  ?.nombre || "Nuestras Obras"}
+              : findCatInTree(
+                  categorias,
+                  (c) => String(c.id) === selectedCategory,
+                )?.nombre || "Nuestras Obras"}
           </h2>
-
-          <p className="text-[#5a5a5a] mx-auto text-sm md:text-base lg:text-lg leading-relaxed font-light">
-            En{" "}
-            <strong className="text-[#1c1c1c]">Ankaloo Construcciones</strong>{" "}
-            brindamos servicios de infraestructura con profesionales
-            especializados y tecnología de última generación.
-          </p>
         </div>
 
         {/* Main Layout con Sidebar */}
@@ -208,6 +203,25 @@ export default function ServiciosGrid() {
           {/* Sidebar Filtros */}
           <aside className="lg:col-span-1">
             <div className="sticky top-6 space-y-4">
+              {/* Breadcrumb */}
+              <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400">
+                <Link to="/" className="hover:text-[#fdce27] transition-colors duration-200">
+                  Inicio
+                </Link>
+                <ChevronRight className="w-3 h-3" />
+                <Link to="/servicios" className="hover:text-[#fdce27] transition-colors duration-200">
+                  Servicios
+                </Link>
+                {selectedCategory !== "all" && (
+                  <>
+                    <ChevronRight className="w-3 h-3" />
+                    <span className="text-[#1c1c1c]">
+                      {findCatInTree(categorias, (c) => String(c.id) === selectedCategory)?.nombre}
+                    </span>
+                  </>
+                )}
+              </nav>
+
               {/* Search Box */}
               <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-2 mb-2">
@@ -304,14 +318,6 @@ export default function ServiciosGrid() {
               </div>
 
               {/* Results Counter */}
-              <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
-                <p className="text-xs text-slate-600">
-                  <span className="font-black text-[#1c1c1c]">
-                    {servicios.length}
-                  </span>{" "}
-                  obras disponibles
-                </p>
-              </div>
             </div>
           </aside>
 

@@ -23,7 +23,7 @@ const Contacto = () => {
 
     try {
       const fd = new FormData(formRef.current);
-      
+
       // Construir FormData con todos los datos incluyendo archivo
       const formData = new FormData();
       formData.append("nombre", fd.get("nombre")?.toString().trim() || "");
@@ -31,8 +31,11 @@ const Contacto = () => {
       formData.append("telefono", fd.get("telefono")?.toString().trim() || "");
       formData.append("mensaje", fd.get("mensaje")?.toString().trim() || "");
       formData.append("asunto", fd.get("asunto")?.toString().trim() || "");
-      formData.append("turnstile_token", isLocal ? "local-bypass" : captchaToken);
-      
+      formData.append(
+        "turnstile_token",
+        isLocal ? "local-bypass" : captchaToken,
+      );
+
       // Agregar archivo si existe
       if (fd.get("archivo")) {
         formData.append("archivo", fd.get("archivo"));
@@ -81,8 +84,8 @@ const Contacto = () => {
     <section className="relative bg-white py-20 overflow-hidden">
       <SEOHead
         priority="low"
-        title={`Ankaloo Construcciones | Contacto`}
-        description={`Contactate con Ankaloo Construcciones para conocer nuestras soluciones tecnológicas. Te ayudamos a digitalizar tu empresa.`}
+        title={`Anka Loo Construcciones | Contacto`}
+        description={`Contactate con Anka Loo Construcciones para conocer nuestras soluciones tecnológicas. Te ayudamos a digitalizar tu empresa.`}
       />
 
       {/* Glow decorativo */}
@@ -92,37 +95,53 @@ const Contacto = () => {
       <div className="relative max-w-5xl mx-auto px-6">
         {/* Encabezado */}
         <header className="text-center mb-16">
-
           <h1 className="text-2xl md:text-5xl font-black text-slate-900 mt-6 mb-4 leading-tight  tracking-tight">
             ¿Quieres comunicarte con nosotros?
           </h1>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">
-            Envíanos tu consulta y recibí <strong>asesoramiento de nuestros profesionales especializados</strong>.
+            Envíanos tu consulta y recibí{" "}
+            <strong>
+              asesoramiento de nuestros profesionales especializados
+            </strong>
+            .
           </p>
         </header>
 
         {/* Layout de contacto */}
         <div className="grid lg:grid-cols-12 gap-12 bg-white rounded-[3rem] shadow-2xl border border-slate-100 overflow-hidden">
-
           {/* Info Lateral */}
           <div className="lg:col-span-4 bg-[#1c1c1c] border-r-4 border-[#fdce27] p-10 text-white flex flex-col justify-between relative overflow-hidden">
             <div className="absolute top-0 right-0 w-40 h-40 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
-            
+
             <div className="relative z-10">
-              <h3 className="text-3xl font-black mb-8  tracking-wide border-b border-[#fdce27]/30 pb-4">Información de Contacto</h3>
+              <h3 className="text-3xl font-black mb-8  tracking-wide border-b border-[#fdce27]/30 pb-4">
+                Información de Contacto
+              </h3>
               <div className="space-y-8">
                 <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">Nuestra Sede</p>
-                  <p className="text-lg font-medium">{company.address || "Córdoba, Argentina"}</p>
+                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
+                    Nuestra Sede
+                  </p>
+                  <p className="text-lg font-medium">
+                    {company.address || "Córdoba, Argentina"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">Email Corporativo</p>
-                  <p className="text-lg font-medium">{contact.email || "info@ankaloo.com"}</p>
+                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
+                    Email Corporativo
+                  </p>
+                  <p className="text-lg font-medium">
+                    {contact.email || "info@ankaloo.com"}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">Horario de Atención</p>
-                  <p className="text-lg font-medium">{company.business_hours || "Lun a Vie: 09:00 - 18:00hs"}</p>
+                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
+                    Horario de Atención
+                  </p>
+                  <p className="text-lg font-medium">
+                    {company.business_hours || "Lun a Vie: 09:00 - 18:00hs"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -193,8 +212,18 @@ const Contacto = () => {
                     <option value="Agradecimiento">Agradecimiento</option>
                   </select>
                   <div className="absolute inset-y-0 right-0 flex items-center pr-6 pointer-events-none">
-                    <svg className="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                    <svg
+                      className="w-5 h-5 text-slate-700"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2.5"
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -230,7 +259,10 @@ const Contacto = () => {
 
               {!isLocal && (
                 <div className="py-2">
-                  <TurnstileCaptcha ref={turnstileRef} onVerify={setCaptchaToken} />
+                  <TurnstileCaptcha
+                    ref={turnstileRef}
+                    onVerify={setCaptchaToken}
+                  />
                 </div>
               )}
 
@@ -242,12 +274,13 @@ const Contacto = () => {
                 >
                   {loading ? "ENVIANDO..." : "ENVIAR CONSULTA"}
                 </button>
-
               </div>
 
               {estadoMensaje.texto && (
                 <div className="mt-6">
-                  <Alerta tipo={estadoMensaje.tipo}>{estadoMensaje.texto}</Alerta>
+                  <Alerta tipo={estadoMensaje.tipo}>
+                    {estadoMensaje.texto}
+                  </Alerta>
                 </div>
               )}
             </form>
