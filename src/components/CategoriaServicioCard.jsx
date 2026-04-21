@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import TiltedCard from './TiltedCard';
+import TiltedCard from "./TiltedCard";
 
 export default function CategoriaServicioCard({ categoria }) {
   const slug =
     categoria.nombre?.toLowerCase().replace(/\s+/g, "-") || categoria.id;
 
   const cardContent = (
-    <div className="relative z-10 h-full flex flex-col p-8 pt-32 lg:pt-[120px] text-white">
+    <div className="relative z-10 h-full flex flex-col items-start text-left p-8 pt-32 lg:pt-[120px] lg:max-w-[45%] text-white">
       {/* Título Estilo Vial */}
       <div className="mb-6">
         <h3 className="inline-block bg-[#5b5959e6]/95 px-5 py-3 text-2xl lg:text-2xl font-black uppercase tracking-tighter text-[#fdce27] border-l-[10px] border-[#fdce27] shadow-xl">
@@ -17,7 +17,7 @@ export default function CategoriaServicioCard({ categoria }) {
 
       {/* Descripción */}
       {categoria.descripcion && (
-        <div 
+        <div
           className="prose prose-invert max-w-none text-[15px] font-medium text-slate-100 mb-6 
                      [&_p]:m-0 [&_p]:leading-tight 
                      [&_ul]:list-none [&_ul]:p-0 [&_ul]:m-0 
@@ -28,25 +28,32 @@ export default function CategoriaServicioCard({ categoria }) {
       )}
 
       {/* CTA siempre visible */}
-      <div className="flex items-center gap-3 group/cta mt-auto">
-        <span className="text-[10px] font-black tracking-[0.15em]  text-white transition-all duration-300 group-hover/cta:text-[#fdce27]">
-          VER SERVICIOS
-        </span>
-        <div className="w-8 h-8 bg-[#fdce27] flex items-center justify-center transition-all duration-300 group-hover/cta:scale-110 active:scale-95 shadow-md">
-          <svg
-            className="w-4 h-4 text-[#1c1c1c]"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={3}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+      <div className="mt-auto">
+        <div className="flex items-center gap-3 group/cta">
+          <span className="text-[10px] font-black tracking-[0.15em]  text-white transition-all duration-300 group-hover/cta:text-[#fdce27]">
+            VER SERVICIOS
+          </span>
+          <div className="w-8 h-8 bg-[#fdce27] flex items-center justify-center transition-all duration-300 group-hover/cta:scale-110 active:scale-95 shadow-md">
+            <svg
+              className="w-4 h-4 text-[#1c1c1c]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={3}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
         </div>
+        {categoria.enfasis && (
+          <p className="mt-3 text-[11px] font-semibold tracking-wide text-white align-right uppercase border-t border-white/20 pt-3">
+            {categoria.enfasis}
+          </p>
+        )}
       </div>
     </div>
   );
@@ -75,13 +82,20 @@ export default function CategoriaServicioCard({ categoria }) {
             />
           ) : (
             <div className="absolute inset-0 w-full h-full bg-[#1c1c1c]">
-              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+              <div
+                className="absolute inset-0 opacity-10"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+                  backgroundSize: "24px 24px",
+                }}
+              ></div>
             </div>
           )}
 
           {/* Filtro amarillo vibrante */}
           <div className="absolute inset-0 bg-[#fdce27]/70 mix-blend-multiply z-10 transition-all duration-500 group-hover:bg-[#fdce27]/80" />
-          
+
           {/* Overlay degradado suave */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
         </div>

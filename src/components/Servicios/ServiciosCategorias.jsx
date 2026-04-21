@@ -107,6 +107,7 @@ export default function ServiciosCategorias() {
 
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
+  const [enfasis, setEnfasis] = useState("");
   const [imagen, setImagen] = useState(null);
   const [imagenPreview, setImagenPreview] = useState(null);
   const [parentId, setParentId] = useState("");
@@ -156,6 +157,7 @@ export default function ServiciosCategorias() {
     if (!cat) return;
     setNombre(cat.nombre || "");
     setDescripcion(cat.descripcion || "");
+    setEnfasis(cat.enfasis || "");
     setParentId(cat.parent_id || "");
     setImagen(null);
     setImagenPreview(cat.imagen || null);
@@ -164,6 +166,7 @@ export default function ServiciosCategorias() {
   const resetForm = () => {
     setNombre("");
     setDescripcion("");
+    setEnfasis("");
     setImagen(null);
     setImagenPreview(null);
     setParentId("");
@@ -203,6 +206,7 @@ export default function ServiciosCategorias() {
     const formData = new FormData();
     formData.append("nombre", nombre.trim());
     formData.append("descripcion", descripcion);
+    formData.append("enfasis", enfasis);
     if (parentId) formData.append("parent_id", parentId);
     if (imagen) formData.append("imagen", imagen);
 
@@ -412,6 +416,22 @@ export default function ServiciosCategorias() {
                 placeholder="Breve descripción de la categoría"
               />
             </Suspense>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-slate-700">
+              Énfasis (opcional)
+            </label>
+            <input
+              type="text"
+              className="w-full border p-3 rounded-lg"
+              value={enfasis}
+              onChange={(e) => setEnfasis(e.target.value)}
+              placeholder="Ej: +15 años de experiencia en obras de infraestructura"
+            />
+            <p className="text-xs text-slate-500 mt-1">
+              Texto corto que se muestra debajo del botón "VER SERVICIOS" en el home
+            </p>
           </div>
 
           <div>
