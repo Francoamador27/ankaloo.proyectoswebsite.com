@@ -7,7 +7,7 @@ export default function CategoriaServicioCard({ categoria }) {
     categoria.nombre?.toLowerCase().replace(/\s+/g, "-") || categoria.id;
 
   const cardContent = (
-    <div className="relative z-10 h-full flex flex-col items-start text-left p-8 pt-32 lg:pt-[120px] lg:max-w-[45%] text-white">
+    <div className="relative z-10 h-full flex flex-col p-8 pt-32 lg:pt-[120px] text-white">
       {/* Título Estilo Vial */}
       <div className="mb-6">
         <h3 className="inline-block bg-[#5b5959e6]/95 px-5 py-3 text-2xl lg:text-2xl font-black uppercase tracking-tighter text-[#fdce27] border-l-[10px] border-[#fdce27] shadow-xl">
@@ -28,9 +28,9 @@ export default function CategoriaServicioCard({ categoria }) {
       )}
 
       {/* CTA siempre visible */}
-      <div className="mt-auto">
+      <div className={`mt-auto ${categoria.enfasis ? "pb-10" : ""}`}>
         <div className="flex items-center gap-3 group/cta">
-          <span className="text-[10px] font-black tracking-[0.15em]  text-white transition-all duration-300 group-hover/cta:text-[#fdce27]">
+          <span className="text-[10px] font-black tracking-[0.15em] text-white transition-all duration-300 group-hover/cta:text-[#fdce27]">
             VER SERVICIOS
           </span>
           <div className="w-8 h-8 bg-[#fdce27] flex items-center justify-center transition-all duration-300 group-hover/cta:scale-110 active:scale-95 shadow-md">
@@ -49,18 +49,20 @@ export default function CategoriaServicioCard({ categoria }) {
             </svg>
           </div>
         </div>
-        {categoria.enfasis && (
-          <p className="mt-3 text-[11px] font-semibold tracking-wide text-white align-right uppercase border-t border-white/20 pt-3">
-            {categoria.enfasis}
-          </p>
-        )}
       </div>
+
+      {/* Énfasis siempre al fondo */}
+      {categoria.enfasis && (
+        <p className="absolute bottom-0 left-0 right-0 px-8 py-3 text-[11px] font-semibold tracking-wide text-white text-right border-t border-white/20">
+          {categoria.enfasis}
+        </p>
+      )}
     </div>
   );
 
   return (
     <Link to={`/servicios/${slug}`}>
-      <div className="group relative h-auto lg:h-[550px] overflow-hidden shadow-xl border border-slate-200/10 transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1c1c1c]">
+      <div className="group relative h-auto min-h-[560px] lg:h-[580px] overflow-hidden shadow-xl border border-slate-200/10 transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1c1c1c]">
         {/* Línea dorada superior que aparece en hover */}
         <div className="absolute top-0 left-0 w-full h-1 bg-[#fdce27] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-30"></div>
 
