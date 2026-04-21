@@ -56,6 +56,7 @@ const AdminSidebar = () => {
         // { text: 'Galería', icon: <GalleryThumbnails size={20} />, path: '/admin-dash/galeria' },
         { text: 'Obras', icon: <HardHat size={20} />, path: '/admin-dash/servicios' },
         { text: 'Certificados', icon: <Award size={20} />, path: '/admin-dash/certificados' },
+        { text: 'Brochure', icon: <FileText size={20} />, path: '/admin-dash/brochure' },
         { text: 'Video Principal', icon: <PlaySquare size={20} />, path: '/admin-dash/video-principal' },
         { text: 'Maquinarias', icon: <Tractor size={20} />, path: '/admin-dash/portafolio' },
 

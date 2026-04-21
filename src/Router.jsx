@@ -88,6 +88,8 @@ const ImagenCorporativaAdmin = lazy(
   () => import("./views/ImagenCorporativaAdmin"),
 );
 const AdminFooter = lazy(() => import("./views/AdminFooter"));
+const AdminBrochure = lazy(() => import("./views/AdminBrochure"));
+const Brochure = lazy(() => import("./components/Brochure"));
 
 const suspense = (node) => (
   <Suspense fallback={<div style={{ minHeight: 200 }} />}>{node}</Suspense>
@@ -124,6 +126,7 @@ const router = createBrowserRouter([
       { path: "/sede", element: suspense(<Sede />) },
       { path: "/calidad", element: suspense(<Calidad />) },
       { path: "/compromiso", element: suspense(<Compromiso />) },
+      { path: "/brochure", element: suspense(<Brochure />) },
     ],
   },
   {
@@ -228,6 +231,7 @@ const router = createBrowserRouter([
         element: suspense(<ImagenCorporativaAdmin />),
       },
       { path: "/admin-dash/footer", element: suspense(<AdminFooter />) },
+      { path: "/admin-dash/brochure", element: suspense(<AdminBrochure />) },
     ],
   },
   {

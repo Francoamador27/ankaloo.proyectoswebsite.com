@@ -29,7 +29,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative border-t border-slate-200 overflow-hidden"
+      className="relative overflow-hidden border-t border-slate-200"
       style={footerStyle}
     >
       {/* Capa de overlay para imagen con escala de grises o brillo opcional */}
@@ -40,7 +40,7 @@ export default function Footer() {
           <img
             src={footer.bg_image}
             alt=""
-            className="w-full h-full object-cover"
+            className="object-cover w-full h-full"
           />
         </div>
       )}
@@ -54,20 +54,20 @@ export default function Footer() {
       )}
 
       {/* Contenido principal */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-20">
+      <div className="relative z-10 px-6 py-20 mx-auto max-w-7xl">
         {/* Grid principal */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 gap-12 mb-16 md:grid-cols-4">
           {/* Logo y breve descripción */}
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-3 group">
               <img
                 src={footer.logo || logo_blanco}
                 alt={`Logo ${company.name}`}
-                className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="object-contain w-auto h-12 transition-transform duration-300 group-hover:scale-105"
               />
             </div>
             <p
-              className="text-sm leading-relaxed font-light opacity-80"
+              className="text-sm font-light leading-relaxed opacity-80"
               style={{ color: footer.text_color }}
             >
               Empresa constructora de Córdoba especializada en obras
@@ -139,20 +139,26 @@ export default function Footer() {
               Empresa
             </h3>
             <ul className="space-y-3">
-              {["Contacto", "Blog", "Trabaja con Nosotros"].map((item, idx) => {
-                const paths = ["/contacto", "/blog", "/trabaja-con-nosotros"];
-                return (
-                  <li key={idx}>
-                    <Link
-                      to={paths[idx]}
-                      className="hover:text-[#fdce27] transition-colors text-sm font-medium opacity-70 hover:opacity-100"
-                      style={{ color: footer.text_color }}
-                    >
-                      {item}
-                    </Link>
-                  </li>
-                );
-              })}
+              {["Contacto", "Brochure", "Trabaja con Nosotros"].map(
+                (item, idx) => {
+                  const paths = [
+                    "/contacto",
+                    "/brochure",
+                    "/trabaja-con-nosotros",
+                  ];
+                  return (
+                    <li key={idx}>
+                      <Link
+                        to={paths[idx]}
+                        className="hover:text-[#fdce27] transition-colors text-sm font-medium opacity-70 hover:opacity-100"
+                        style={{ color: footer.text_color }}
+                      >
+                        {item}
+                      </Link>
+                    </li>
+                  );
+                },
+              )}
             </ul>
           </div>
 
@@ -203,30 +209,30 @@ export default function Footer() {
 
         {/* Logos Adicionales Opcionales */}
         {(footer.logo1 || footer.logo2) && (
-          <div className="flex flex-wrap justify-center items-center gap-8 mb-12 animate-in fade-in duration-1000">
+          <div className="flex flex-wrap items-center justify-center gap-8 mb-12 duration-1000 animate-in fade-in">
             {footer.logo1 && (
               <img
                 src={footer.logo1}
                 alt="Logo Partner 1"
-                className="h-20 w-auto object-contain transition-all duration-500 rounded-xl bg-white p-2 shadow-2xl shadow-black/20"
+                className="object-contain w-auto h-20 p-2 transition-all duration-500 bg-white shadow-2xl rounded-xl shadow-black/20"
               />
             )}
             {footer.logo2 && (
               <img
                 src={footer.logo2}
                 alt="Logo Partner 2"
-                className="h-20 w-auto object-contain transition-all duration-500 rounded-xl bg-white p-2 shadow-2xl shadow-black/20"
+                className="object-contain w-auto h-20 p-2 transition-all duration-500 bg-white shadow-2xl rounded-xl shadow-black/20"
               />
             )}
           </div>
         )}
 
         {/* Divisor */}
-        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-8"></div>
+        <div className="h-px mb-8 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
         {/* Copyright y derechos */}
         <div
-          className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm opacity-60"
+          className="flex flex-col items-center justify-between gap-4 text-sm md:flex-row opacity-60"
           style={{ color: footer.text_color }}
         >
           <div className="flex items-center gap-2">
