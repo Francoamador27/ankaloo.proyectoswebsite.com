@@ -217,34 +217,6 @@ export default function ServiciosGrid() {
         <div className="grid grid-cols-1 gap-6 mb-16 lg:grid-cols-4 lg:mb-20">
           {/* Sidebar Filtros */}
           <aside className="lg:col-span-1">
-            <nav className="flex items-center gap-2 mb-5 text-xs font-semibold text-slate-400">
-              <Link
-                to="/"
-                className="hover:text-[#fdce27] transition-colors duration-200"
-              >
-                Inicio
-              </Link>
-              <ChevronRight className="w-3 h-3" />
-              <Link
-                to="/servicios"
-                className="hover:text-[#fdce27] transition-colors duration-200"
-              >
-                Servicios
-              </Link>
-              {selectedCategory !== "all" && (
-                <>
-                  <ChevronRight className="w-3 h-3" />
-                  <span className="text-[#1c1c1c]">
-                    {
-                      findCatInTree(
-                        categorias,
-                        (c) => String(c.id) === selectedCategory,
-                      )?.nombre
-                    }
-                  </span>
-                </>
-              )}
-            </nav>
             <div className="sticky space-y-4 top-6">
               {/* Search Box */}
               <div className="p-4 transition-shadow bg-white border shadow-sm rounded-xl border-slate-200 hover:shadow-md">
