@@ -69,7 +69,7 @@ export default function Portafolio() {
       <div className="min-h-screen bg-[#f4f4f4] lg: relative overflow-hidden">
         <div
           aria-hidden="true"
-          className="hidden lg:block pointer-events-none absolute left-0 top-0 h-full w-48 select-none z-0 opacity-60"
+          className="absolute top-0 left-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
           style={{
             backgroundImage: `url(${lineasDer})`,
             backgroundRepeat: "repeat-y",
@@ -79,7 +79,7 @@ export default function Portafolio() {
         />
         <div
           aria-hidden="true"
-          className="hidden lg:block pointer-events-none absolute right-0 top-0 h-full w-48 select-none z-0 opacity-60"
+          className="absolute top-0 right-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
           style={{
             backgroundImage: `url(${lineasIzq})`,
             backgroundRepeat: "repeat-y",
@@ -93,31 +93,22 @@ export default function Portafolio() {
           <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#1c1c1c] rounded-full blur-3xl"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 lg:py-24">
+        <div className="relative z-10 px-6 py-24 mx-auto max-w-7xl lg:py-24">
           {/* Header Centrado */}
-          <header className="relative z-10 text-center mb-16 lg:mb-10">
+          <header className="relative z-10 mb-16 text-center lg:mb-10">
             <h1 className="text-5xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight">
-              Nuestras <span className="text-[#fdce27]">Maquinarias</span>
+              Nuestros <span className="text-[#fdce27]">Equipos</span>
             </h1>
-
-            <p className="max-w-7xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
-              En{" "}
-              <strong className="text-[#1c1c1c]">
-                {company.name || "Anka Loo Construcciones"}
-              </strong>{" "}
-              brindamos soluciones de infraestructura con tecnología de
-              vanguardia y equipos especializados.
-            </p>
           </header>
 
           {/* Grid de proyectos */}
           {loading ? (
-            <div className="flex justify-center items-center py-12">
+            <div className="flex items-center justify-center py-12">
               <Loader className="w-10 h-10 text-[#fdce27] animate-spin" />
             </div>
           ) : portafoliosFiltrados.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
+              <div className="grid grid-cols-1 gap-4 mb-10 md:grid-cols-3 lg:grid-cols-4">
                 {portafoliosPaginados.map((proyecto) => (
                   <PortafolioCard key={proyecto.id} proyecto={proyecto} />
                 ))}
@@ -161,7 +152,7 @@ export default function Portafolio() {
               )}
             </>
           ) : (
-            <div className="text-center py-12 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div className="py-12 text-center bg-white border shadow-sm rounded-xl border-slate-200">
               <p className="text-base lg:text-lg text-slate-500">
                 {searchQuery
                   ? "No hay proyectos que coincidan con tu búsqueda"

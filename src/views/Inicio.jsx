@@ -22,7 +22,7 @@ const Inicio = () => {
   const { company } = useCont();
   return (
     <>
-      <div className="  ">
+      <div className="">
         <FeatureSection />
         <AnkalooHighlights />
         <Suspense fallback={<div style={{ minHeight: 320 }} />}>
@@ -41,11 +41,6 @@ const Inicio = () => {
         <LazyRender minHeight={420}>
           <Suspense fallback={<div style={{ minHeight: 420 }} />}>
             <VideoMain url={company.video_principal} />
-          </Suspense>
-        </LazyRender>
-        <LazyRender minHeight={320}>
-          <Suspense fallback={<div style={{ minHeight: 320 }} />}>
-            <QuienesSomos />
           </Suspense>
         </LazyRender>
 

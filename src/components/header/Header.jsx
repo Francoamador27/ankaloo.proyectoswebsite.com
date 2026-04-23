@@ -36,7 +36,7 @@ export default function Header() {
   const leftNav = [
     { label: "Inicio", href: "/" },
     { label: "Servicios", href: "/servicios" },
-    { label: "Maquinarias", href: "/maquinarias" },
+    { label: "Equipos", href: "/maquinarias" },
     // { label: "Calidad", href: "/calidad" },
   ];
 
@@ -61,10 +61,10 @@ export default function Header() {
             : "bg-white/10 backdrop-blur-md border-b border-white/20"
         }`}
       >
-        <nav className="max-w-7xl mx-auto px-6">
+        <nav className="px-6 mx-auto max-w-7xl">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* LOGO A LA IZQUIERDA */}
-            <Link to="/" className="relative group flex items-center gap-3">
+            <Link to="/" className="relative flex items-center gap-3 group">
               {/* Glow effect */}
               <div className="absolute -inset-3 bg-[#fdce27]/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
 
@@ -74,12 +74,12 @@ export default function Header() {
                 alt="Anka Loo"
                 width={120}
                 height={48}
-                className="h-10 md:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105 relative z-10"
+                className="relative z-10 object-contain w-auto h-10 transition-transform duration-500 md:h-12 group-hover:scale-105"
               />
             </Link>
 
             {/* NAVEGACION (Desktop) */}
-            <ul className="hidden lg:flex items-center gap-1">
+            <ul className="items-center hidden gap-1 lg:flex">
               {[...leftNav, ...rightNav].map((item, i) => (
                 <li key={i}>
                   <NavLink
@@ -130,7 +130,7 @@ export default function Header() {
               : "opacity-0 -translate-y-4 invisible"
           }`}
         >
-          <div className="mx-4 mt-3 p-6 rounded-3xl shadow-2xl overflow-hidden relative border border-white/10">
+          <div className="relative p-6 mx-4 mt-3 overflow-hidden border shadow-2xl rounded-3xl border-white/10">
             <div className={`absolute inset-0 bg-white`}></div>
 
             <ul className="relative space-y-2">
@@ -159,7 +159,7 @@ export default function Header() {
 
       {/* Auth / User Dropdown (Commented out sections from original) */}
       {/* 
-      <div className="hidden lg:flex items-center space-x-4">
+      <div className="items-center hidden space-x-4 lg:flex">
           {!user ? (
             <>
               <Link to="/auth/login">Iniciar sesión</Link>

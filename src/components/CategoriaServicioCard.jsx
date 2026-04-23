@@ -53,7 +53,7 @@ export default function CategoriaServicioCard({ categoria }) {
 
       {/* Énfasis siempre al fondo */}
       {categoria.enfasis && (
-        <p className="absolute bottom-0 left-0 right-0 px-8 py-3 text-[11px] font-semibold tracking-wide text-white text-right border-t border-white/20">
+        <p className="absolute bottom-0 left-0 right-0 px-8 py-3 text-[11px]  tracking-wide text-white text-right border-t border-white/20">
           {categoria.enfasis}
         </p>
       )}
@@ -99,11 +99,11 @@ export default function CategoriaServicioCard({ categoria }) {
           <div className="absolute inset-0 bg-[#fdce27]/70 mix-blend-multiply z-10 transition-all duration-500 group-hover:bg-[#fdce27]/80" />
 
           {/* Overlay degradado suave */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         </div>
 
         {/* Contenido: Relativo en mobile para dar altura, absoluto en desktop */}
-        <div className="relative lg:absolute lg:inset-0 z-20">
+        <div className="relative z-20 lg:absolute lg:inset-0">
           {cardContent}
         </div>
       </div>

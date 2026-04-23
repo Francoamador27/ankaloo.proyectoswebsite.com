@@ -5,6 +5,8 @@ import Alerta from "../components/Alerta";
 import WhatsappHref from "../utils/WhatsappUrl";
 import useCont from "../hooks/useCont";
 import SEOHead from "./Head/Head";
+import lineasIzq from "../assets/lineasamarillasizq.png";
+import lineasDer from "../assets/lineasamarillasder.png";
 
 const Contacto = () => {
   const formRef = useRef(null);
@@ -81,7 +83,27 @@ const Contacto = () => {
   };
 
   return (
-    <section className="relative bg-white py-20 overflow-hidden">
+    <section className="relative py-20 overflow-hidden bg-white">
+      <div
+        aria-hidden="true"
+        className="absolute top-0 left-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
+        style={{
+          backgroundImage: `url(${lineasDer})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "contain",
+          backgroundPosition: "left top",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute top-0 right-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
+        style={{
+          backgroundImage: `url(${lineasIzq})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "contain",
+          backgroundPosition: "right top",
+        }}
+      />
       <SEOHead
         priority="low"
         title={`Anka Loo Construcciones | Contacto`}
@@ -92,19 +114,12 @@ const Contacto = () => {
       <div className="absolute -top-32 -right-40 w-[500px] h-[500px] bg-[#fdce27]/8 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#1c1c1c]/5 rounded-full blur-3xl"></div>
 
-      <div className="relative max-w-5xl mx-auto px-6">
+      <div className="relative max-w-5xl px-6 mx-auto">
         {/* Encabezado */}
-        <header className="text-center mb-16">
-          <h1 className="text-2xl md:text-5xl font-black text-slate-900 mt-6 mb-4 leading-tight  tracking-tight">
-            ¿Quieres comunicarte con nosotros?
+        <header className="mb-16 text-center">
+          <h1 className="mt-6 mb-4 text-2xl font-black leading-tight tracking-tight md:text-5xl text-[#fdce27]">
+            Contacto
           </h1>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">
-            Envíanos tu consulta y recibí{" "}
-            <strong>
-              asesoramiento de nuestros profesionales especializados
-            </strong>
-            .
-          </p>
         </header>
 
         {/* Layout de contacto */}
@@ -137,7 +152,7 @@ const Contacto = () => {
                 </div>
                 <div>
                   <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
-                    Horario de Atención
+                    Horario
                   </p>
                   <p className="text-lg font-medium">
                     {company.business_hours || "Lun a Vie: 09:00 - 18:00hs"}
@@ -154,11 +169,11 @@ const Contacto = () => {
           </div>
 
           {/* Formulario */}
-          <div className="lg:col-span-8 p-10 md:p-12">
+          <div className="p-10 lg:col-span-8 md:p-12">
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-slate-900 font-black text-sm  tracking-wider">
+                  <label className="text-sm font-black tracking-wider text-slate-900">
                     Nombre y Apellido
                   </label>
                   <input
@@ -170,7 +185,7 @@ const Contacto = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-slate-900 font-black text-sm  tracking-wider">
+                  <label className="text-sm font-black tracking-wider text-slate-900">
                     Teléfono de Contacto
                   </label>
                   <input
@@ -184,7 +199,7 @@ const Contacto = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-slate-900 font-black text-sm  tracking-wider">
+                <label className="text-sm font-black tracking-wider text-slate-900">
                   Email de contacto
                 </label>
                 <input
@@ -197,7 +212,7 @@ const Contacto = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-slate-900 font-black text-sm tracking-wider block">
+                <label className="block text-sm font-black tracking-wider text-slate-900">
                   Asunto <span className="text-xs">(opcional)</span>
                 </label>
                 <div className="relative">
@@ -230,7 +245,7 @@ const Contacto = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-slate-900 font-black text-sm tracking-wider block">
+                <label className="block text-sm font-black tracking-wider text-slate-900">
                   Comentario
                 </label>
                 <textarea
@@ -243,7 +258,7 @@ const Contacto = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-slate-900 font-black text-sm tracking-wider block">
+                <label className="block text-sm font-black tracking-wider text-slate-900">
                   Adjuntar archivo <span className="text-xs">(opcional)</span>
                 </label>
                 <input
@@ -252,7 +267,7 @@ const Contacto = () => {
                   accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.jpeg,.png"
                   className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-4 focus:ring-[#0891b2]/20 transition-all font-medium text-sm"
                 />
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="mt-1 text-xs text-slate-500">
                   Máx. 5MB. Formatos: PDF, DOC, DOCX, XLS, XLSX, TXT, JPG, PNG
                 </p>
               </div>
@@ -266,7 +281,7 @@ const Contacto = () => {
                 </div>
               )}
 
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex flex-col gap-4 pt-4 sm:flex-row">
                 <button
                   type="submit"
                   className="flex-1 bg-[#1c1c1c] hover:bg-[#2c2c2c] border-2 border-[#fdce27] text-white font-black px-4 py-2 shadow-xl hover:scale-[1.02] transition-all disabled:opacity-60 active:scale-95"

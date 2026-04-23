@@ -1,12 +1,19 @@
 import logo_blanco from "../../assets/img/logo/logo_ankaloo.png";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
-import { Mail, Phone, MapPin, Heart } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import useCont from "../../hooks/useCont";
 import { Link } from "react-router-dom";
+import useSWR from "swr";
+import clienteAxios from "../../config/axios";
+
+const fetcher = (url) => clienteAxios(url).then((res) => res.data.data ?? res.data);
 
 export default function Footer() {
   const { company, contact, social, footer, settings } = useCont();
   const currentYear = new Date().getFullYear();
+
+  const { data: certData } = useSWR("/api/certificados", fetcher, { revalidateOnFocus: false });
+  const certificados = Array.isArray(certData) ? certData : [];
 
   // No renderizar hasta que settings cargue para evitar layout shift
   if (!settings) {
@@ -66,14 +73,7 @@ export default function Footer() {
                 className="object-contain w-auto h-12 transition-transform duration-300 group-hover:scale-105"
               />
             </div>
-            <p
-              className="text-sm font-light leading-relaxed opacity-80"
-              style={{ color: footer.text_color }}
-            >
-              Empresa constructora de Córdoba especializada en obras
-              hidráulicas, viales, saneamiento y ambientales. Profesionales con
-              tecnología de última generación.
-            </p>
+
             {/* Redes Sociales */}
             <div className="flex gap-4 pt-4">
               {social.facebook && (
@@ -106,10 +106,10 @@ export default function Footer() {
           {/* Links Rápidos */}
           <div>
             <h3 className="text-lg font-black tracking-widest mb-6 text-[#fdce27]">
-              Navegar
+              Dentro de este sitio
             </h3>
             <ul className="space-y-3">
-              {["Inicio", "Servicios", "Maquinarias", "Quiénes Somos"].map(
+              {["Inicio", "Servicios", "Equipos", "Quiénes Somos"].map(
                 (item, idx) => {
                   const paths = [
                     "/",
@@ -207,22 +207,62 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Logos Adicionales Opcionales */}
-        {(footer.logo1 || footer.logo2) && (
-          <div className="flex flex-wrap items-center justify-center gap-8 mb-12 duration-1000 animate-in fade-in">
-            {footer.logo1 && (
-              <img
-                src={footer.logo1}
-                alt="Logo Partner 1"
-                className="object-contain w-auto h-20 p-2 transition-all duration-500 bg-white shadow-2xl rounded-xl shadow-black/20"
-              />
+        {/* Sellos y certificados */}
+        {(footer.logo1 || footer.logo2 || certificados.length > 0) && (
+          <div className="flex flex-wrap items-end justify-between gap-8 mb-12">
+            {/* Achilles — izquierda */}
+            {(footer.logo1 || footer.logo2) && (
+              <div className="flex flex-col gap-3">
+                <span className="text-xs font-semibold opacity-60" style={{ color: footer.text_color }}>
+                  Proveedor aprobado en:
+                </span>
+                <div className="flex items-center gap-4 flex-wrap">
+                  {footer.logo1 && (
+                    <img
+                      src={footer.logo1}
+                      alt="Logo Partner 1"
+                      className="object-contain w-auto h-20 p-2 transition-all duration-500 bg-white shadow-2xl rounded-xl shadow-black/20"
+                    />
+                  )}
+                  {footer.logo2 && (
+                    <img
+                      src={footer.logo2}
+                      alt="Logo Partner 2"
+                      className="object-contain w-auto h-20 p-2 transition-all duration-500 bg-white shadow-2xl rounded-xl shadow-black/20"
+                    />
+                  )}
+                </div>
+              </div>
             )}
-            {footer.logo2 && (
-              <img
-                src={footer.logo2}
-                alt="Logo Partner 2"
-                className="object-contain w-auto h-20 p-2 transition-all duration-500 bg-white shadow-2xl rounded-xl shadow-black/20"
-              />
+
+            {/* Certificados de calidad — derecha */}
+            {certificados.length > 0 && (
+              <div className="flex flex-col gap-3">
+                <span className="text-xs font-semibold opacity-60" style={{ color: footer.text_color }}>
+                  Calidad certificada:
+                </span>
+                <div className="flex items-center gap-4 flex-wrap">
+                  {certificados.map((cert) =>
+                    cert.imagen ? (
+                      <a
+                        key={cert.id}
+                        href={cert.documento || cert.imagen}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={`Descargar certificado: ${cert.titulo}`}
+                        className="transition-all duration-500 hover:scale-105"
+                      >
+                        <img
+                          src={cert.imagen}
+                          alt={cert.titulo}
+                          className="object-contain w-auto h-20 p-2 bg-white shadow-2xl rounded-xl shadow-black/20"
+                        />
+                      </a>
+                    ) : null
+                  )}
+                </div>
+              </div>
             )}
           </div>
         )}

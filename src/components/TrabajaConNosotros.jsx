@@ -5,6 +5,8 @@ import Alerta from "../components/Alerta";
 import WhatsappHref from "../utils/WhatsappUrl";
 import useCont from "../hooks/useCont";
 import SEOHead from "./Head/Head";
+import lineasIzq from "../assets/lineasamarillasizq.png";
+import lineasDer from "../assets/lineasamarillasder.png";
 
 const TrabajaConNosotros = () => {
   const formRef = useRef(null);
@@ -93,6 +95,26 @@ const TrabajaConNosotros = () => {
 
   return (
     <section className="relative bg-slate-50 py-20 overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="absolute top-0 left-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
+        style={{
+          backgroundImage: `url(${lineasDer})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "contain",
+          backgroundPosition: "left top",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute top-0 right-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
+        style={{
+          backgroundImage: `url(${lineasIzq})`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "contain",
+          backgroundPosition: "right top",
+        }}
+      />
       <SEOHead
         priority="low"
         title={`Anka Loo Construcciones | Trabaja Con Nosotros`}

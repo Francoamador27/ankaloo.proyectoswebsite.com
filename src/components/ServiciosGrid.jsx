@@ -88,7 +88,19 @@ export default function ServiciosGrid() {
     });
 
     if (selectedCategory !== "all") {
-      params.set("category", selectedCategory);
+      // Si es categoría padre (tiene subcategorías), incluir también los hijos
+      const parentCat = categorias.find(
+        (c) => String(c.id) === selectedCategory,
+      );
+      if (parentCat && (parentCat.children || []).length > 0) {
+        const ids = [
+          parentCat.id,
+          ...(parentCat.children || []).map((c) => c.id),
+        ];
+        params.set("category", ids.join(","));
+      } else {
+        params.set("category", selectedCategory);
+      }
     }
 
     if (searchQuery.trim()) {
@@ -96,7 +108,7 @@ export default function ServiciosGrid() {
     }
 
     return `/api/servicios?${params.toString()}`;
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, categorias]);
 
   const { data, error, isLoading } = useSWR(serviciosUrl, fetcher, {
     revalidateOnFocus: false,
@@ -155,7 +167,7 @@ export default function ServiciosGrid() {
     <section className="relative bg-[#f4f4f4] py-12 lg:py-16 px-6 lg:px-20 overflow-hidden">
       <div
         aria-hidden="true"
-        className="hidden lg:block pointer-events-none absolute left-0 top-0 h-full w-48 select-none z-0 opacity-60"
+        className="absolute top-0 left-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
         style={{
           backgroundImage: `url(${lineasDer})`,
           backgroundRepeat: "repeat-y",
@@ -165,7 +177,7 @@ export default function ServiciosGrid() {
       />
       <div
         aria-hidden="true"
-        className="hidden lg:block pointer-events-none absolute right-0 top-0 h-full w-48 select-none z-0 opacity-60"
+        className="absolute top-0 right-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
         style={{
           backgroundImage: `url(${lineasIzq})`,
           backgroundRepeat: "repeat-y",
@@ -185,45 +197,57 @@ export default function ServiciosGrid() {
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#1c1c1c] rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Header Compacto */}
-        <div className="text-center mb-8 lg:mb-10">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#1c1c1c] mb-3 lg:mb-4 tracking-tight ">
-            {selectedCategory === "all"
-              ? "Nuestras Obras"
-              : findCatInTree(
-                  categorias,
-                  (c) => String(c.id) === selectedCategory,
-                )?.nombre || "Nuestras Obras"}
-          </h2>
+      <div className="relative z-10 mx-auto max-w-7xl">
+        {/* Fila header: breadcrumb + título */}
+        <div className="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-4">
+          <div className="flex flex-col justify-end gap-2 lg:col-span-1"></div>
+          <div className="lg:col-span-3">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#1c1c1c] tracking-tight">
+              {selectedCategory === "all"
+                ? "Nuestras Obras"
+                : findCatInTree(
+                    categorias,
+                    (c) => String(c.id) === selectedCategory,
+                  )?.nombre || "Nuestras Obras"}
+            </h2>
+          </div>
         </div>
 
         {/* Main Layout con Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-16 lg:mb-20">
+        <div className="grid grid-cols-1 gap-6 mb-16 lg:grid-cols-4 lg:mb-20">
           {/* Sidebar Filtros */}
           <aside className="lg:col-span-1">
-            <div className="sticky top-6 space-y-4">
-              {/* Breadcrumb */}
-              <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                <Link to="/" className="hover:text-[#fdce27] transition-colors duration-200">
-                  Inicio
-                </Link>
-                <ChevronRight className="w-3 h-3" />
-                <Link to="/servicios" className="hover:text-[#fdce27] transition-colors duration-200">
-                  Servicios
-                </Link>
-                {selectedCategory !== "all" && (
-                  <>
-                    <ChevronRight className="w-3 h-3" />
-                    <span className="text-[#1c1c1c]">
-                      {findCatInTree(categorias, (c) => String(c.id) === selectedCategory)?.nombre}
-                    </span>
-                  </>
-                )}
-              </nav>
-
+            <nav className="flex items-center gap-2 mb-5 text-xs font-semibold text-slate-400">
+              <Link
+                to="/"
+                className="hover:text-[#fdce27] transition-colors duration-200"
+              >
+                Inicio
+              </Link>
+              <ChevronRight className="w-3 h-3" />
+              <Link
+                to="/servicios"
+                className="hover:text-[#fdce27] transition-colors duration-200"
+              >
+                Servicios
+              </Link>
+              {selectedCategory !== "all" && (
+                <>
+                  <ChevronRight className="w-3 h-3" />
+                  <span className="text-[#1c1c1c]">
+                    {
+                      findCatInTree(
+                        categorias,
+                        (c) => String(c.id) === selectedCategory,
+                      )?.nombre
+                    }
+                  </span>
+                </>
+              )}
+            </nav>
+            <div className="sticky space-y-4 top-6">
               {/* Search Box */}
-              <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+              <div className="p-4 transition-shadow bg-white border shadow-sm rounded-xl border-slate-200 hover:shadow-md">
                 <div className="flex items-center gap-2 mb-2">
                   <svg
                     className="w-5 h-5 text-[#fdce27]"
@@ -252,7 +276,7 @@ export default function ServiciosGrid() {
               </div>
 
               {/* Categorías Filter */}
-              <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+              <div className="p-4 transition-shadow bg-white border shadow-sm rounded-xl border-slate-200 hover:shadow-md">
                 <div className="flex items-center gap-2 mb-3">
                   <svg
                     className="w-5 h-5 text-[#fdce27]"
@@ -272,17 +296,17 @@ export default function ServiciosGrid() {
                   </label>
                 </div>
                 <div className="space-y-2">
-                  <button
-                    type="button"
+                  <Link
+                    to="/servicios/"
                     onClick={() => handleCategorySelect("all")}
-                    className={`w-full px-3 py-2 text-xs font-black transition-all text-left ${
+                    className={`block w-full px-3 py-2 text-xs font-black transition-all text-left ${
                       selectedCategory === "all"
                         ? "bg-[#1c1c1c] text-[#fdce27] border-l-2 border-[#fdce27]"
                         : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                     }`}
                   >
-                    Todos
-                  </button>
+                    Volver a Nuestros Servicios
+                  </Link>
                   {categorias.map((cat) => (
                     <React.Fragment key={cat.id}>
                       <button
@@ -325,12 +349,12 @@ export default function ServiciosGrid() {
           <main className="lg:col-span-3">
             {/* Carga o error */}
             {isLoading && (
-              <div className="text-center text-slate-500 mb-12 animate-pulse">
+              <div className="mb-12 text-center text-slate-500 animate-pulse">
                 Cargando Servicios …
               </div>
             )}
             {error && (
-              <div className="text-center text-red-600 mb-12 bg-red-50 p-4 rounded-xl">
+              <div className="p-4 mb-12 text-center text-red-600 bg-red-50 rounded-xl">
                 No pudimos cargar los Servicios. Por favor, reintenta más tarde.
               </div>
             )}
@@ -338,7 +362,7 @@ export default function ServiciosGrid() {
             {/* Grid */}
             {!isLoading && servicios.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                <div className="grid grid-cols-1 gap-4 mb-8 md:grid-cols-2 lg:grid-cols-3">
                   {serviciosPaginados.map((item, idx) => (
                     <ServicioCard key={idx} item={item} idx={idx} />
                   ))}
@@ -380,7 +404,7 @@ export default function ServiciosGrid() {
               </>
             ) : (
               !isLoading && (
-                <div className="text-center py-12 bg-white rounded-xl border border-slate-200 shadow-sm">
+                <div className="py-12 text-center bg-white border shadow-sm rounded-xl border-slate-200">
                   <svg
                     className="w-12 h-12 mx-auto mb-4 text-slate-400"
                     fill="none"
@@ -394,10 +418,10 @@ export default function ServiciosGrid() {
                       d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <h3 className="text-xl font-semibold text-slate-800 mb-1">
+                  <h3 className="mb-1 text-xl font-semibold text-slate-800">
                     No se encontraron servicios
                   </h3>
-                  <p className="text-slate-600 text-sm">
+                  <p className="text-sm text-slate-600">
                     Intenta ajustar tus filtros de búsqueda
                   </p>
                 </div>
@@ -406,7 +430,7 @@ export default function ServiciosGrid() {
           </main>
         </div>
 
-        <div className="mt-8 lg:mt-10 text-center text-slate-500 font-bold text-xs lg:text-sm tracking-widest ">
+        <div className="mt-8 text-xs font-bold tracking-widest text-center lg:mt-10 text-slate-500 lg:text-sm ">
           <p>Obras Viales | Hidráulicas | Saneamiento | Urbanizaciones</p>
         </div>
       </div>

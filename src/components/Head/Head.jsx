@@ -41,7 +41,7 @@ export default function SEOHead(props) {
   const defaultDesc =
     pDesc ??
     (company
-      ? `${company.name}: Soluciones de desarrollo de sistemas, software, hardware y marketing digital. Transformamos tu negocio con tecnología. ${company.address ?? ""} ${company.business_hours ? `· Horario de atención: ${company.business_hours}` : ""}`.trim()
+      ? `${company.name}: Soluciones de desarrollo de sistemas, software, hardware y marketing digital. Transformamos tu negocio con tecnología. ${company.address ?? ""} ${company.business_hours ? `· Horario: ${company.business_hours}` : ""}`.trim()
       : "Anka Loo Construcciones: Acompañamos a las empresas en su transformación digital con soluciones integrales de desarrollo, software, hardware y marketing digital.");
 
   const title = pTitle ?? defaultTitle;

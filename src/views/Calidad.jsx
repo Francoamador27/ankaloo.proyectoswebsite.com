@@ -22,6 +22,11 @@ export default function Calidad() {
     isLoading,
   } = useSWR("/api/certificados", fetcher);
 
+  const { data: politicaData } = useSWR("/api/politica-gestion", fetcher, {
+    revalidateOnFocus: false,
+  });
+  const politicaUrl = politicaData?.documento ?? null;
+
   return (
     <>
       <SEOHead
@@ -116,15 +121,18 @@ export default function Calidad() {
               , que rige la gestión diaria y regula nuestro trabajo para el
               logro de los objetivos y la mejora continua de nuestros procesos.
             </p>
-            <a
-              href="https://ankaloo.com.ar/wp-content/uploads/2025/08/Politica-de-Gestion-Rev02.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#fdce27] hover:bg-[#1c1c1c] text-[#1c1c1c] hover:text-[#fdce27] text-[11px] font-black uppercase tracking-[0.15em] px-5 py-3.5 rounded-2xl transition-colors duration-300"
-            >
-              <Download size={16} strokeWidth={2.5} />
-              <span>Descargar Política de Gestión</span>
-            </a>
+            {politicaUrl && (
+              <a
+                href={politicaUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-[#fdce27] hover:bg-[#1c1c1c] text-[#1c1c1c] hover:text-[#fdce27] text-[11px] font-black uppercase tracking-[0.15em] px-5 py-3.5 rounded-2xl transition-colors duration-300"
+              >
+                <Download size={16} strokeWidth={2.5} />
+                <span>Descargar Política de Gestión</span>
+              </a>
+            )}
           </div>
         </div>
       </div>

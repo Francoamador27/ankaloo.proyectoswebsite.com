@@ -130,10 +130,10 @@ export default function ServiciosSwiper() {
   }, []);
 
   return (
-    <section className="relative bg-[#f4f4f4] py-24 px-6 lg:px-20 overflow-hidden">
+    <section className="relative bg-[#f4f4f4] pt-10 px-6 lg:px-20 overflow-hidden">
       <div
         aria-hidden="true"
-        className="hidden lg:block pointer-events-none absolute left-0 top-0 h-full w-48 select-none z-0 opacity-60"
+        className="absolute top-0 left-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
         style={{
           backgroundImage: `url(${lineasDer})`,
           backgroundRepeat: "repeat-y",
@@ -143,7 +143,7 @@ export default function ServiciosSwiper() {
       />
       <div
         aria-hidden="true"
-        className="hidden lg:block pointer-events-none absolute right-0 top-0 h-full w-48 select-none z-0 opacity-60"
+        className="absolute top-0 right-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
         style={{
           backgroundImage: `url(${lineasIzq})`,
           backgroundRepeat: "repeat-y",
@@ -163,29 +163,27 @@ export default function ServiciosSwiper() {
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#1c1c1c] rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto">
+      <div className="relative z-10 mx-auto max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="mb-20 text-center">
           <h2 className="text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight ">
             Nuestras <span className="text-[#fdce27]">Obras</span>
           </h2>
 
           <p className="max-w-2xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
-            En{" "}
-            <strong className="text-[#1c1c1c]">Anka Loo Construcciones</strong>{" "}
-            brindamos servicios de infraestructura con profesionales
-            especializados y tecnología de vanguardia.
+            En Anka Loo Construcciones brindamos servicios de infraestructura en
+            obras hidráulicas, viales, de urbanización y saneamiento.
           </p>
         </div>
 
         {/* Carga o error */}
         {isLoading && (
-          <div className="text-center text-slate-400 mb-12 animate-pulse">
+          <div className="mb-12 text-center text-slate-400 animate-pulse">
             Cargando Servicios …
           </div>
         )}
         {error && (
-          <div className="text-center text-red-400 mb-12 bg-red-950 p-4 rounded-xl">
+          <div className="p-4 mb-12 text-center text-red-400 bg-red-950 rounded-xl">
             No pudimos cargar los Servicios. Por favor, reintenta más tarde.
           </div>
         )}
