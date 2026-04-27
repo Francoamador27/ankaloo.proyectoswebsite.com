@@ -417,7 +417,7 @@ export default function ServiciosCategorias() {
             <Suspense
               fallback={
                 <div className="border rounded-lg p-4 text-slate-400">
-                  Cargando editor...
+                  Cargando editor....
                 </div>
               }
             >
@@ -441,7 +441,8 @@ export default function ServiciosCategorias() {
               placeholder="Ej: +15 años de experiencia en obras de infraestructura"
             />
             <p className="text-xs text-slate-500 mt-1">
-              Texto corto que se muestra debajo del botón "VER SERVICIOS" en el home
+              Texto corto que se muestra debajo del botón "VER SERVICIOS" en el
+              home
             </p>
           </div>
 
@@ -457,13 +458,25 @@ export default function ServiciosCategorias() {
               />
             )}
             <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-blue-50 hover:border-blue-400 transition-all group">
-              <svg className="w-8 h-8 text-slate-400 group-hover:text-blue-500 mb-2 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <svg
+                className="w-8 h-8 text-slate-400 group-hover:text-blue-500 mb-2 transition-colors"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
               </svg>
               <span className="text-sm font-medium text-slate-500 group-hover:text-blue-600 transition-colors">
                 {imagen ? imagen.name : "Hacer clic para subir imagen"}
               </span>
-              <span className="text-xs text-slate-400 mt-1">JPG, PNG o WEBP — máx. 5 MB</span>
+              <span className="text-xs text-slate-400 mt-1">
+                JPG, PNG o WEBP — máx. 5 MB
+              </span>
               <input
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
@@ -478,7 +491,8 @@ export default function ServiciosCategorias() {
               PDF de obras (opcional)
             </label>
             <p className="text-xs text-slate-500 mb-2">
-              Se mostrará un botón "Ver más obras" en el grid de servicios de esta categoría
+              Se mostrará un botón "Ver más obras" en el grid de servicios de
+              esta categoría
             </p>
             {pdfActual && !removePdf && (
               <div className="flex items-center gap-3 mb-2 p-2 bg-slate-50 border rounded-lg">
@@ -504,7 +518,9 @@ export default function ServiciosCategorias() {
             )}
             {removePdf && (
               <div className="flex items-center gap-3 mb-2 p-2 bg-red-50 border border-red-200 rounded-lg">
-                <span className="text-sm text-red-700 flex-1">PDF será eliminado al guardar</span>
+                <span className="text-sm text-red-700 flex-1">
+                  PDF será eliminado al guardar
+                </span>
                 <button
                   type="button"
                   onClick={() => setRemovePdf(false)}
@@ -515,13 +531,25 @@ export default function ServiciosCategorias() {
               </div>
             )}
             <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer bg-slate-50 hover:bg-red-50 hover:border-red-400 transition-all group">
-              <svg className="w-8 h-8 text-slate-400 group-hover:text-red-500 mb-2 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <svg
+                className="w-8 h-8 text-slate-400 group-hover:text-red-500 mb-2 transition-colors"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
               <span className="text-sm font-medium text-slate-500 group-hover:text-red-600 transition-colors">
                 {pdf ? pdf.name : "Hacer clic para subir PDF"}
               </span>
-              <span className="text-xs text-slate-400 mt-1">Solo archivos PDF — máx. 20 MB</span>
+              <span className="text-xs text-slate-400 mt-1">
+                Solo archivos PDF — máx. 20 MB
+              </span>
               <input
                 type="file"
                 accept="application/pdf"
