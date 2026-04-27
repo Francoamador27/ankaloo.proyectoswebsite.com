@@ -120,6 +120,10 @@ const Contacto = () => {
           <h1 className="mt-6 mb-4 text-2xl font-black leading-tight tracking-tight md:text-5xl text-[#fdce27]">
             Contacto
           </h1>
+          <p className="max-w-2xl mx-auto text-base md:text-lg text-slate-600 font-light">
+            Dejanos tus comentarios en el siguiente formulario, con tus datos
+            completos, para que podamos responderte. Muchas Gracias.
+          </p>
         </header>
 
         {/* Layout de contacto */}
@@ -136,7 +140,7 @@ const Contacto = () => {
               <div className="space-y-8">
                 <div>
                   <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
-                    Nuestra Sede
+                    Nuestra Sede Corporativa
                   </p>
                   <p className="text-lg font-medium">
                     {company.address || "Córdoba, Argentina"}

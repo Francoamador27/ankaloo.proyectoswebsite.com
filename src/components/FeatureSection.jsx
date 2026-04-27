@@ -78,9 +78,7 @@ function HeroSwiper({ slides }) {
               {/* Content */}
               <div className="relative z-10 w-full max-w-5xl px-16 lg:px-24 mx-auto text-center">
                 {/* Label corporativo */}
-                <p className="text-[#fdce27] text-xs font-bold tracking-[0.35em]  mb-5">
-                  ANKA LOO CONSTRUCCIONES
-                </p>
+
 
                 <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-[1.15] tracking-[0.02em] drop-shadow-lg">
                   {slide.title}

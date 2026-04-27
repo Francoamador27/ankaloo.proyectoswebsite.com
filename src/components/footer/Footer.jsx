@@ -1,18 +1,21 @@
 import logo_blanco from "../../assets/img/logo/logo_ankaloo.png";
-import { FaFacebook, FaInstagram } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { Mail, Phone, MapPin } from "lucide-react";
 import useCont from "../../hooks/useCont";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
 import clienteAxios from "../../config/axios";
 
-const fetcher = (url) => clienteAxios(url).then((res) => res.data.data ?? res.data);
+const fetcher = (url) =>
+  clienteAxios(url).then((res) => res.data.data ?? res.data);
 
 export default function Footer() {
   const { company, contact, social, footer, settings } = useCont();
   const currentYear = new Date().getFullYear();
 
-  const { data: certData } = useSWR("/api/certificados", fetcher, { revalidateOnFocus: false });
+  const { data: certData } = useSWR("/api/certificados", fetcher, {
+    revalidateOnFocus: false,
+  });
   const certificados = Array.isArray(certData) ? certData : [];
 
   // No renderizar hasta que settings cargue para evitar layout shift
@@ -106,30 +109,23 @@ export default function Footer() {
           {/* Links Rápidos */}
           <div>
             <h3 className="text-lg font-black tracking-widest mb-6 text-[#fdce27]">
-              Dentro de este sitio
+              Menú
             </h3>
             <ul className="space-y-3">
-              {["Inicio", "Servicios", "Equipos", "Quiénes Somos"].map(
-                (item, idx) => {
-                  const paths = [
-                    "/",
-                    "/servicios",
-                    "/maquinarias",
-                    "/quienes-somos",
-                  ];
-                  return (
-                    <li key={idx}>
-                      <Link
-                        to={paths[idx]}
-                        className="hover:text-[#fdce27] transition-colors text-sm font-medium opacity-70 hover:opacity-100"
-                        style={{ color: footer.text_color }}
-                      >
-                        {item}
-                      </Link>
-                    </li>
-                  );
-                },
-              )}
+              {["Inicio", "Servicios", "Equipos"].map((item, idx) => {
+                const paths = ["/", "/servicios", "/maquinarias"];
+                return (
+                  <li key={idx}>
+                    <Link
+                      to={paths[idx]}
+                      className="hover:text-[#fdce27] transition-colors text-sm font-medium opacity-70 hover:opacity-100"
+                      style={{ color: footer.text_color }}
+                    >
+                      {item}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
@@ -139,12 +135,12 @@ export default function Footer() {
               Empresa
             </h3>
             <ul className="space-y-3">
-              {["Contacto", "Brochure", "Trabaja con Nosotros"].map(
+              {["Quiénes Somos", "Trabaja con Nosotros", "Brochure"].map(
                 (item, idx) => {
                   const paths = [
-                    "/contacto",
-                    "/brochure",
+                    "/quienes-somos",
                     "/trabaja-con-nosotros",
+                    "/brochure",
                   ];
                   return (
                     <li key={idx}>
@@ -181,6 +177,7 @@ export default function Footer() {
                   <span className="text-sm">{contact.email}</span>
                 </a>
               )}
+
               {contact.phone && (
                 <a
                   href={`tel:${contact.phone}`}
@@ -194,15 +191,48 @@ export default function Footer() {
                   <span className="text-sm">{contact.phone}</span>
                 </a>
               )}
-              {company.address && (
-                <div
-                  className="flex items-start gap-3 opacity-70"
-                  style={{ color: footer.text_color }}
-                >
-                  <MapPin size={18} className="flex-shrink-0 mt-0.5" />
-                  <span className="text-sm">{company.address}</span>
-                </div>
-              )}
+              {company.address &&
+                (() => {
+                  const mapUrl = company.address
+                    ? "https://www.google.com/maps/place/Anka+Loo+Construcciones/@-31.377188,-64.124414,17z/data=!4m6!3m5!1s0x9432a280e165d4c1:0xc5edd79764ccc652!8m2!3d-31.3760341!4d-64.124197!16s%2Fg%2F11b8v9jfg9?hl=es-419&entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D"
+                    : null;
+                  return mapUrl ? (
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-start gap-3 hover:text-[#fdce27] transition-colors group opacity-70 hover:opacity-100"
+                      style={{ color: footer.text_color }}
+                    >
+                      <MapPin
+                        size={18}
+                        className="flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
+                      />
+                      <span className="text-sm">{company.address}</span>
+                    </a>
+                  ) : (
+                    <div
+                      className="flex items-start gap-3 opacity-70"
+                      style={{ color: footer.text_color }}
+                    >
+                      <MapPin size={18} className="flex-shrink-0 mt-0.5" />
+                      <span className="text-sm">{company.address}</span>
+                    </div>
+                  );
+                })()}
+              <a
+                href="https://ar.linkedin.com/company/ankaloo-construcciones"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 hover:text-[#fdce27] transition-colors group opacity-70 hover:opacity-100"
+                style={{ color: footer.text_color }}
+              >
+                <FaLinkedin
+                  size={18}
+                  className="flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
+                />
+                <span className="text-sm">LinkedIn</span>
+              </a>
             </div>
           </div>
         </div>
@@ -213,7 +243,10 @@ export default function Footer() {
             {/* Achilles — izquierda */}
             {(footer.logo1 || footer.logo2) && (
               <div className="flex flex-col gap-3">
-                <span className="text-xs font-semibold opacity-60" style={{ color: footer.text_color }}>
+                <span
+                  className="text-xs font-semibold opacity-60"
+                  style={{ color: footer.text_color }}
+                >
                   Proveedor aprobado en:
                 </span>
                 <div className="flex items-center gap-4 flex-wrap">
@@ -238,7 +271,10 @@ export default function Footer() {
             {/* Certificados de calidad — derecha */}
             {certificados.length > 0 && (
               <div className="flex flex-col gap-3">
-                <span className="text-xs font-semibold opacity-60" style={{ color: footer.text_color }}>
+                <span
+                  className="text-xs font-semibold opacity-60"
+                  style={{ color: footer.text_color }}
+                >
                   Calidad certificada:
                 </span>
                 <div className="flex items-center gap-4 flex-wrap">
@@ -259,7 +295,7 @@ export default function Footer() {
                           className="object-contain w-auto h-20 p-2 bg-white shadow-2xl rounded-xl shadow-black/20"
                         />
                       </a>
-                    ) : null
+                    ) : null,
                   )}
                 </div>
               </div>
@@ -285,9 +321,7 @@ export default function Footer() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <p className="text-sm font-medium">
-              Construyendo el futuro de Córdoba
-            </p>
+            <p className="text-sm font-medium"></p>
           </div>
         </div>
       </div>

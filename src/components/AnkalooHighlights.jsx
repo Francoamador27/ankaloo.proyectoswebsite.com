@@ -21,7 +21,7 @@ export default function AnkalooHighlights() {
       ),
       title: "Compromiso con la sustentabilidad",
       desc: "En Anka Loo trabajamos con una mirada de triple impacto en el desempeño de las tareas y procesos.",
-      button: "Ver Compromiso ",
+      button: "Ver  ",
       route: "/compromiso",
     },
     {
