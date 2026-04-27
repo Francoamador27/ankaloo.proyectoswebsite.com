@@ -15,7 +15,11 @@ import useCont from "../hooks/useCont";
 const fetcher = (url) => clienteAxios.get(url).then((res) => res.data.data);
 
 export default function Calidad() {
-  const { company } = useCont();
+  const { company, settings } = useCont();
+  const API_BASE = import.meta.env.VITE_API_URL || '';
+  const imgCalidad = settings?.imagen_calidad
+    ? (settings.imagen_calidad.startsWith('http') ? settings.imagen_calidad : `${API_BASE}${settings.imagen_calidad}`)
+    : null;
   const {
     data: certificados,
     error,
@@ -51,6 +55,17 @@ export default function Calidad() {
               nuestros procesos constructivos.
             </p>
           </header>
+
+          {/* Imagen de calidad */}
+          {imgCalidad && (
+            <div className="mb-10 rounded-3xl overflow-hidden shadow-xl border border-slate-100">
+              <img
+                src={imgCalidad}
+                alt="Calidad Anka Loo"
+                className="w-full max-h-80 object-cover"
+              />
+            </div>
+          )}
 
           {/* Grilla de Certificados */}
           {isLoading ? (

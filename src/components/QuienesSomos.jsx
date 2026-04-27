@@ -20,8 +20,16 @@ const fetcher = (url) => clienteAxios(url).then((res) => res.data);
 
 // Carga perezosa del componente 3D pesado
 const Lanyard = lazy(() => import("./Lanyard"));
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+  if (url.includes('/embed/')) return url;
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+};
+
 const QuienesSomos = () => {
   const { company, logoUrl, contact } = useCont();
+  const videoEmbedUrl = getYouTubeEmbedUrl(company.video_quienes_somos);
   const { data: brochureData } = useSWR("/api/brochure", fetcher, {
     revalidateOnFocus: false,
   });
@@ -129,6 +137,18 @@ const QuienesSomos = () => {
             </div>
           )}
         </div>
+
+        {/* Video Quiénes Somos */}
+        {videoEmbedUrl && (
+          <div className="max-w-4xl mx-auto mb-16 rounded-3xl overflow-hidden shadow-xl border border-slate-100 aspect-video">
+            <iframe
+              src={videoEmbedUrl}
+              title="Video Anka Loo Construcciones"
+              className="w-full h-full"
+              allowFullScreen
+            />
+          </div>
+        )}
 
         {/* Grid principal */}
         <div className="grid gap-10 md:grid-cols-5">

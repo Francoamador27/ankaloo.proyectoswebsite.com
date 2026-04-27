@@ -121,6 +121,9 @@ const Provider = ({ children }) => {
     business_hours: settings?.business_hours || "",
     video_principal: settings?.video_principal || "",
     imagen_corporativa: settings?.imagen_corporativa || "",
+    imagen_calidad: settings?.imagen_calidad || "",
+    video_quienes_somos: settings?.video_quienes_somos || "",
+    imagen_compromiso: settings?.imagen_compromiso || "",
   };
 
 

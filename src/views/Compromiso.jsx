@@ -50,7 +50,11 @@ const iniciativas = [
 ];
 
 export default function Compromiso() {
-  const { company } = useCont();
+  const { company, settings } = useCont();
+  const API_BASE = import.meta.env.VITE_API_URL || '';
+  const imgCompromiso = settings?.imagen_compromiso
+    ? (settings.imagen_compromiso.startsWith('http') ? settings.imagen_compromiso : `${API_BASE}${settings.imagen_compromiso}`)
+    : null;
 
   return (
     <>
@@ -67,6 +71,17 @@ export default function Compromiso() {
           <h1 className="text-5xl md:text-6xl font-black text-[#1c1c1c] tracking-tighter leading-none mb-12">
             Nuestro <span className="text-green-600">Compromiso</span>
           </h1>
+
+          {/* Imagen compromiso */}
+          {imgCompromiso && (
+            <div className="mb-12 rounded-3xl overflow-hidden shadow-xl border border-slate-100">
+              <img
+                src={imgCompromiso}
+                alt="Compromiso Ambiental Anka Loo"
+                className="w-full max-h-80 object-cover"
+              />
+            </div>
+          )}
 
           {/* Texto principal */}
           <p className="text-xl md:text-2xl leading-relaxed text-[#5a5a5a] font-light mb-20">
