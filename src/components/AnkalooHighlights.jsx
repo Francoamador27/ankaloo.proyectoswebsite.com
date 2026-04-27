@@ -7,36 +7,29 @@ export default function AnkalooHighlights() {
       icon: <Leaf size={36} strokeWidth={1.5} />,
       title: "Compromiso con la sustentabilidad",
       desc: "En Anka Loo trabajamos con una mirada de triple impacto en el desempeño de las tareas y procesos.",
-      button: "Ver más",
+      button: "Ver ",
       route: "/compromiso",
     },
     {
       icon: <Users size={36} strokeWidth={1.5} />,
-      title: "Equipo Profesional",
-      desc: "Contamos con profesionales de formación específica y personal altamente capacitado.",
-      button: "Trabaja con nosotros",
-      route: "/trabaja-con-nosotros",
+      title: "Nuestra Gente",
+      desc: "Nuestro diferencial está en la gestión de nuestra gente y en la incorporación de tecnología para cumplir plazos, optimizar costos y satisfacer a nuestros clientes.",
+      button: "Ver",
+      route: "/quienes-somos",
     },
     {
       icon: <ShieldCheck size={36} strokeWidth={1.5} />,
       title: "Calidad Certificada",
       desc: "Certificados ISO 9001, 14001 y 45001 que garantizan nuestros estándares de calidad.",
-      button: "Ver certificados",
+      button: "Ver ",
       route: "/calidad",
-    },
-    {
-      icon: <MapPin size={36} strokeWidth={1.5} />,
-      title: "Cobertura Nacional",
-      desc: "Con sede en Córdoba, trabajamos en todo el país.",
-      button: "Ver sede",
-      route: "/sede",
     },
   ];
 
   return (
     <section className="bg-slate-50 py-10 px-6 lg:px-20">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((item, idx) => (
             <div
               key={idx}

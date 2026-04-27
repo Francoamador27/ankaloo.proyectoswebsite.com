@@ -31,7 +31,7 @@ export default function CategoriaServicioCard({ categoria }) {
       <div className={`mt-auto ${categoria.enfasis ? "pb-10" : ""}`}>
         <div className="flex items-center gap-3 group/cta">
           <span className="text-[10px] font-black tracking-[0.15em] text-white transition-all duration-300 group-hover/cta:text-[#fdce27]">
-            VER SERVICIOS
+            VER
           </span>
           <div className="w-8 h-8 bg-[#fdce27] flex items-center justify-center transition-all duration-300 group-hover/cta:scale-110 active:scale-95 shadow-md">
             <svg

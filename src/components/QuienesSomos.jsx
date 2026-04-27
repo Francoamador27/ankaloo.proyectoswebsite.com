@@ -22,8 +22,10 @@ const fetcher = (url) => clienteAxios(url).then((res) => res.data);
 const Lanyard = lazy(() => import("./Lanyard"));
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
-  if (url.includes('/embed/')) return url;
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (url.includes("/embed/")) return url;
+  const match = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+  );
   return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 };
 
@@ -92,16 +94,10 @@ const QuienesSomos = () => {
           <h1 className="mt-6 text-4xl font-black leading-tight md:text-5xl text-slate-900">
             Quienes<span className="text-[#fdce27]"> Somos</span>
           </h1>
-          <p className="max-w-3xl mx-auto mt-6 text-xl font-light leading-relaxed text-slate-600">
-            Somos una empresa constructora de <strong>Córdoba</strong>{" "}
-            especializada en obras de infraestructura. Brindamos servicios de
-            calidad basados en el conocimiento y la experiencia en{" "}
-            <strong>técnicas constructivas de vanguardia</strong>.
-          </p>
         </header>
 
         {/* Historia */}
-        <div className="max-w-4xl p-8 mx-auto mb-16 bg-white border shadow-lg border-slate-100 rounded-3xl">
+        <div className="p-8 mb-16 bg-white border shadow-lg border-slate-100 rounded-3xl md:p-12">
           <h2 className="mb-4 text-2xl font-black text-slate-900">Historia</h2>
           <p className="text-lg leading-relaxed text-slate-600">
             Anka Loo se constituye formalmente en 2006, a partir de la
@@ -150,114 +146,85 @@ const QuienesSomos = () => {
           </div>
         )}
 
-        {/* Grid principal */}
-        <div className="grid gap-10 md:grid-cols-5">
-          {/* Columna texto */}
-          <div className="md:col-span-3">
-            <section className="relative p-8 overflow-hidden bg-white border shadow-xl rounded-3xl border-slate-100 md:p-12">
-              {/* Lanyard 3D Animation Background */}
-              <div className="absolute inset-0 overflow-hidden -z-10 h-96 rounded-3xl bg-slate-50/50">
-                <Suspense
-                  fallback={
-                    <div className="flex flex-col items-center justify-center w-full h-full opacity-50">
-                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-slate-300 border-t-[#fdce27] mb-2"></div>
-                      <span className="text-xs font-bold tracking-widest uppercase text-slate-400">
-                        Cargando 3D...
-                      </span>
-                    </div>
-                  }
-                >
-                  <Lanyard />
-                </Suspense>
-              </div>
-              <div className="relative z-10">
-                <h2 className="mb-6 text-3xl font-black text-slate-900">
-                  Nuestra Misión
-                </h2>
-                <p className="mb-8 text-lg leading-relaxed text-slate-600">
-                  En{" "}
-                  <strong className="text-[#fdce27]">
-                    Anka Loo Construcciones
-                  </strong>
-                  , nuestro objetivo primario es brindar a nuestros clientes
-                  servicios de alta calidad, poniendo a su disposición
-                  profesionales de formación específica, maquinarias y
-                  tecnología de última generación. Este formato de eficiencia
-                  comprobada permite alcanzar excelentes resultados bajando
-                  significativamente los costos operativos.
-                </p>
-                {company?.imagen_corporativa && (
-                  <div className="relative w-full h-80 md:h-[400px] mt-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-                    <img
-                      src={
-                        company.imagen_corporativa.startsWith("http")
-                          ? company.imagen_corporativa
-                          : `${import.meta.env.VITE_API_URL}/${company.imagen_corporativa}`
-                      }
-                      alt="Equipo e Infraestructura Anka Loo"
-                      className="object-cover w-full h-full transition-transform duration-700 hover:scale-105"
-                    />
-                  </div>
-                )}
-              </div>
-            </section>
-          </div>
-
-          {/* Columna lateral */}
-          <aside className="space-y-8 md:col-span-2">
-            <div className="p-8 bg-white border shadow-lg rounded-3xl border-slate-100">
-              <h3 className="mb-6 text-2xl font-black text-slate-900">
-                Contacto
-              </h3>
-              <div className="space-y-5 text-slate-700">
-                <div>
-                  <span className="block mb-1 text-xs font-bold tracking-widest text-slate-400">
-                    Oficinas
-                  </span>
-                  <strong className="text-lg">
-                    {company.address || "Argentina"}
-                  </strong>
+        {/* Propósito + Valores */}
+        <section className="relative overflow-hidden bg-white  shadow-xl rounded-3xl  p-8 md:p-12">
+          <div className="grid gap-10 md:grid-cols-2 items-center">
+            {/* Columna texto */}
+            <div>
+              <h2 className="mb-6 text-xl font-black text-slate-900">
+                Propósito
+              </h2>
+              <p className="mb-2 text-lg leading-relaxed text-slate-600">
+                Nuestro propósito es contribuir positivamente a la comunidad y
+                al desarrollo de nuestros colaboradores, disfrutando cada paso
+                del camino y asumiendo los desafíos como una oportunidad para
+                crecer.
+              </p>
+              <div className="pt-2 border-t border-slate-100">
+                <h3 className="mb-4 text-xl font-black text-slate-900">
+                  Valores
+                </h3>
+                <div className="space-y-3 text-base leading-relaxed text-slate-600">
+                  <p>
+                    Fomentamos relaciones basadas en el respeto y la empatía,
+                    promoviendo calidad, profesionalismo y eficiencia en cada
+                    proyecto.
+                  </p>
+                  <p>
+                    Cumplimos los acuerdos asumidos, adoptando soluciones
+                    innovadoras para generar valor.
+                  </p>
+                  <p>
+                    Trabajamos priorizando el bienestar de las personas, la
+                    rentabilidad y la sostenibilidad ambiental, contribuyendo al
+                    desarrollo integral de la comunidad.
+                  </p>
                 </div>
-                <div>
-                  <span className="block mb-1 text-xs font-bold tracking-widest text-slate-400">
-                    Horario
-                  </span>
-                  <strong className="text-lg">
-                    {company.business_hours || "Lunes a Viernes, 9 a 18hs"}
-                  </strong>
-                </div>
-                <div>
-                  <span className="block mb-1 text-xs font-bold tracking-widest text-slate-400">
-                    Medios de Contacto
-                  </span>
-                  <div className="flex flex-col gap-2 mt-2">
-                    {contact.whatsapp && (
-                      <a
-                        href={`https://wa.me/${contact.whatsapp}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-[#fdce27] font-bold hover:underline"
-                      >
-                        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                        WhatsApp: {contact.phone}
-                      </a>
-                    )}
-                    <a
-                      href={`mailto:${contact.email}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-slate-600 font-medium hover:text-[#fdce27]"
-                    >
-                      {contact.email || "info@ankaloo.com"}
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-8 aspect-[4/3] w-full overflow-hidden rounded-[2rem] ring-4 ring-slate-50 shadow-inner">
-                <Mapa />
               </div>
             </div>
-          </aside>
+
+            {/* Columna imagen */}
+            {company?.imagen_corporativa && (
+              <div className="relative w-full h-72 md:h-[420px] rounded-2xl overflow-hidden">
+                <img
+                  src={
+                    company.imagen_corporativa.startsWith("http")
+                      ? company.imagen_corporativa
+                      : `${import.meta.env.VITE_API_URL}/${company.imagen_corporativa}`
+                  }
+                  alt="Equipo e Infraestructura Anka Loo"
+                  className="object-cover w-full h-full transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Misión y Visión */}
+        <div className="grid gap-6 mt-10 md:grid-cols-2">
+          {/* Misión */}
+          <div className="bg-white border border-slate-100 shadow-xl rounded-3xl p-8">
+            <h3 className="mb-4 text-xl font-black text-slate-900">Misión</h3>
+            <p className="text-base leading-relaxed text-slate-600">
+              Nuestra Misión es ser una empresa de servicios, enfocada en la
+              construcción y mantenimiento de obras de infraestructura,
+              referente en la Región Centro de Argentina, comprometida con el
+              cumplimiento y la calidad de sus trabajos, el desarrollo
+              sostenible, aplicando para ello la mejor tecnología.
+            </p>
+          </div>
+
+          {/* Visión */}
+          <div className="bg-white border border-slate-100 shadow-xl rounded-3xl p-8">
+            <h3 className="mb-4 text-xl font-black text-slate-900">Visión</h3>
+            <p className="text-base leading-relaxed text-slate-600">
+              Nuestra visión es consolidarnos como una empresa referente,
+              ampliando nuestra participación en los sectores público y privado.
+              Aspiramos asumir proyectos de creciente complejidad, promoviendo
+              la innovación, la excelencia y un impacto positivo en la
+              comunidad.
+            </p>
+          </div>
         </div>
       </div>
 

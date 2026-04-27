@@ -11,7 +11,7 @@ import SEOHead from "./Head/Head";
 import { ServicioCard } from "./Cards/ServicioCard";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 
 const POR_PAGINA = 12;
 
@@ -23,6 +23,15 @@ export default function ServiciosGrid() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [pagina, setPagina] = useState(1);
+  const [openAccordions, setOpenAccordions] = useState(new Set());
+
+  const toggleAccordion = (catId) => {
+    setOpenAccordions((prev) => {
+      const next = new Set(prev);
+      next.has(catId) ? next.delete(catId) : next.add(catId);
+      return next;
+    });
+  };
 
   // Busca una categoría (o subcategoría) por id o slug en el árbol completo
   const findCatInTree = (list, pred) => {
@@ -279,37 +288,48 @@ export default function ServiciosGrid() {
                   >
                     Volver a Nuestros Servicios
                   </Link>
-                  {categorias.map((cat) => (
-                    <React.Fragment key={cat.id}>
-                      <button
-                        type="button"
-                        onClick={() => handleCategorySelect(String(cat.id))}
-                        className={`w-full px-3 py-2 text-xs font-black transition-all text-left ${
-                          selectedCategory === String(cat.id)
-                            ? "bg-[#1c1c1c] text-[#fdce27] border-l-2 border-[#fdce27]"
-                            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                        }`}
-                      >
-                        {cat.nombre}
-                      </button>
-                      {(cat.children || []).map((subcat) => (
+                  {categorias.map((cat) => {
+                    const hasChildren = (cat.children || []).length > 0;
+                    const isOpen = openAccordions.has(cat.id);
+                    return (
+                      <React.Fragment key={cat.id}>
                         <button
-                          key={subcat.id}
                           type="button"
-                          onClick={() =>
-                            handleCategorySelect(String(subcat.id))
-                          }
-                          className={`w-full px-3 py-2 text-xs font-black transition-all text-left pl-6 border-l-2 ${
-                            selectedCategory === String(subcat.id)
-                              ? "bg-[#1c1c1c] text-[#fdce27] border-[#fdce27]"
-                              : "bg-slate-100 text-slate-700 hover:bg-slate-200 border-transparent"
+                          onClick={() => {
+                            handleCategorySelect(String(cat.id));
+                            if (hasChildren) toggleAccordion(cat.id);
+                          }}
+                          className={`w-full px-3 py-2 text-xs font-black transition-all text-left flex items-center justify-between gap-1 ${
+                            selectedCategory === String(cat.id)
+                              ? "bg-[#1c1c1c] text-[#fdce27] border-l-2 border-[#fdce27]"
+                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                           }`}
                         >
-                          └ {subcat.nombre}
+                          <span>{cat.nombre}</span>
+                          {hasChildren && (
+                            <ChevronDown
+                              className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                            />
+                          )}
                         </button>
-                      ))}
-                    </React.Fragment>
-                  ))}
+                        {hasChildren && isOpen &&
+                          cat.children.map((subcat) => (
+                            <button
+                              key={subcat.id}
+                              type="button"
+                              onClick={() => handleCategorySelect(String(subcat.id))}
+                              className={`w-full px-3 py-2 text-xs font-black transition-all text-left pl-6 border-l-2 ${
+                                selectedCategory === String(subcat.id)
+                                  ? "bg-[#1c1c1c] text-[#fdce27] border-[#fdce27]"
+                                  : "bg-slate-100 text-slate-700 hover:bg-slate-200 border-transparent"
+                              }`}
+                            >
+                              └ {subcat.nombre}
+                            </button>
+                          ))}
+                      </React.Fragment>
+                    );
+                  })}
                 </div>
               </div>
 

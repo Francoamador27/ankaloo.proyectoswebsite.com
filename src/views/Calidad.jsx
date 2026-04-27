@@ -16,9 +16,11 @@ const fetcher = (url) => clienteAxios.get(url).then((res) => res.data.data);
 
 export default function Calidad() {
   const { company, settings } = useCont();
-  const API_BASE = import.meta.env.VITE_API_URL || '';
+  const API_BASE = import.meta.env.VITE_API_URL || "";
   const imgCalidad = settings?.imagen_calidad
-    ? (settings.imagen_calidad.startsWith('http') ? settings.imagen_calidad : `${API_BASE}${settings.imagen_calidad}`)
+    ? settings.imagen_calidad.startsWith("http")
+      ? settings.imagen_calidad
+      : `${API_BASE}${settings.imagen_calidad}`
     : null;
   const {
     data: certificados,
@@ -45,27 +47,16 @@ export default function Calidad() {
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           {/* Header de Sección */}
-          <header className="mb-10">
-            <h1 className="text-5xl md:text-6xl lg:text-5xl font-black text-[#1c1c1c] tracking-tighter leading-none  mb-8">
+          <header className="mb-10 text-center">
+            <h1 className="text-5xl md:text-6xl lg:text-5xl font-black text-[#1c1c1c] tracking-tighter leading-none mb-8">
               Calidad <span className="text-[#fdce27]">Certificada</span>
             </h1>
-            <p className="max-w-7xl text-xl leading-relaxed font-light text-[#5a5a5a] animate-fadeInUp">
+            <p className="max-w-3xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a] animate-fadeInUp">
               En <strong>{company.name || "Anka Loo"} </strong>
               contamos con certificaciones de calidad ISO que avalan cada uno de
               nuestros procesos constructivos.
             </p>
           </header>
-
-          {/* Imagen de calidad */}
-          {imgCalidad && (
-            <div className="mb-10 rounded-3xl overflow-hidden shadow-xl border border-slate-100">
-              <img
-                src={imgCalidad}
-                alt="Calidad Anka Loo"
-                className="w-full max-h-80 object-cover"
-              />
-            </div>
-          )}
 
           {/* Grilla de Certificados */}
           {isLoading ? (
@@ -87,36 +78,36 @@ export default function Calidad() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="max-w-4xl mx-auto grid grid-cols-3 gap-5 justify-items-center">
               {certificados.map((cert, index) => (
                 <article
                   key={cert.id}
-                  className="group bg-white shadow-lg hover:shadow-2xl border border-slate-100 transition-all duration-500 animate-fadeInUp overflow-hidden rounded-3xl flex flex-col"
+                  className="group w-full bg-white shadow-lg hover:shadow-2xl border border-slate-100 transition-all duration-500 animate-fadeInUp overflow-hidden rounded-2xl flex flex-col"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="relative flex items-center justify-center p-8 lg:p-12 aspect-[4/3] sm:aspect-video md:aspect-[4/3] lg:aspect-[3/2]">
+                  <div className="relative flex items-center justify-center aspect-video">
                     {cert.imagen ? (
                       <img
                         src={cert.imagen}
                         alt="Certificado de Calidad"
-                        className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 drop-shadow-sm"
+                        className="w-full h-full object-contain drop-shadow-sm"
                       />
                     ) : (
-                      <Award className="w-20 h-20 text-slate-200" />
+                      <Award className="w-12 h-12 text-slate-200" />
                     )}
                     <div className="absolute inset-0 bg-[#1c1c1c]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                   </div>
 
                   {cert.documento && (
-                    <div className="px-6 pb-6 flex justify-center">
+                    <div className="px-4 pb-4 flex justify-center">
                       <a
                         href={cert.documento}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 bg-[#fdce27] hover:bg-[#1c1c1c] text-[#1c1c1c] hover:text-[#fdce27] text-[11px] font-black uppercase tracking-[0.15em] px-5 py-3.5 shadow-xl rounded-2xl transition-colors duration-300"
+                        className="flex items-center gap-2 bg-[#fdce27] hover:bg-[#1c1c1c] text-[#1c1c1c] hover:text-[#fdce27] text-[10px] font-black uppercase tracking-[0.15em] px-4 py-2.5 shadow-xl rounded-xl transition-colors duration-300"
                       >
-                        <Download size={16} strokeWidth={2.5} />
-                        <span>Descargar Certificado</span>
+                        <Download size={13} strokeWidth={2.5} />
+                        <span>DESCARGAR CERTIFICADO</span>
                       </a>
                     </div>
                   )}
@@ -124,30 +115,51 @@ export default function Calidad() {
               ))}
             </div>
           )}
+
           {/* Política de Gestión */}
           <div className="mb-12 bg-[#f4f4f4] rounded-2xl p-8 lg:p-10 mt-10">
-            <p className="text-lg leading-relaxed font-light text-[#5a5a5a] mb-6">
-              En <strong className="text-[#1c1c1c] font-black">Anka Loo</strong>{" "}
-              definimos y cumplimos una{" "}
-              <strong className="text-[#1c1c1c]">
-                Política de Calidad, Medio Ambiente, Salud y Seguridad de los
-                Trabajadores
-              </strong>
-              , que rige la gestión diaria y regula nuestro trabajo para el
-              logro de los objetivos y la mejora continua de nuestros procesos.
-            </p>
-            {politicaUrl && (
-              <a
-                href={politicaUrl}
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#fdce27] hover:bg-[#1c1c1c] text-[#1c1c1c] hover:text-[#fdce27] text-[11px] font-black uppercase tracking-[0.15em] px-5 py-3.5 rounded-2xl transition-colors duration-300"
-              >
-                <Download size={16} strokeWidth={2.5} />
-                <span>Descargar Política de Gestión</span>
-              </a>
-            )}
+            <div className="grid gap-8 md:grid-cols-2 items-center">
+              {/* Columna texto + botón */}
+              <div>
+                <p className="text-lg leading-relaxed font-light text-[#5a5a5a] mb-6">
+                  En{" "}
+                  <strong className="text-[#1c1c1c] font-black">
+                    Anka Loo
+                  </strong>{" "}
+                  definimos y cumplimos una{" "}
+                  <strong className="text-[#1c1c1c]">
+                    Política de Calidad, Medio Ambiente, Salud y Seguridad de
+                    los Trabajadores
+                  </strong>
+                  , que rige la gestión diaria y regula nuestro trabajo para el
+                  logro de los objetivos y la mejora continua de nuestros
+                  procesos.
+                </p>
+                {politicaUrl && (
+                  <a
+                    href={politicaUrl}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#fdce27] hover:bg-[#1c1c1c] text-[#1c1c1c] hover:text-[#fdce27] text-[11px] font-black uppercase tracking-[0.15em] px-5 py-3.5 rounded-2xl transition-colors duration-300"
+                  >
+                    <Download size={16} strokeWidth={2.5} />
+                    <span>Descargar Política de Gestión</span>
+                  </a>
+                )}
+              </div>
+
+              {/* Columna imagen */}
+              {imgCalidad && (
+                <div className="rounded-2xl overflow-hidden shadow-lg">
+                  <img
+                    src={imgCalidad}
+                    alt="Calidad Anka Loo"
+                    className="w-full h-96 object-cover"
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
