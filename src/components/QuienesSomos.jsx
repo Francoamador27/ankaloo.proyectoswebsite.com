@@ -17,6 +17,7 @@ import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
 
 const fetcher = (url) => clienteAxios(url).then((res) => res.data);
+const fetcherList = (url) => clienteAxios(url).then((res) => res.data.data);
 
 // Carga perezosa del componente 3D pesado
 const Lanyard = lazy(() => import("./Lanyard"));
@@ -36,6 +37,10 @@ const QuienesSomos = () => {
     revalidateOnFocus: false,
   });
   const brochure = brochureData?.data ?? null;
+
+  const { data: lideres } = useSWR("/api/lideres", fetcherList, {
+    revalidateOnFocus: false,
+  });
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -226,6 +231,53 @@ const QuienesSomos = () => {
             </p>
           </div>
         </div>
+
+        {/* Líderes */}
+        {lideres && lideres.length > 0 && (
+          <div className="mt-10">
+            <h2 className="mb-8 text-2xl font-black text-slate-900">Nuestro Equipo</h2>
+            <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
+              {lideres.map((lider) => (
+                <div key={lider.id} className="flex items-center gap-5 bg-white border border-slate-100 shadow-md rounded-2xl p-5">
+                  <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-100 shrink-0">
+                    {lider.imagen ? (
+                      <img
+                        src={lider.imagen}
+                        alt={`${lider.nombre} ${lider.apellido}`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-slate-200 text-slate-400 text-xl font-black">
+                        {lider.nombre[0]}{lider.apellido[0]}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-black text-slate-900 truncate">
+                      {lider.nombre} {lider.apellido}
+                    </p>
+                    <p className="text-xs uppercase tracking-widest text-slate-500 mt-0.5 truncate">
+                      {lider.posicion}
+                    </p>
+                    {lider.linkedin && (
+                      <a
+                        href={lider.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-2"
+                        aria-label="LinkedIn"
+                      >
+                        <svg className="w-4 h-4 text-[#0077b5] hover:opacity-70 transition-opacity" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* JSON-LD SEO */}

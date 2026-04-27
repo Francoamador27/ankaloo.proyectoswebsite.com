@@ -90,6 +90,8 @@ const ImagenCorporativaAdmin = lazy(
 const AdminFooter = lazy(() => import("./views/AdminFooter"));
 const AdminBrochure = lazy(() => import("./views/AdminBrochure"));
 const Brochure = lazy(() => import("./components/Brochure"));
+const AdminLideresList = lazy(() => import("./views/AdminLideresList"));
+const AdminLiderForm = lazy(() => import("./views/AdminLiderForm"));
 
 const suspense = (node) => (
   <Suspense fallback={<div style={{ minHeight: 200 }} />}>{node}</Suspense>
@@ -221,6 +223,18 @@ const router = createBrowserRouter([
       {
         path: "/admin-dash/certificados/:id",
         element: suspense(<AdminCertificadoForm />),
+      },
+      {
+        path: "/admin-dash/lideres",
+        element: suspense(<AdminLideresList />),
+      },
+      {
+        path: "/admin-dash/lideres/new",
+        element: suspense(<AdminLiderForm />),
+      },
+      {
+        path: "/admin-dash/lideres/:id",
+        element: suspense(<AdminLiderForm />),
       },
       {
         path: "/admin-dash/video-principal",

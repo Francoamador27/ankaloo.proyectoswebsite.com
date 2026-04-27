@@ -66,6 +66,7 @@ const AdminSidebar = () => {
         // { text: 'Finanzas', icon: <Coins size={20} />, path: '/admin-dash/finanzas' },
         // { text: 'Citas', icon: <ListCheck size={20} />, path: '/admin-dash/citas' },
         // { text: 'Profesionales', icon: <ShieldUser size={20} />, path: '/admin-dash/doctores' },
+        { text: 'Líderes', icon: <Users size={20} />, path: '/admin-dash/lideres' },
         { text: 'Leads Contacto', icon: <Mail size={20} />, path: '/admin-dash/leads-contacto' },
         { text: 'RRHH', icon: <Briefcase size={20} />, path: '/admin-dash/leads-rrhh' },
         // { text: 'Testimonios', icon: <MessageSquareQuote size={20} />, path: '/admin-dash/testimonios' },
