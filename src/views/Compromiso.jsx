@@ -15,19 +15,19 @@ const iniciativas = [
     icon: Droplets,
     titulo: "Biocombustible",
     descripcion:
-      "Todos nuestros equipos operan con biocombustible, reduciendo las emisiones de carbono en cada obra.",
+      "Los equipos que operan con biocombustible, reducen las emisiones de carbono en cada obra.",
   },
   {
     icon: Sun,
     titulo: "Energía Solar",
     descripcion:
-      "Paneles solares en nuestro predio que generan más del 80% de la energía que consumimos.",
+      "Los paneles solares en nuestro predio generan más del 80% de la energía que consumimos.",
   },
   {
     icon: TreePine,
     titulo: "Reforestación",
     descripcion:
-      "Reforestamos cada zona de obra intervenida, devolviendo la vegetación al entorno natural.",
+      "Plantamos árboles en las zonas de obra intervenidas para compensar la biodiversidad.",
   },
   {
     icon: Wind,
@@ -39,21 +39,23 @@ const iniciativas = [
     icon: Recycle,
     titulo: "Reciclaje Integral",
     descripcion:
-      "Gestionamos el reciclaje de papel, plásticos, vidrios, voluminosos y residuos orgánicos.",
+      "Reciclamos papel, plásticos, vidrios, voluminosos y residuos orgánicos.",
   },
   {
     icon: ShieldCheck,
     titulo: "Residuos Peligrosos",
     descripcion:
-      "Gestión de residuos peligrosos en pleno cumplimiento de la legislación vigente.",
+      "Gestionamos los residuos peligrosos en cumplimiento de la legislación vigente.",
   },
 ];
 
 export default function Compromiso() {
   const { company, settings } = useCont();
-  const API_BASE = import.meta.env.VITE_API_URL || '';
+  const API_BASE = import.meta.env.VITE_API_URL || "";
   const imgCompromiso = settings?.imagen_compromiso
-    ? (settings.imagen_compromiso.startsWith('http') ? settings.imagen_compromiso : `${API_BASE}${settings.imagen_compromiso}`)
+    ? settings.imagen_compromiso.startsWith("http")
+      ? settings.imagen_compromiso
+      : `${API_BASE}${settings.imagen_compromiso}`
     : null;
 
   return (
@@ -73,15 +75,6 @@ export default function Compromiso() {
           </h1>
 
           {/* Imagen compromiso */}
-          {imgCompromiso && (
-            <div className="mb-12 rounded-3xl overflow-hidden shadow-xl border border-slate-100">
-              <img
-                src={imgCompromiso}
-                alt="Compromiso Ambiental Anka Loo"
-                className="w-full max-h-80 object-cover"
-              />
-            </div>
-          )}
 
           {/* Texto principal */}
           <p className="text-xl md:text-2xl leading-relaxed text-[#5a5a5a] font-light mb-20">
@@ -110,12 +103,20 @@ export default function Compromiso() {
             </span>{" "}
             en cumplimiento de la legislación vigente.
           </p>
-
+          {imgCompromiso && (
+            <div className="mb-12 rounded-3xl overflow-hidden shadow-xl border border-slate-100">
+              <img
+                src={imgCompromiso}
+                alt="Compromiso Ambiental Anka Loo"
+                className="w-full max-h-150 object-cover"
+              />
+            </div>
+          )}
           {/* Divisor */}
           <div className="flex items-center gap-4 mb-14">
             <div className="h-px flex-1 bg-slate-200" />
             <span className="text-[10px] font-black tracking-[0.35em] text-slate-400 uppercase">
-              Nuestras Iniciativas
+              Compromiso con la sustentabilidad
             </span>
             <div className="h-px flex-1 bg-slate-200" />
           </div>
@@ -125,7 +126,7 @@ export default function Compromiso() {
             {iniciativas.map(({ icon: Icon, titulo, descripcion }) => (
               <div
                 key={titulo}
-                className="bg-white p-8 flex flex-col gap-5 hover:bg-[#f4f4f4] transition-colors duration-300"
+                className="bg-white p-8 flex flex-col gap-5"
               >
                 <div className="w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center flex-shrink-0">
                   <Icon className="text-white w-6 h-6" strokeWidth={1.5} />
