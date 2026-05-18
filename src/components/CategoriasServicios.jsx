@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import clienteAxios from "../config/axios";
@@ -10,6 +10,34 @@ export default function CategoriasServicios() {
   const { pathname } = useLocation();
   const isServiciosRoot = pathname === "/servicios" || pathname === "/servicios/";
   const [categorias, setCategorias] = useState([]);
+
+  const titleRef = useCallback((el) => {
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("visible");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" }
+    );
+    observer.observe(el);
+  }, []);
+
+  const textRef = useCallback((el) => {
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("visible");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+  }, []);
 
   // ---- SWR - Obtener categorías ----
   const fetcher = (url) => clienteAxios(url).then((res) => res.data);
@@ -90,10 +118,28 @@ export default function CategoriasServicios() {
       <div className="relative z-10 mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-16 text-center">
-          <h2 className="text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight ">
+          <style>{`
+            @keyframes slideFromLeft {
+              from { opacity: 0; transform: translateX(-60px); }
+              to   { opacity: 1; transform: translateX(0); }
+            }
+            @keyframes textFadeUp {
+              from { opacity: 0; transform: translateY(24px); }
+              to   { opacity: 1; transform: translateY(0); }
+            }
+            .anim-title { opacity: 0; }
+            .anim-title.visible {
+              animation: slideFromLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            }
+            .anim-text { opacity: 0; }
+            .anim-text.visible {
+              animation: textFadeUp 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            }
+          `}</style>
+          <h2 ref={titleRef} className="anim-title text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight">
             Nuestros <span className="text-[#fdce27]">Servicios</span>
           </h2>
-          <p className="max-w-7xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
+          <p ref={textRef} className="anim-text max-w-7xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
             Cumpliendo 20 años, la empresa reafirma su propósito de contribuir
             positivamente a la comunidad poniendo a disposición su experiencia y
             recorrido en pos del desarrollo de nuevos mercados. Asumiendo

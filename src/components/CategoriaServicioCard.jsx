@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import TiltedCard from "./TiltedCard";
 
 export default function CategoriaServicioCard({ categoria }) {
   const slug =
     categoria.nombre?.toLowerCase().replace(/\s+/g, "-") || categoria.id;
+
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("visible");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const cardContent = (
     <div className="relative z-10 h-full flex flex-col p-8 pt-32 lg:pt-[120px] text-white">
@@ -61,6 +79,18 @@ export default function CategoriaServicioCard({ categoria }) {
   );
 
   return (
+    <>
+      <style>{`
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .cat-card { opacity: 0; }
+        .cat-card.visible {
+          animation: fadeSlideUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+      `}</style>
+      <div ref={wrapperRef} className="cat-card">
     <Link to={`/servicios/${slug}`}>
       <div className="group relative h-auto min-h-[560px] lg:h-[580px] overflow-hidden shadow-xl border border-slate-200/10 transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1c1c1c]">
         {/* Línea dorada superior que aparece en hover */}
@@ -108,5 +138,7 @@ export default function CategoriaServicioCard({ categoria }) {
         </div>
       </div>
     </Link>
+    </div>
+    </>
   );
 }

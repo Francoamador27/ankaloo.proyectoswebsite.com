@@ -3,7 +3,7 @@ import {
   BuildingOfficeIcon,
   CheckBadgeIcon,
 } from "@heroicons/react/24/outline";
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Download } from "lucide-react";
 import useSWR from "swr";
@@ -32,6 +32,20 @@ const getYouTubeEmbedUrl = (url) => {
 
 const QuienesSomos = () => {
   const { company, logoUrl, contact } = useCont();
+
+  const equipoRef = useCallback((el) => {
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("visible");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" }
+    );
+    observer.observe(el);
+  }, []);
   const videoEmbedUrl = getYouTubeEmbedUrl(company.video_quienes_somos);
   const { data: brochureData } = useSWR("/api/brochure", fetcher, {
     revalidateOnFocus: false,
@@ -95,8 +109,17 @@ const QuienesSomos = () => {
 
       <div className="relative z-10 max-w-6xl px-6 py-20 mx-auto">
         {/* Header */}
+        <style>{`
+          @keyframes qsSlideLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+          }
+          .qs-title { animation: qsSlideLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+          .qs-equipo { opacity: 0; }
+          .qs-equipo.visible { animation: qsSlideLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        `}</style>
         <header className="mb-16 text-center">
-          <h1 className="mt-6 text-4xl font-black leading-tight md:text-5xl text-slate-900">
+          <h1 className="qs-title mt-6 text-4xl font-black leading-tight md:text-5xl text-slate-900">
             Quienes<span className="text-[#fdce27]"> Somos</span>
           </h1>
         </header>
@@ -233,7 +256,7 @@ const QuienesSomos = () => {
         {/* Líderes */}
         {lideres && lideres.length > 0 && (
           <div className="mt-10">
-            <h2 className="mb-8 text-2xl font-black text-slate-900">
+            <h2 ref={equipoRef} className="qs-equipo mb-8 text-2xl font-black text-slate-900">
               Nuestro Equipo
             </h2>
             <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">

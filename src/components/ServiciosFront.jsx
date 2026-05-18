@@ -102,35 +102,58 @@ export default function ServiciosSwiper() {
     }));
   }, [serviciosApi, serviciosFallback]);
 
+  const titleRef = useCallback((el) => {
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("visible");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" }
+    );
+    observer.observe(el);
+  }, []);
+
   // ✅ Helper: marcar visibles desde Swiper
   const markSwiperVisible = useCallback((swiper) => {
     if (!swiper) return;
-
     setVisibleCards((prev) => {
       const next = new Set(prev);
-
-      const slidesPerView =
-        swiper.params.slidesPerView === "auto"
-          ? swiper.slides.length
-          : swiper.params.slidesPerView || 1;
-
-      const activeIndex = swiper.activeIndex || 0;
-      const numVisibleSlides =
-        typeof slidesPerView === "number" ? Math.ceil(slidesPerView) : 1;
-
-      for (let i = 0; i < numVisibleSlides; i++) {
-        const index = activeIndex + i;
-        if (index < swiper.slides.length) {
-          next.add(String(index));
-        }
+      const perView = Math.ceil(
+        typeof swiper.params.slidesPerView === "number"
+          ? swiper.params.slidesPerView
+          : 1
+      );
+      const realIdx = swiper.realIndex ?? 0;
+      for (let i = 0; i < perView; i++) {
+        next.add(String(realIdx + i));
       }
-
       return next;
     });
   }, []);
 
   return (
     <section className="relative bg-[#f4f4f4] pt-10 px-6 lg:px-20 overflow-hidden">
+      <style>{`
+        @keyframes srvSlideLeft {
+          from { opacity: 0; transform: translateX(-60px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes srvFadeUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .serv-title { opacity: 0; }
+        .serv-title.visible {
+          animation: srvSlideLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .serv-card { opacity: 0; }
+        .serv-card.serv-card--visible {
+          animation: srvFadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+      `}</style>
       <div
         aria-hidden="true"
         className="absolute top-0 left-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
@@ -166,7 +189,7 @@ export default function ServiciosSwiper() {
       <div className="relative z-10 mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-20 text-center">
-          <h2 className="text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight ">
+          <h2 ref={titleRef} className="serv-title text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight">
             Nuestras <span className="text-[#fdce27]">Obras</span>
           </h2>
 

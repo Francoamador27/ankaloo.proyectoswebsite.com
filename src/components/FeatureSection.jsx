@@ -57,6 +57,28 @@ function SlideBackground({ slide }) {
 function HeroSwiper({ slides }) {
   return (
     <div className="relative w-full h-full">
+      <style>{`
+        @keyframes slideUpFade {
+          from {
+            opacity: 0;
+            transform: translateY(32px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .slide-title,
+        .slide-desc {
+          opacity: 0;
+        }
+        .swiper-slide-active .slide-title {
+          animation: slideUpFade 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .swiper-slide-active .slide-desc {
+          animation: slideUpFade 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+        }
+      `}</style>
       <Swiper
         modules={[Autoplay, EffectFade, Pagination, Navigation]}
         effect="fade"
@@ -77,14 +99,11 @@ function HeroSwiper({ slides }) {
               <div className="absolute inset-0 bg-black/50" />
               {/* Content */}
               <div className="relative z-10 w-full max-w-5xl px-16 lg:px-24 mx-auto text-center">
-                {/* Label corporativo */}
-
-
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-[1.15] tracking-[0.02em] drop-shadow-lg">
+                <h1 className="slide-title text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-[1.15] tracking-[0.02em] drop-shadow-lg">
                   {slide.title}
                 </h1>
 
-                <p className="max-w-xl mx-auto text-base md:text-lg text-white/75 font-light leading-relaxed">
+                <p className="slide-desc max-w-xl mx-auto text-base md:text-lg text-white/75 font-light leading-relaxed">
                   {slide.description}
                 </p>
               </div>

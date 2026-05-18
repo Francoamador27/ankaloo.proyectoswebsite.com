@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
 
-export const ServicioCard = ({ item, idx }) => {
+export const ServicioCard = ({ item, idx, isVisible }) => {
+  const stagger = (idx % 4) * 0.12;
   return (
     <div
-      className="min-h-[400px] group relative overflow-hidden shadow-md transition-all duration-500 hover:shadow-xl hover:shadow-[#fdce27]/10 opacity-0 animate-fadeInUp bg-white border border-slate-200 border-b-4 border-b-[#fdce27]"
-      style={{
-        animationDelay: `${idx * 120}ms`,
-        animationFillMode: "forwards",
-      }}
+      className={`serv-card min-h-[400px] group relative overflow-hidden shadow-md transition-shadow duration-500 hover:shadow-xl hover:shadow-[#fdce27]/10 bg-white border border-slate-200 border-b-4 border-b-[#fdce27]${isVisible ? " serv-card--visible" : ""}`}
+      style={{ animationDelay: `${stagger}s` }}
     >
       {/* Imagen arriba */}
       <div className="relative h-[180px] md:h-[200px] overflow-hidden">

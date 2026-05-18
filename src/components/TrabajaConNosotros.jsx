@@ -127,9 +127,16 @@ const TrabajaConNosotros = () => {
       <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-white/3 rounded-full blur-3xl"></div>
 
       <div className="relative max-w-5xl mx-auto px-6">
+        <style>{`
+          @keyframes tcnSlideLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+          }
+          .tcn-title { animation: tcnSlideLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        `}</style>
         {/* Encabezado */}
         <header className="text-center mb-16">
-          <h1 className="text-2xl md:text-5xl font-black text-[#1c1c1c] mt-6 mb-4 leading-tight">
+          <h1 className="tcn-title text-2xl md:text-5xl font-black text-[#1c1c1c] mt-6 mb-4 leading-tight">
             Trabaja con <span className="text-[#fdce27]">Nosotros</span>
           </h1>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">

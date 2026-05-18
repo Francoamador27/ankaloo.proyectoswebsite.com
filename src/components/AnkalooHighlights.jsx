@@ -1,7 +1,27 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Leaf, Users, ShieldCheck, MapPin } from "lucide-react";
 
 export default function AnkalooHighlights() {
+  const cardRefs = useRef([]);
+
+  useEffect(() => {
+    const observers = cardRefs.current.filter(Boolean).map((card) => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            card.classList.add("visible");
+            observer.disconnect();
+          }
+        },
+        { threshold: 0.25 }
+      );
+      observer.observe(card);
+      return observer;
+    });
+    return () => observers.forEach((obs) => obs.disconnect());
+  }, []);
+
   const items = [
     {
       icon: <Leaf size={36} strokeWidth={1.5} />,
@@ -28,12 +48,26 @@ export default function AnkalooHighlights() {
 
   return (
     <section className="bg-slate-50 py-10 px-6 lg:px-20">
+      <style>{`
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .highlight-card {
+          opacity: 0;
+        }
+        .highlight-card.visible {
+          animation: fadeSlideUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+      `}</style>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((item, idx) => (
             <div
               key={idx}
-              className="group bg-white border border-slate-200 hover:border-[#fdce27]/40 p-8 transition-all duration-300 hover:shadow-md flex flex-col"
+              ref={(el) => (cardRefs.current[idx] = el)}
+              className="highlight-card group bg-white border border-slate-200 hover:border-[#fdce27]/40 p-8 transition-all duration-300 hover:shadow-md flex flex-col"
+              style={{ animationDelay: `${idx * 0.15}s` }}
             >
               {/* Icono */}
               <div className="text-slate-400 group-hover:text-[#1c1c1c] transition-colors duration-300 mb-4">

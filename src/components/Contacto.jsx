@@ -116,8 +116,15 @@ const Contacto = () => {
 
       <div className="relative max-w-5xl px-6 mx-auto">
         {/* Encabezado */}
+        <style>{`
+          @keyframes ctSlideLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+          }
+          .ct-title { animation: ctSlideLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        `}</style>
         <header className="mb-16 text-center">
-          <h1 className="mt-6 mb-4 text-2xl font-black leading-tight tracking-tight md:text-5xl text-[#fdce27]">
+          <h1 className="ct-title mt-6 mb-4 text-2xl font-black leading-tight tracking-tight md:text-5xl text-[#fdce27]">
             Contacto
           </h1>
           <p className="max-w-2xl mx-auto text-base md:text-lg text-slate-600 font-light">

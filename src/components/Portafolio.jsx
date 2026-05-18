@@ -95,8 +95,15 @@ export default function Portafolio() {
 
         <div className="relative z-10 px-6 py-24 mx-auto max-w-7xl lg:py-24">
           {/* Header Centrado */}
+          <style>{`
+            @keyframes pfSlideLeft {
+              from { opacity: 0; transform: translateX(-60px); }
+              to   { opacity: 1; transform: translateX(0); }
+            }
+            .pf-title { animation: pfSlideLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+          `}</style>
           <header className="relative z-10 mb-16 text-center lg:mb-10">
-            <h1 className="text-5xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight">
+            <h1 className="pf-title text-5xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight">
               Nuestros <span className="text-[#fdce27]">Equipos</span>
             </h1>
           </header>
