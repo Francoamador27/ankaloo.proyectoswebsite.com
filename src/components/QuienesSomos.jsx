@@ -259,11 +259,11 @@ const QuienesSomos = () => {
             <h2 ref={equipoRef} className="qs-equipo mb-8 text-2xl font-black text-slate-900">
               Nuestro Equipo
             </h2>
-            <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {lideres.map((lider) => (
                 <div
                   key={lider.id}
-                  className="flex items-center gap-5 bg-white border border-slate-100 shadow-md rounded-2xl p-5"
+                  className="flex items-center gap-5 bg-white border border-slate-100 shadow-md rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-[#fdce27]"
                 >
                   <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-100 shrink-0">
                     {lider.imagen ? (
@@ -280,10 +280,10 @@ const QuienesSomos = () => {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-black text-slate-900 truncate">
+                    <p className="font-black text-slate-900">
                       {lider.nombre} {lider.apellido}
                     </p>
-                    <p className="text-xs uppercase tracking-widest text-slate-500 mt-0.5 truncate">
+                    <p className="text-xs uppercase tracking-widest text-slate-500 mt-0.5">
                       {lider.posicion}
                     </p>
                     {lider.linkedin && (
