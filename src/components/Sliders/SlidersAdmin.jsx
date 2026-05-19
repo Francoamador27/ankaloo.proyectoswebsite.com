@@ -187,8 +187,19 @@ const SlidersAdmin = () => {
 
       resetForm();
       fetchSlides();
-    } catch {
-      setError(editingId ? 'Error al actualizar el slide' : 'Error al crear el slide');
+    } catch (e) {
+      const status = e?.response?.status;
+      const imagenErrors = e?.response?.data?.errors?.imagen ?? [];
+      const isSizeError =
+        status === 413 ||
+        imagenErrors.some((msg) => msg.toLowerCase().includes('greater than') || msg.toLowerCase().includes('kilobytes') || msg.toLowerCase().includes('size')) ||
+        e?.response?.data?.message?.toLowerCase().includes('too large') ||
+        e?.message?.toLowerCase().includes('too large');
+      if (isSizeError) {
+        setError('size');
+      } else {
+        setError(editingId ? 'Error al actualizar el slide' : 'Error al crear el slide');
+      }
     } finally {
       setCargando(false);
     }
@@ -364,7 +375,25 @@ const SlidersAdmin = () => {
           )}
         </div>
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && (
+          <p className="text-red-600 text-sm">
+            {error === 'size' ? (
+              <>
+                El tamaño de la imagen es demasiado grande, debe reducirla antes de subirla.{' '}
+                <a
+                  href="https://www.iloveimg.com/es/comprimir-imagen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline font-bold hover:text-red-800 transition-colors"
+                >
+                  Comprimir imagen aquí
+                </a>
+              </>
+            ) : (
+              error
+            )}
+          </p>
+        )}
         {mensaje && <p className="text-green-600 text-sm">{mensaje}</p>}
       </form>
 
