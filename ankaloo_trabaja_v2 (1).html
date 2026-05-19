@@ -1,0 +1,449 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap');
+
+  .anka-page {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    border: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .anka-hero {
+    background: #1C1C1C;
+    color: #f0ede6;
+    padding: 56px 40px 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .anka-hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(243,152,0,0.08);
+  }
+  .anka-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(243,152,0,0.05);
+  }
+  .anka-hero-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #F39800;
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .anka-hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1.2;
+    margin: 0 0 20px;
+    color: #f0ede6;
+    max-width: 460px;
+    position: relative;
+  }
+  .anka-hero-title em {
+    font-style: italic;
+    color: #F39800;
+  }
+  .anka-hero-sub {
+    font-size: 15px;
+    color: #a0a0a0;
+    max-width: 400px;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .anka-video {
+    background: #111;
+    padding: 0;
+    position: relative;
+  }
+  .anka-video-frame {
+    width: 100%;
+    aspect-ratio: 16/7;
+    background: #181818;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .anka-video-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .anka-play-btn {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(243,152,0,0.15);
+    border: 1.5px solid rgba(243,152,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .anka-play-triangle {
+    width: 0; height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 18px solid #F39800;
+    margin-left: 4px;
+  }
+  .anka-video-caption {
+    font-size: 12px;
+    color: #555;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .anka-video-bg-text {
+    font-family: 'Fraunces', serif;
+    font-size: 80px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.03);
+    position: absolute;
+    bottom: 8px;
+    right: 20px;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .anka-pillars {
+    padding: 48px 40px;
+    background: var(--color-background-primary);
+  }
+  .anka-section-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+  }
+  .anka-section-heading {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 300;
+    margin: 0 0 32px;
+    line-height: 1.3;
+  }
+  .anka-pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .anka-pillar {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 20px 16px;
+    border: 0.5px solid var(--color-border-tertiary);
+  }
+  .anka-pillar-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: #1C1C1C;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .anka-pillar-title {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .anka-pillar-desc {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  .anka-vacantes {
+    padding: 40px;
+    border-top: 0.5px solid var(--color-border-tertiary);
+  }
+  .anka-vacantes-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    gap: 12px;
+  }
+  .anka-vacante-area {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 3px;
+  }
+  .anka-vacante-role {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .anka-vacante-tag {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+  .anka-vacante-arrow {
+    font-size: 16px;
+    color: #F39800;
+  }
+
+  .anka-form {
+    padding: 40px;
+    background: var(--color-background-secondary);
+    border-top: 0.5px solid var(--color-border-tertiary);
+  }
+  .anka-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .anka-input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .anka-label {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .anka-input {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--color-text-primary);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .anka-textarea {
+    resize: none;
+    height: 80px;
+  }
+  .anka-upload {
+    border: 0.5px dashed var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    background: var(--color-background-primary);
+    margin-top: 4px;
+    cursor: pointer;
+  }
+  .anka-upload-icon {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .anka-submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 16px;
+  }
+  .anka-note {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    max-width: 300px;
+    line-height: 1.4;
+  }
+  .anka-btn {
+    background: #F39800;
+    color: #1C1C1C;
+    border: none;
+    border-radius: var(--border-radius-md);
+    padding: 12px 28px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .anka-nav {
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    height: 52px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary);
+    gap: 8px;
+  }
+  .anka-nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    margin-right: auto;
+  }
+  .anka-nav-logo span {
+    color: #F39800;
+  }
+  .anka-nav-link {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    padding: 6px 10px;
+  }
+  .anka-nav-link.active {
+    color: var(--color-text-primary);
+    font-weight: 500;
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+  }
+</style>
+
+<div class="anka-page">
+
+  <div class="anka-nav">
+    <span class="anka-nav-logo">Anka<span>loo</span></span>
+    <span class="anka-nav-link">Empresa</span>
+    <span class="anka-nav-link">Obras</span>
+    <span class="anka-nav-link">Servicios</span>
+    <span class="anka-nav-link active">Empleos</span>
+  </div>
+
+  <div class="anka-hero">
+    <div class="anka-hero-label">Capital humano · Únete al equipo</div>
+    <h1 class="anka-hero-title">Construimos obras.<br><em>Construimos carreras.</em></h1>
+    <p class="anka-hero-sub">En Ankaloo creemos que los proyectos de infraestructura los hacen las personas. Buscamos <strong style="color:#f0ede6;font-weight:500">personas</strong> que quieran crecer junto con nosotros.</p>
+  </div>
+
+  <div class="anka-video">
+    <div class="anka-video-frame">
+      <div class="anka-video-bg-text">Ankaloo</div>
+      <div class="anka-video-overlay">
+        <div class="anka-play-btn">
+          <div class="anka-play-triangle"></div>
+        </div>
+        <span class="anka-video-caption">Quiénes somos · 2:30 min</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="anka-pillars">
+    <div class="anka-section-eyebrow">Por qué Ankaloo</div>
+    <h2 class="anka-section-heading">Lo que nos hace diferentes</h2>
+    <div class="anka-pillars-grid">
+      <div class="anka-pillar">
+        <div class="anka-pillar-icon">🏗</div>
+        <div class="anka-pillar-title">Proyectos de escala</div>
+        <div class="anka-pillar-desc">Trabajamos en obras de infraestructura vial e hidráulica con impacto real en la región.</div>
+      </div>
+      <div class="anka-pillar">
+        <div class="anka-pillar-icon">📈</div>
+        <div class="anka-pillar-title">Desarrollo profesional</div>
+        <div class="anka-pillar-desc">Programas de formación en liderazgo y competencias técnicas para todos los niveles.</div>
+      </div>
+      <div class="anka-pillar">
+        <div class="anka-pillar-icon">🤝</div>
+        <div class="anka-pillar-title">Equipo comprometido</div>
+        <div class="anka-pillar-desc">Un equipo que apuesta al trabajo colaborativo y la mejora continua.</div>
+      </div>
+      <div class="anka-pillar">
+        <div class="anka-pillar-icon">🛡</div>
+        <div class="anka-pillar-title">Seguridad ante todo</div>
+        <div class="anka-pillar-desc">Nuestra cultura de HyS es parte de quiénes somos, en todas las áreas.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anka-vacantes">
+    <div class="anka-section-eyebrow">Posiciones abiertas</div>
+    <h2 class="anka-section-heading">¿Hay algo para vos?</h2>
+    <div class="anka-vacantes-item">
+      <div>
+        <div class="anka-vacante-area">Obra civil</div>
+        <div class="anka-vacante-role">Jefe de Obra</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="anka-vacante-tag">Córdoba</span>
+        <span class="anka-vacante-arrow">→</span>
+      </div>
+    </div>
+    <div class="anka-vacantes-item">
+      <div>
+        <div class="anka-vacante-area">Logística</div>
+        <div class="anka-vacante-role">Responsable de Almacén</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="anka-vacante-tag">Córdoba</span>
+        <span class="anka-vacante-arrow">→</span>
+      </div>
+    </div>
+    <div class="anka-vacantes-item">
+      <div>
+        <div class="anka-vacante-area">Corporativo</div>
+        <div class="anka-vacante-role">Analista de Capital Humano</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="anka-vacante-tag">Remoto</span>
+        <span class="anka-vacante-arrow">→</span>
+      </div>
+    </div>
+    <div style="margin-top:16px; font-size:12px; color:var(--color-text-secondary);">¿No ves tu perfil? Dejanos tu CV de todas formas ↓</div>
+  </div>
+
+  <div class="anka-form">
+    <div class="anka-section-eyebrow">Postulaciones espontáneas</div>
+    <h2 class="anka-section-heading">Contanos sobre vos</h2>
+    <div class="anka-form-grid">
+      <div class="anka-input-wrap">
+        <span class="anka-label">Nombre completo</span>
+        <div class="anka-input">María González</div>
+      </div>
+      <div class="anka-input-wrap">
+        <span class="anka-label">Área de interés</span>
+        <div class="anka-input" style="color:var(--color-text-secondary)">Seleccioná un área ↓</div>
+      </div>
+    </div>
+    <div class="anka-form-grid">
+      <div class="anka-input-wrap">
+        <span class="anka-label">Email</span>
+        <div class="anka-input">maria@ejemplo.com</div>
+      </div>
+      <div class="anka-input-wrap">
+        <span class="anka-label">Teléfono</span>
+        <div class="anka-input">+54 351 ...</div>
+      </div>
+    </div>
+    <div class="anka-input-wrap" style="margin-bottom:12px">
+      <span class="anka-label">¿Por qué Ankaloo?</span>
+      <div class="anka-input anka-textarea"></div>
+    </div>
+    <div class="anka-input-wrap">
+      <span class="anka-label">CV / Portafolio</span>
+      <div class="anka-upload">
+        <span class="anka-upload-icon">↑</span>
+        Subir archivo · PDF o Word, hasta 5 MB
+      </div>
+    </div>
+    <div class="anka-submit-row">
+      <p class="anka-note">Tu información se trata con total confidencialidad. Solo el equipo de Capital Humano tiene acceso.</p>
+      <button class="anka-btn">Enviar postulación →</button>
+    </div>
+  </div>
+
+</div>

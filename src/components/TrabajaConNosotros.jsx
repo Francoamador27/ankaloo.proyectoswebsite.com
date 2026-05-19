@@ -2,19 +2,63 @@ import { useRef, useState } from "react";
 import TurnstileCaptcha from "../components/TurnstileCaptcha";
 import clienteAxios from "../config/axios";
 import Alerta from "../components/Alerta";
-import WhatsappHref from "../utils/WhatsappUrl";
 import useCont from "../hooks/useCont";
 import SEOHead from "./Head/Head";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
+import { Landmark, TrendingUp, Users, ShieldCheck } from "lucide-react";
+
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+  if (url.includes("/embed/")) return url;
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+};
+
+const PILLARS = [
+  {
+    Icon: Landmark,
+    title: "Proyectos de escala",
+    desc: "Trabajamos en obras de infraestructura vial e hidráulica con impacto real en la región.",
+  },
+  {
+    Icon: TrendingUp,
+    title: "Desarrollo profesional",
+    desc: "Programas de formación en liderazgo y competencias técnicas para todos los niveles.",
+  },
+  {
+    Icon: Users,
+    title: "Equipo comprometido",
+    desc: "Un equipo que apuesta al trabajo colaborativo y la mejora continua.",
+  },
+  {
+    Icon: ShieldCheck,
+    title: "Seguridad ante todo",
+    desc: "Nuestra cultura de HyS es parte de quiénes somos, en todas las áreas.",
+  },
+];
+
+const VACANTES = [
+  { area: "Obra civil", rol: "Jefe de Obra", ubicacion: "Córdoba" },
+  { area: "Logística", rol: "Responsable de Almacén", ubicacion: "Córdoba" },
+  { area: "Corporativo", rol: "Analista de Capital Humano", ubicacion: "Remoto" },
+];
 
 const TrabajaConNosotros = () => {
   const formRef = useRef(null);
+  const formSectionRef = useRef(null);
   const turnstileRef = useRef(null);
   const [captchaToken, setCaptchaToken] = useState("");
   const [estadoMensaje, setEstadoMensaje] = useState({ tipo: "", texto: "" });
   const [loading, setLoading] = useState(false);
-  const { company, contact } = useCont();
+  const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
+
+  const handleSelectVacante = (rol) => {
+    setPuestoSeleccionado(rol);
+    formSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const { company } = useCont();
+  const videoEmbedUrl = getYouTubeEmbedUrl(company?.video_quienes_somos);
 
   const isLocal = import.meta.env.VITE_ENTORNO === "local";
 
@@ -25,57 +69,31 @@ const TrabajaConNosotros = () => {
 
     try {
       const fd = new FormData(formRef.current);
-
-      // Construir FormData con todos los datos incluyendo CV
       const formData = new FormData();
       formData.append("nombre", fd.get("nombre")?.toString().trim() || "");
       formData.append("email", fd.get("email")?.toString().trim() || "");
       formData.append("telefono", fd.get("telefono")?.toString().trim() || "");
-      formData.append(
-        "puesto_interes",
-        fd.get("puesto_interes")?.toString().trim() || "",
-      );
-      formData.append(
-        "experiencia",
-        fd.get("experiencia")?.toString().trim() || "",
-      );
+      formData.append("puesto_interes", fd.get("puesto_interes")?.toString().trim() || "");
+      formData.append("experiencia", fd.get("experiencia")?.toString().trim() || "");
       formData.append("mensaje", fd.get("mensaje")?.toString().trim() || "");
-      formData.append(
-        "turnstile_token",
-        isLocal ? "local-bypass" : captchaToken,
-      );
+      formData.append("turnstile_token", isLocal ? "local-bypass" : captchaToken);
+      if (fd.get("cv")) formData.append("cv", fd.get("cv"));
 
-      // Agregar CV (obligatorio)
-      if (fd.get("cv")) {
-        formData.append("cv", fd.get("cv"));
-      }
+      const res = await clienteAxios.post("/api/trabaja-con-nosotros", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-      const res = await clienteAxios.post(
-        "/api/trabaja-con-nosotros",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
-      const isOk =
-        (res.status >= 200 && res.status < 300) || res.data?.success === true;
-
+      const isOk = (res.status >= 200 && res.status < 300) || res.data?.success === true;
       if (!isOk) throw new Error(res.data?.message || "Error al enviar");
 
       setEstadoMensaje({
         tipo: "exito",
-        texto:
-          res.data?.message ||
-          "Tu CV fue enviado con éxito. ¡Nos pondremos en contacto pronto!",
+        texto: res.data?.message || "Tu CV fue enviado con éxito. ¡Nos pondremos en contacto pronto!",
       });
 
       formRef.current?.reset();
       setCaptchaToken("");
-      if (!isLocal && turnstileRef.current?.reset) {
-        turnstileRef.current.reset();
-      }
+      if (!isLocal && turnstileRef.current?.reset) turnstileRef.current.reset();
     } catch (error) {
       console.error("TrabajaConNosotros error:", error);
       setEstadoMensaje({
@@ -85,16 +103,21 @@ const TrabajaConNosotros = () => {
           error.message ||
           "Hubo un error al enviar tu CV. Por favor intenta de nuevo.",
       });
-      if (!isLocal && turnstileRef.current?.reset) {
-        turnstileRef.current.reset();
-      }
+      if (!isLocal && turnstileRef.current?.reset) turnstileRef.current.reset();
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="relative bg-slate-50 py-20 overflow-hidden">
+    <section className="relative overflow-hidden">
+      <SEOHead
+        priority="low"
+        title="Anka Loo Construcciones | Trabaja Con Nosotros"
+        description="Envía tu CV y únete al equipo de Anka Loo Construcciones. Buscamos profesionales talentosos para impulsar grandes obras de infraestructura."
+      />
+
+      {/* Decorativas laterales */}
       <div
         aria-hidden="true"
         className="absolute top-0 left-0 z-0 hidden w-48 h-full pointer-events-none select-none lg:block opacity-60"
@@ -115,209 +138,233 @@ const TrabajaConNosotros = () => {
           backgroundPosition: "right top",
         }}
       />
-      <SEOHead
-        priority="low"
-        title={`Anka Loo Construcciones | Trabaja Con Nosotros`}
-        description={`Envía tu CV y únete al equipo de Anka Loo Construcciones. Buscamos profesionales talentosos para impulsar la transformación digital.`}
-      />
 
-      {/* Glow decorativo */}
-      <div className="absolute -top-32 -right-40 w-[500px] h-[500px] bg-[#fdce27]/8 rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#fdce27]/5 rounded-full blur-3xl"></div>
-      <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-white/3 rounded-full blur-3xl"></div>
+      {/* ── HERO ── */}
+      <div className="relative bg-[#1c1c1c] overflow-hidden px-6 sm:px-12 py-16 sm:py-20">
+        {/* glows decorativos */}
+        <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-[#fdce27]/8 pointer-events-none" />
+        <div className="absolute -bottom-10 left-[30%] w-52 h-52 rounded-full bg-[#fdce27]/5 pointer-events-none" />
 
-      <div className="relative max-w-5xl mx-auto px-6">
-        <style>{`
-          @keyframes tcnSlideLeft {
-            from { opacity: 0; transform: translateX(-60px); }
-            to   { opacity: 1; transform: translateX(0); }
-          }
-          .tcn-title { animation: tcnSlideLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-        `}</style>
-        {/* Encabezado */}
-        <header className="text-center mb-16">
-          <h1 className="tcn-title text-2xl md:text-5xl font-black text-[#1c1c1c] mt-6 mb-4 leading-tight">
-            Trabaja con <span className="text-[#fdce27]">Nosotros</span>
-          </h1>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">
-            Completá el formulario con tus datos y adjuntá tu CV. Nuestro equipo
-            se pondrá en contacto si hay una vacante disponible.
+        <div className="relative z-10 max-w-5xl mx-auto">
+          <p className="text-xs font-normal tracking-[0.15em] uppercase text-[#fdce27] mb-4">
+            Capital humano · Únete al equipo
           </p>
-        </header>
+          <h1 className="text-4xl sm:text-5xl font-black text-[#f0ede6] leading-tight mb-5 max-w-xl">
+            Construimos obras.{" "}
+            <em className="not-italic text-[#fdce27]">Construimos carreras.</em>
+          </h1>
+          <p className="text-[#a0a0a0] text-base sm:text-lg font-light leading-relaxed max-w-md">
+            En Ankaloo creemos que los proyectos de infraestructura los hacen las
+            personas. Buscamos{" "}
+            <strong className="text-[#f0ede6] font-medium">personas</strong> que
+            quieran crecer junto con nosotros.
+          </p>
+        </div>
+      </div>
 
-        {/* Layout de solicitud */}
-        <div className="grid lg:grid-cols-12 gap-12 bg-white rounded-[2rem] shadow-xl border border-slate-200 overflow-hidden">
-          {/* Info Lateral */}
-          <div className="lg:col-span-4 bg-[#1c1c1c] p-10 text-white flex flex-col justify-between relative overflow-hidden border-r-4 border-[#fdce27]">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
+      {/* ── VIDEO ── */}
+      {videoEmbedUrl && (
+        <div className="w-full aspect-video bg-black">
+          <iframe
+            src={videoEmbedUrl}
+            title="Video Anka Loo Construcciones"
+            className="w-full h-full"
+            allowFullScreen
+          />
+        </div>
+      )}
 
-            <div className="relative z-10">
-              <h3 className="text-3xl font-black mb-8 text-[#fdce27]  tracking-wide">
-                ¿Por Qué Unirse?
-              </h3>
-              <div className="space-y-8">
-                <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
-                    Crecimiento
-                  </p>
-                  <p className="text-lg font-medium text-slate-200">
-                    Participación en grandes obras de infraestructura
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
-                    Equipo
-                  </p>
-                  <p className="text-lg font-medium text-slate-200">
-                    Trabajá con profesionales de la construcción
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
-                    Tecnología
-                  </p>
-                  <p className="text-lg font-medium text-slate-200">
-                    Equipos de última generación en cada obra
-                  </p>
-                </div>
-              </div>
-            </div>
+      <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 space-y-16">
 
-            <div className="mt-12 pt-8 border-t border-[#fdce27]/20 relative z-10">
-              <p className="text-slate-300 text-sm font-bold tracking-[0.15em] ">
-                Tu carrera comienza aquí
-              </p>
-            </div>
+        {/* ── PILLARS ── */}
+        <div>
+          <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-2">
+            Por qué Ankaloo
+          </p>
+          <h2 className="text-2xl font-black text-slate-900 mb-8">
+            Lo que nos hace diferentes
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {PILLARS.map((pillar) => {
+              const PillarIcon = pillar.Icon;
+              return (
+                <div
+                  key={pillar.title}
+                  className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:-translate-y-1 hover:shadow-md hover:border-[#fdce27] transition-all duration-300"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-[#1c1c1c] flex items-center justify-center mb-4">
+                    <PillarIcon size={18} className="text-[#fdce27]" />
+                  </div>
+                  <p className="text-sm font-semibold text-slate-900 mb-1">{pillar.title}</p>
+                  <p className="text-xs text-slate-500 leading-relaxed">{pillar.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── VACANTES ── */}
+        <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
+          <div className="px-8 pt-8 pb-4">
+            <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-2">
+              Posiciones abiertas
+            </p>
+            <h2 className="text-2xl font-black text-slate-900">
+              ¿Hay algo para vos?
+            </h2>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {VACANTES.map((v) => (
+              <button
+                key={v.rol}
+                type="button"
+                onClick={() => handleSelectVacante(v.rol)}
+                className="w-full flex items-center justify-between px-8 py-4 hover:bg-[#fdce27]/5 transition-colors cursor-pointer text-left"
+              >
+                <div>
+                  <p className="text-xs uppercase tracking-[0.08em] text-slate-400 mb-0.5">
+                    {v.area}
+                  </p>
+                  <p className="text-sm font-semibold text-slate-800">{v.rol}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500">
+                    {v.ubicacion}
+                  </span>
+                  <span className="text-[#fdce27] text-lg font-bold">→</span>
+                </div>
+              </button>
+            ))}
+          </div>
+          <p className="px-8 py-4 text-xs text-slate-400 border-t border-slate-100">
+            ¿No ves tu perfil? Dejanos tu CV de todas formas ↓
+          </p>
+        </div>
+
+        {/* ── FORMULARIO ── */}
+        <div ref={formSectionRef} className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
+          <div className="bg-slate-50 px-8 pt-8 pb-6 border-b border-slate-100">
+            <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-2">
+              Postulaciones espontáneas
+            </p>
+            <h2 className="text-2xl font-black text-slate-900">
+              Contanos sobre vos
+            </h2>
           </div>
 
-          {/* Formulario */}
-          <div className="lg:col-span-8 p-10 md:p-12 bg-white">
-            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-slate-900 font-black text-sm  tracking-wider">
-                    Nombre y Apellido
-                  </label>
-                  <input
-                    type="text"
-                    name="nombre"
-                    placeholder="Ej: Juan Pérez"
-                    required
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 focus:ring-4 focus:ring-[#fdce27]/20 focus:border-[#fdce27] transition-all font-medium text-slate-900 placeholder-slate-400"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-slate-900 font-black text-sm  tracking-wider">
-                    WhatsApp / Teléfono
-                  </label>
-                  <input
-                    type="tel"
-                    name="telefono"
-                    placeholder="Ej: +54 9 351..."
-                    required
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 focus:ring-4 focus:ring-[#fdce27]/20 focus:border-[#fdce27] transition-all font-medium text-slate-900 placeholder-slate-400"
-                  />
-                </div>
+          <form ref={formRef} onSubmit={handleSubmit} className="p-8 space-y-5">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
+                  Nombre completo
+                </label>
+                <input
+                  type="text"
+                  name="nombre"
+                  placeholder="Ej: Juan Pérez"
+                  required
+                  className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
+                />
               </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
+                  Área de interés <span className="normal-case">(opcional)</span>
+                </label>
+                <input
+                  type="text"
+                  name="puesto_interes"
+                  placeholder="Ej: Operador de Maquinaria, Ingeniero Civil..."
+                  value={puestoSeleccionado}
+                  onChange={(e) => setPuestoSeleccionado(e.target.value)}
+                  className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
+                />
+              </div>
+            </div>
 
-              <div className="space-y-2">
-                <label className="text-slate-900 font-black text-sm  tracking-wider">
-                  Email de contacto
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
+                  Email
                 </label>
                 <input
                   type="email"
                   name="email"
                   placeholder="ejemplo@email.com"
                   required
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 focus:ring-4 focus:ring-[#fdce27]/20 focus:border-[#fdce27] transition-all font-medium text-slate-900 placeholder-slate-400"
+                  className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
                 />
               </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-slate-900 font-black text-sm  tracking-wider">
-                    Puesto de Interés{" "}
-                    <span className="text-xs">(opcional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="puesto_interes"
-                    placeholder="Ej: Operador de Maquinaria, Ingeniero Civil..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 focus:ring-4 focus:ring-[#fdce27]/20 focus:border-[#fdce27] transition-all font-medium text-slate-900 placeholder-slate-400"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-slate-900 font-black text-sm  tracking-wider">
-                    Años de Experiencia{" "}
-                    <span className="text-xs">(opcional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="experiencia"
-                    placeholder="Ej: 5+ años en construcción"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 focus:ring-4 focus:ring-[#fdce27]/20 focus:border-[#fdce27] transition-all font-medium text-slate-900 placeholder-slate-400"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-slate-900 font-black text-sm  tracking-wider">
-                  Carta de Presentación (opcional)
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
+                  Teléfono
                 </label>
-                <textarea
-                  name="mensaje"
-                  rows="3"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 focus:ring-4 focus:ring-[#fdce27]/20 focus:border-[#fdce27] transition-all font-medium text-slate-900 placeholder-slate-400 resize-none"
-                  placeholder="Cuéntanos un poco sobre ti y por qué te interesa unirte a nuestro equipo..."
+                <input
+                  type="tel"
+                  name="telefono"
+                  placeholder="+54 351 ..."
+                  required
+                  className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
                 />
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <label className="text-slate-900 font-black text-sm  tracking-wider">
-                  Adjuntar CV (obligatorio)
-                </label>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
+                ¿Por qué Ankaloo? <span className="normal-case">(opcional)</span>
+              </label>
+              <textarea
+                name="mensaje"
+                rows={3}
+                placeholder="Contanos un poco sobre vos y por qué querés unirte al equipo..."
+                className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all resize-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
+                CV / Portafolio
+              </label>
+              <label className="flex flex-col items-center gap-2 border border-dashed border-slate-300 rounded-xl p-5 text-center text-sm text-slate-400 bg-slate-50 cursor-pointer hover:border-[#fdce27] hover:bg-[#fdce27]/5 transition-all">
+                <span className="text-xl">↑</span>
+                <span>Subir archivo · PDF o Word, hasta 5 MB</span>
                 <input
                   type="file"
                   name="cv"
                   accept=".pdf,.doc,.docx"
                   required
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 focus:ring-4 focus:ring-[#fdce27]/20 focus:border-[#fdce27] transition-all font-medium text-slate-700 text-sm"
+                  hidden
                 />
-                <p className="text-xs text-slate-400 mt-1">
-                  Máx. 5MB. Formatos aceptados: PDF, DOC, DOCX
-                </p>
+              </label>
+            </div>
+
+            {!isLocal && (
+              <div className="py-2">
+                <TurnstileCaptcha ref={turnstileRef} onVerify={setCaptchaToken} />
               </div>
+            )}
 
-              {!isLocal && (
-                <div className="py-2">
-                  <TurnstileCaptcha
-                    ref={turnstileRef}
-                    onVerify={setCaptchaToken}
-                  />
-                </div>
-              )}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
+              <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+                Tu información se trata con total confidencialidad. Solo el equipo
+                de Capital Humano tiene acceso.
+              </p>
+              <button
+                type="submit"
+                disabled={loading || (!isLocal && !captchaToken)}
+                className="bg-[#fdce27] text-[#1c1c1c] font-bold text-sm px-8 py-3 rounded-xl hover:brightness-95 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 whitespace-nowrap"
+              >
+                {loading ? "Enviando..." : "Enviar postulación →"}
+              </button>
+            </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <button
-                  type="submit"
-                  className="flex-1 bg-[#fdce27] hover:bg-[#e6b800] text-[#1c1c1c] font-black px-5 py-2 shadow-xl shadow-[#fdce27]/20 hover:scale-[1.02] transition-all disabled:opacity-60 active:scale-95"
-                  disabled={loading || (!isLocal && !captchaToken)}
-                >
-                  {loading ? "ENVIANDO..." : "ENVIAR CV"}
-                </button>
+            {estadoMensaje.texto && (
+              <div className="mt-4">
+                <Alerta tipo={estadoMensaje.tipo}>{estadoMensaje.texto}</Alerta>
               </div>
-
-              {estadoMensaje.texto && (
-                <div className="mt-6">
-                  <Alerta tipo={estadoMensaje.tipo}>
-                    {estadoMensaje.texto}
-                  </Alerta>
-                </div>
-              )}
-            </form>
-          </div>
+            )}
+          </form>
         </div>
+
       </div>
     </section>
   );
