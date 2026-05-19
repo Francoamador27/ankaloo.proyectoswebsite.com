@@ -70,14 +70,14 @@ export default function Compromiso() {
           {/* Eyebrow */}
 
           {/* Título */}
-          <h1 className="text-5xl md:text-6xl font-black text-[#1c1c1c] tracking-tighter leading-none mb-12">
+          <h1 className="text-4xl  text md:text-4xl font-black text-[#1c1c1c] tracking-tighter leading-none mb-5">
             Nuestro <span className="text-green-600">Compromiso</span>
           </h1>
 
           {/* Imagen compromiso */}
 
           {/* Texto principal */}
-          <p className="text-xl md:text-2xl leading-relaxed text-[#5a5a5a] font-light mb-20">
+          <p className="text-lg md:text-lg leading-relaxed text-[#5a5a5a]  font-light mb-20">
             En <strong className="text-[#1c1c1c] font-black">Anka Loo</strong>{" "}
             trabajamos con una mirada sustentable integrada que incluye: el uso
             de{" "}
@@ -124,10 +124,7 @@ export default function Compromiso() {
           {/* Grilla de iniciativas */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-slate-200 border border-slate-200 rounded-2xl overflow-hidden">
             {iniciativas.map(({ icon: Icon, titulo, descripcion }) => (
-              <div
-                key={titulo}
-                className="bg-white p-8 flex flex-col gap-5"
-              >
+              <div key={titulo} className="bg-white p-8 flex flex-col gap-5">
                 <div className="w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center flex-shrink-0">
                   <Icon className="text-white w-6 h-6" strokeWidth={1.5} />
                 </div>

@@ -103,9 +103,9 @@ function HeroSwiper({ slides }) {
                   {slide.title}
                 </h1>
 
-                <p className="slide-desc max-w-xl mx-auto text-base md:text-lg text-white/75 font-light leading-relaxed">
+                {/* <p className="slide-desc max-w-xl mx-auto text-base md:text-lg text-white/75 font-light leading-relaxed">
                   {slide.description}
-                </p>
+                </p> */}
               </div>
             </div>
           </SwiperSlide>

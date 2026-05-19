@@ -43,7 +43,10 @@ export default function Header() {
   const rightNav = [
     // { label: "Sede", href: "/sede" },
     { label: "Quiénes Somos", href: "/quienes-somos" },
-
+    {
+      label: "Brochure",
+      href: "https://api.ankaloo.com.ar/storage/uploads/brochures/1776908375_Ankaloo%20Brochure%202026-.pdf",
+    },
     //i { label: "Blog", href: "/blog" },
     { label: "Contacto", href: "/contacto" },
     { label: "Trabaja con Nosotros", href: "/trabaja-con-nosotros" },
