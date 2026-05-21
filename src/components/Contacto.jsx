@@ -172,11 +172,7 @@ const Contacto = () => {
               </div>
             </div>
 
-            <div className="mt-12 pt-8 border-t border-[#fdce27]/20 relative z-10">
-              <p className="text-white/70 text-sm font-bold tracking-[0.15em] ">
-                Construyendo el futuro
-              </p>
-            </div>
+            <div className="mt-12 pt-8 border-t border-[#fdce27]/20 relative z-10"></div>
           </div>
 
           {/* Formulario */}

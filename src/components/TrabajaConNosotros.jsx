@@ -11,7 +11,9 @@ import { Landmark, TrendingUp, Users, ShieldCheck } from "lucide-react";
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
   if (url.includes("/embed/")) return url;
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  const match = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+  );
   return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 };
 
@@ -41,7 +43,11 @@ const PILLARS = [
 const VACANTES = [
   { area: "Obra civil", rol: "Jefe de Obra", ubicacion: "Córdoba" },
   { area: "Logística", rol: "Responsable de Almacén", ubicacion: "Córdoba" },
-  { area: "Corporativo", rol: "Analista de Capital Humano", ubicacion: "Remoto" },
+  {
+    area: "Corporativo",
+    rol: "Analista de Capital Humano",
+    ubicacion: "Remoto",
+  },
 ];
 
 const TrabajaConNosotros = () => {
@@ -55,7 +61,10 @@ const TrabajaConNosotros = () => {
 
   const handleSelectVacante = (rol) => {
     setPuestoSeleccionado(rol);
-    formSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    formSectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
   const { company } = useCont();
   const videoEmbedUrl = getYouTubeEmbedUrl(company?.video_quienes_somos);
@@ -73,22 +82,38 @@ const TrabajaConNosotros = () => {
       formData.append("nombre", fd.get("nombre")?.toString().trim() || "");
       formData.append("email", fd.get("email")?.toString().trim() || "");
       formData.append("telefono", fd.get("telefono")?.toString().trim() || "");
-      formData.append("puesto_interes", fd.get("puesto_interes")?.toString().trim() || "");
-      formData.append("experiencia", fd.get("experiencia")?.toString().trim() || "");
+      formData.append(
+        "puesto_interes",
+        fd.get("puesto_interes")?.toString().trim() || "",
+      );
+      formData.append(
+        "experiencia",
+        fd.get("experiencia")?.toString().trim() || "",
+      );
       formData.append("mensaje", fd.get("mensaje")?.toString().trim() || "");
-      formData.append("turnstile_token", isLocal ? "local-bypass" : captchaToken);
+      formData.append(
+        "turnstile_token",
+        isLocal ? "local-bypass" : captchaToken,
+      );
       if (fd.get("cv")) formData.append("cv", fd.get("cv"));
 
-      const res = await clienteAxios.post("/api/trabaja-con-nosotros", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await clienteAxios.post(
+        "/api/trabaja-con-nosotros",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
 
-      const isOk = (res.status >= 200 && res.status < 300) || res.data?.success === true;
+      const isOk =
+        (res.status >= 200 && res.status < 300) || res.data?.success === true;
       if (!isOk) throw new Error(res.data?.message || "Error al enviar");
 
       setEstadoMensaje({
         tipo: "exito",
-        texto: res.data?.message || "Tu CV fue enviado con éxito. ¡Nos pondremos en contacto pronto!",
+        texto:
+          res.data?.message ||
+          "Tu CV fue enviado con éxito. ¡Nos pondremos en contacto pronto!",
       });
 
       formRef.current?.reset();
@@ -154,8 +179,8 @@ const TrabajaConNosotros = () => {
             <em className="not-italic text-[#fdce27]">Construimos carreras.</em>
           </h1>
           <p className="text-[#a0a0a0] text-base sm:text-lg font-light leading-relaxed max-w-md">
-            En Ankaloo creemos que los proyectos de infraestructura los hacen las
-            personas. Buscamos{" "}
+            En Anka Loo creemos que los proyectos de infraestructura los hacen
+            las personas. Buscamos{" "}
             <strong className="text-[#f0ede6] font-medium">personas</strong> que
             quieran crecer junto con nosotros.
           </p>
@@ -175,7 +200,6 @@ const TrabajaConNosotros = () => {
       )}
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 space-y-16">
-
         {/* ── PILLARS ── */}
         <div>
           <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-2">
@@ -195,8 +219,12 @@ const TrabajaConNosotros = () => {
                   <div className="w-9 h-9 rounded-lg bg-[#1c1c1c] flex items-center justify-center mb-4">
                     <PillarIcon size={18} className="text-[#fdce27]" />
                   </div>
-                  <p className="text-sm font-semibold text-slate-900 mb-1">{pillar.title}</p>
-                  <p className="text-xs text-slate-500 leading-relaxed">{pillar.desc}</p>
+                  <p className="text-sm font-semibold text-slate-900 mb-1">
+                    {pillar.title}
+                  </p>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    {pillar.desc}
+                  </p>
                 </div>
               );
             })}
@@ -225,7 +253,9 @@ const TrabajaConNosotros = () => {
                   <p className="text-xs uppercase tracking-[0.08em] text-slate-400 mb-0.5">
                     {v.area}
                   </p>
-                  <p className="text-sm font-semibold text-slate-800">{v.rol}</p>
+                  <p className="text-sm font-semibold text-slate-800">
+                    {v.rol}
+                  </p>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xs px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500">
@@ -242,7 +272,10 @@ const TrabajaConNosotros = () => {
         </div>
 
         {/* ── FORMULARIO ── */}
-        <div ref={formSectionRef} className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
+        <div
+          ref={formSectionRef}
+          className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden"
+        >
           <div className="bg-slate-50 px-8 pt-8 pb-6 border-b border-slate-100">
             <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-2">
               Postulaciones espontáneas
@@ -268,7 +301,8 @@ const TrabajaConNosotros = () => {
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
-                  Área de interés <span className="normal-case">(opcional)</span>
+                  Área de interés{" "}
+                  <span className="normal-case">(opcional)</span>
                 </label>
                 <input
                   type="text"
@@ -310,7 +344,8 @@ const TrabajaConNosotros = () => {
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
-                ¿Por qué Ankaloo? <span className="normal-case">(opcional)</span>
+                ¿Por qué Anka Loo?{" "}
+                <span className="normal-case">(opcional)</span>
               </label>
               <textarea
                 name="mensaje"
@@ -339,14 +374,17 @@ const TrabajaConNosotros = () => {
 
             {!isLocal && (
               <div className="py-2">
-                <TurnstileCaptcha ref={turnstileRef} onVerify={setCaptchaToken} />
+                <TurnstileCaptcha
+                  ref={turnstileRef}
+                  onVerify={setCaptchaToken}
+                />
               </div>
             )}
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
               <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
-                Tu información se trata con total confidencialidad. Solo el equipo
-                de Capital Humano tiene acceso.
+                Tu información se trata con total confidencialidad. Solo el
+                equipo de Capital Humano tiene acceso.
               </p>
               <button
                 type="submit"
@@ -364,7 +402,6 @@ const TrabajaConNosotros = () => {
             )}
           </form>
         </div>
-
       </div>
     </section>
   );
