@@ -99,7 +99,7 @@ function HeroSwiper({ slides }) {
               <div className="absolute inset-0 bg-black/50" />
               {/* Content */}
               <div className="relative z-10 w-full max-w-5xl px-16 lg:px-24 mx-auto text-center">
-                <h1 className="slide-title text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-[1.15] tracking-[0.02em] drop-shadow-lg">
+                <h1 className="slide-title text-lg md:text-4xl lg:text-5xl font-black text-white mb-6 mt-10 md:mt-0 leading-[1.15] tracking-[0.02em] drop-shadow-lg">
                   {slide.title}
                 </h1>
 
@@ -148,7 +148,7 @@ export default function HeroFeatures() {
   }, []);
 
   return (
-    <section className="relative w-full h-[85vh] min-h-screen overflow-hidden">
+    <section className="relative w-full aspect-video lg:aspect-auto lg:h-[85vh] overflow-hidden">
       {/* Contenido encima */}
       {loading ? (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20">
