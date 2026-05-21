@@ -224,7 +224,7 @@ export default function ServiciosSwiper() {
               1280: { slidesPerView: 4, spaceBetween: 20 },
             }}
             navigation
-            pagination={{ clickable: true }}
+            pagination={{ clickable: true, dynamicBullets: true }}
             autoplay={{ delay: 4500, disableOnInteraction: true }}
             loop={true}
             style={{ paddingBottom: "38px" }}

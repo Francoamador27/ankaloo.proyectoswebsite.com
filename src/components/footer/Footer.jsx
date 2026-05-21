@@ -44,15 +44,22 @@ export default function Footer() {
     >
       {/* Capa de overlay para imagen con escala de grises o brillo opcional */}
       {footer.bg_type === "image" && (
-        <div
-          className={`absolute inset-0 z-0 ${footer.greyscale ? "grayscale contrast-125 brightness-50" : "bg-black/40"}`}
-        >
-          <img
-            src={footer.bg_image}
-            alt=""
-            className="object-cover w-full h-full"
-          />
-        </div>
+        <>
+          <style>{`
+            @media (max-width: 1023px) {
+              .footer-bg-img { object-position: ${footer.bg_position || 'center'} !important; }
+            }
+          `}</style>
+          <div
+            className={`absolute inset-0 z-0 ${footer.greyscale ? "grayscale contrast-125 brightness-50" : "bg-black/40"}`}
+          >
+            <img
+              src={footer.bg_image}
+              alt=""
+              className="footer-bg-img object-cover w-full h-full"
+            />
+          </div>
+        </>
       )}
 
       {/* Elementos decorativos de fondo (solo si no es imagen) */}

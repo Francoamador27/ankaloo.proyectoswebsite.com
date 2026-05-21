@@ -228,33 +228,6 @@ export default function ServiciosGrid() {
           <aside className="lg:col-span-1">
             <div className="sticky space-y-4 top-6">
               {/* Search Box */}
-              <div className="p-4 transition-shadow bg-white border shadow-sm rounded-xl border-slate-200 hover:shadow-md">
-                <div className="flex items-center gap-2 mb-2">
-                  <svg
-                    className="w-5 h-5 text-[#fdce27]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                  <label className="text-sm font-semibold text-slate-900">
-                    Buscar obra
-                  </label>
-                </div>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Nombre o tipo de obra..."
-                  className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-[#fdce27] focus:outline-none focus:ring-2 focus:ring-[#fdce27]/20 transition-all duration-200 text-sm"
-                />
-              </div>
 
               {/* Categorías Filter */}
               <div className="p-4 transition-shadow bg-white border shadow-sm rounded-xl border-slate-200 hover:shadow-md">
@@ -312,12 +285,15 @@ export default function ServiciosGrid() {
                             />
                           )}
                         </button>
-                        {hasChildren && isOpen &&
+                        {hasChildren &&
+                          isOpen &&
                           cat.children.map((subcat) => (
                             <button
                               key={subcat.id}
                               type="button"
-                              onClick={() => handleCategorySelect(String(subcat.id))}
+                              onClick={() =>
+                                handleCategorySelect(String(subcat.id))
+                              }
                               className={`w-full px-3 py-2 text-xs font-black transition-all text-left pl-6 border-l-2 ${
                                 selectedCategory === String(subcat.id)
                                   ? "bg-[#1c1c1c] text-[#fdce27] border-[#fdce27]"
@@ -361,9 +337,13 @@ export default function ServiciosGrid() {
                 </div>
 
                 {(() => {
-                  const catActual = selectedCategory !== "all"
-                    ? findCatInTree(categorias, (c) => String(c.id) === selectedCategory)
-                    : null;
+                  const catActual =
+                    selectedCategory !== "all"
+                      ? findCatInTree(
+                          categorias,
+                          (c) => String(c.id) === selectedCategory,
+                        )
+                      : null;
                   return catActual?.pdf ? (
                     <div className="flex justify-center mt-4 mb-6">
                       <a
@@ -372,8 +352,16 @@ export default function ServiciosGrid() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 px-8 py-3 bg-[#1c1c1c] text-[#fdce27] font-black tracking-wider text-sm uppercase hover:bg-[#fdce27] hover:text-[#1c1c1c] transition-all duration-300"
                       >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         Ver más obras
                       </a>

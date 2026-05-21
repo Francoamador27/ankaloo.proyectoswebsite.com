@@ -11,7 +11,7 @@ export default function VideoMain({ url }) {
           observer.disconnect();
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.15 },
     );
     observer.observe(el);
   }, []);
@@ -25,7 +25,7 @@ export default function VideoMain({ url }) {
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" },
     );
     observer.observe(el);
   }, []);
@@ -44,7 +44,10 @@ export default function VideoMain({ url }) {
   };
 
   return (
-    <section ref={sectionRef} className="relative py-20 overflow-hidden bg-white lg:py-20">
+    <section
+      ref={sectionRef}
+      className="relative py-20 overflow-hidden bg-white lg:py-20"
+    >
       <style>{`
         @keyframes vmFadeUp {
           from { opacity: 0; transform: translateY(30px); }
@@ -69,14 +72,10 @@ export default function VideoMain({ url }) {
 
       <div className="mx-auto max-w-7xl">
         <div className="vm-header px-6 mb-16 text-center">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="h-1 w-12 bg-[#fdce27]"></div>
-            <span className="text-[10px] font-black tracking-[0.4em] text-slate-400 ">
-              Experiencia en Movimiento
-            </span>
-            <div className="h-1 w-12 bg-[#fdce27]"></div>
-          </div>
-          <h2 ref={titleRef} className="vm-title text-4xl md:text-6xl font-black text-[#1c1c1c] tracking-tighter leading-none mb-4">
+          <h2
+            ref={titleRef}
+            className="vm-title text-4xl md:text-6xl font-black text-[#1c1c1c] tracking-tighter leading-none mb-4"
+          >
             Nuestro Trabajo en Acción
           </h2>
         </div>

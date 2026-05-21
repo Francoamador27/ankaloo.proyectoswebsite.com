@@ -48,10 +48,10 @@ export default function Calidad() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           {/* Header de Sección */}
           <header className="mb-10 text-center">
-            <h1 className="text-5xl md:text-6xl lg:text-5xl font-black text-[#1c1c1c] tracking-tighter leading-none mb-8">
+            <h1 className="text-4xl md:text-5xl font-black text-[#1c1c1c] leading-tight mb-8">
               Calidad <span className="text-[#fdce27]">Certificada</span>
             </h1>
-            <p className="max-w-3xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a] animate-fadeInUp">
+            <p className="max-w-3xl mx-auto text-lg leading-relaxed font-light text-[#5a5a5a] animate-fadeInUp">
               En <strong>{company.name || "Anka Loo"} </strong>
               contamos con certificaciones de calidad ISO que avalan cada uno de
               nuestros procesos constructivos.

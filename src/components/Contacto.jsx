@@ -124,7 +124,7 @@ const Contacto = () => {
           .ct-title { animation: ctSlideLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         `}</style>
         <header className="mb-16 text-center">
-          <h1 className="ct-title mt-6 mb-4 text-2xl font-black leading-tight tracking-tight md:text-5xl text-[#fdce27]">
+          <h1 className="ct-title mt-6 mb-4 text-4xl lg:text-6xl font-black tracking-tight text-[#fdce27]">
             Contacto
           </h1>
           <p className="max-w-2xl mx-auto text-base md:text-lg text-slate-600 font-light">
@@ -135,46 +135,6 @@ const Contacto = () => {
 
         {/* Layout de contacto */}
         <div className="grid lg:grid-cols-12 gap-12 bg-white rounded-[3rem] shadow-2xl border border-slate-100 overflow-hidden">
-          {/* Info Lateral */}
-          <div className="lg:col-span-4 bg-[#1c1c1c] border-r-4 border-[#fdce27] p-10 text-white flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
-
-            <div className="relative z-10">
-              <h3 className="text-3xl font-black mb-8  tracking-wide border-b border-[#fdce27]/30 pb-4">
-                Información de Contacto
-              </h3>
-              <div className="space-y-8">
-                <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
-                    Nuestra Sede Corporativa
-                  </p>
-                  <p className="text-lg font-medium">
-                    {company.address || "Córdoba, Argentina"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
-                    Email Corporativo
-                  </p>
-                  <p className="text-lg font-medium">
-                    {contact.email || "info@ankaloo.com"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
-                    Horario
-                  </p>
-                  <p className="text-lg font-medium">
-                    {company.business_hours || "Lun a Vie: 09:00 - 18:00hs"}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-12 pt-8 border-t border-[#fdce27]/20 relative z-10"></div>
-          </div>
-
           {/* Formulario */}
           <div className="p-10 lg:col-span-8 md:p-12">
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
@@ -307,6 +267,47 @@ const Contacto = () => {
               )}
             </form>
           </div>
+
+          {/* Info Lateral */}
+          <div className="lg:col-span-4 bg-[#1c1c1c] border-l-4 border-[#fdce27] p-10 text-white flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#fdce27]/5 rounded-full blur-2xl"></div>
+
+            <div className="relative z-10">
+              <h3 className="text-3xl font-black mb-8  tracking-wide border-b border-[#fdce27]/30 pb-4">
+                Información de Contacto
+              </h3>
+              <div className="space-y-8">
+                <div>
+                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
+                    Nuestra Sede Corporativa
+                  </p>
+                  <p className="text-lg font-medium">
+                    {company.address || "Córdoba, Argentina"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
+                    Email Corporativo
+                  </p>
+                  <p className="text-lg font-medium">
+                    {contact.email || "info@ankaloo.com"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[#fdce27] text-xs font-black  tracking-widest mb-1">
+                    Horario
+                  </p>
+                  <p className="text-lg font-medium">
+                    {company.business_hours || "Lun a Vie: 09:00 - 18:00hs"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-12 pt-8 border-t border-[#fdce27]/20 relative z-10"></div>
+          </div>
+
         </div>
       </div>
     </section>

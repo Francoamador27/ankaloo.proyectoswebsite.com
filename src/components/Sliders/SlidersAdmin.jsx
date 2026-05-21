@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import clienteAxios from '../../config/axios';
 import {
   DndContext,
@@ -13,19 +13,33 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Trash2, Image as ImageIcon, Pencil, X } from 'lucide-react';
 
-const SortableItem = ({ slide, onDelete, onEdit, isEditing }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id: slide.id });
+// Convierte { x, y } porcentajes → string CSS object-position
+const toObjPos = ({ x, y }) => `${x}% ${y}%`;
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
+// Parsea string guardado → { x, y }
+const parseObjPos = (str = '50% 50%') => {
+  const m = str.match(/^(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%$/);
+  if (m) return { x: parseFloat(m[1]), y: parseFloat(m[2]) };
+  const keyX = { left: 0, center: 50, right: 100 };
+  const keyY = { top: 0, center: 50, bottom: 100 };
+  const parts = str.trim().split(/\s+/);
+  return { x: keyX[parts[0]] ?? 50, y: keyY[parts[1]] ?? 50 };
+};
+
+// Calcula posición relativa al elemento desde mouse o touch
+const getPosFromEvent = (e, el) => {
+  const rect = el.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: Math.round(Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100))),
+    y: Math.round(Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100))),
   };
+};
+
+const SortableItem = ({ slide, onDelete, onEdit, isEditing }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: slide.id });
+  const style = { transform: CSS.Transform.toString(transform), transition };
 
   return (
     <div
@@ -65,10 +79,7 @@ const SortableItem = ({ slide, onDelete, onEdit, isEditing }) => {
       </div>
 
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onEdit(slide);
-        }}
+        onClick={(e) => { e.stopPropagation(); onEdit(slide); }}
         className="text-gray-400 hover:text-[#1c1c1c] transition-colors p-2"
         title="Editar"
       >
@@ -76,10 +87,7 @@ const SortableItem = ({ slide, onDelete, onEdit, isEditing }) => {
       </button>
 
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete(slide.id);
-        }}
+        onClick={(e) => { e.stopPropagation(); onDelete(slide.id); }}
         className="text-red-500 hover:text-red-700 p-2"
         title="Eliminar"
       >
@@ -99,10 +107,14 @@ const SlidersAdmin = () => {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [focalPoint, setFocalPoint] = useState({ x: 50, y: 50 });
+  const [isDragging, setIsDragging] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
   const [mensaje, setMensaje] = useState(null);
+
+  const containerRef = useRef(null);
 
   useEffect(() => {
     fetchSlides();
@@ -125,9 +137,25 @@ const SlidersAdmin = () => {
     setYoutubeUrl('');
     setImagen(null);
     setPreview(null);
+    setFocalPoint({ x: 50, y: 50 });
     setError(null);
     setMensaje(null);
   };
+
+  const handleDragStart = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    if (containerRef.current) {
+      setFocalPoint(getPosFromEvent(e, containerRef.current));
+    }
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging || !containerRef.current) return;
+    setFocalPoint(getPosFromEvent(e, containerRef.current));
+  };
+
+  const handleDragEnd = () => setIsDragging(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -156,6 +184,7 @@ const SlidersAdmin = () => {
     formData.append('title', title);
     formData.append('description', description);
     formData.append('background_type', backgroundType);
+    formData.append('mobile_position', toObjPos(focalPoint));
 
     if (backgroundType === 'image' && imagen) {
       formData.append('imagen', imagen);
@@ -169,18 +198,12 @@ const SlidersAdmin = () => {
       setCargando(true);
       if (editingId) {
         await clienteAxios.post(`/api/sliders/${editingId}?_method=PUT`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
         });
         setMensaje('Slide actualizado correctamente');
       } else {
         await clienteAxios.post('/api/sliders', formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
         });
         setMensaje('Slide creado correctamente');
       }
@@ -192,14 +215,14 @@ const SlidersAdmin = () => {
       const imagenErrors = e?.response?.data?.errors?.imagen ?? [];
       const isSizeError =
         status === 413 ||
-        imagenErrors.some((msg) => msg.toLowerCase().includes('greater than') || msg.toLowerCase().includes('kilobytes') || msg.toLowerCase().includes('size')) ||
+        imagenErrors.some((msg) =>
+          msg.toLowerCase().includes('greater than') ||
+          msg.toLowerCase().includes('kilobytes') ||
+          msg.toLowerCase().includes('size')
+        ) ||
         e?.response?.data?.message?.toLowerCase().includes('too large') ||
         e?.message?.toLowerCase().includes('too large');
-      if (isSizeError) {
-        setError('size');
-      } else {
-        setError(editingId ? 'Error al actualizar el slide' : 'Error al crear el slide');
-      }
+      setError(isSizeError ? 'size' : editingId ? 'Error al actualizar el slide' : 'Error al crear el slide');
     } finally {
       setCargando(false);
     }
@@ -212,18 +235,34 @@ const SlidersAdmin = () => {
     setBackgroundType(slide.background_type || 'image');
     setYoutubeUrl(slide.youtube_url || '');
     setPreview(slide.image || null);
+    setFocalPoint(parseObjPos(slide.mobile_position || '50% 50%'));
     setImagen(null);
     setError(null);
     setMensaje(null);
   };
 
-  const handleCancelEdit = () => {
-    resetForm();
+  const handleSlidesReorder = async (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = slides.findIndex((s) => s.id === active.id);
+    const newIndex = slides.findIndex((s) => s.id === over.id);
+    const newOrder = arrayMove(slides, oldIndex, newIndex);
+    setSlides(newOrder);
+
+    try {
+      await clienteAxios.post(
+        '/api/sliders/reorder',
+        { order: newOrder.map((s, index) => ({ id: s.id, position: index + 1 })) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch {
+      console.error('Error guardando orden');
+    }
   };
 
   const handleDelete = async (id) => {
     if (!confirm('Eliminar este slide?')) return;
-
     try {
       await clienteAxios.delete(`/api/sliders/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -234,48 +273,20 @@ const SlidersAdmin = () => {
     }
   };
 
-  const handleDragEnd = async (event) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = slides.findIndex((s) => s.id === active.id);
-    const newIndex = slides.findIndex((s) => s.id === over.id);
-
-    const newOrder = arrayMove(slides, oldIndex, newIndex);
-    setSlides(newOrder);
-
-    try {
-      await clienteAxios.post(
-        '/api/sliders/reorder',
-        {
-          order: newOrder.map((s, index) => ({
-            id: s.id,
-            position: index + 1,
-          })),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-    } catch {
-      console.error('Error guardando orden');
-    }
-  };
-
   return (
     <div className="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-      <h2 className="text-2xl font-black mb-8 text-[#1c1c1c] border-b border-gray-100 pb-4">Administrar Slider Principal</h2>
+      <h2 className="text-2xl font-black mb-8 text-[#1c1c1c] border-b border-gray-100 pb-4">
+        Administrar Slider Principal
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-5 mb-10 bg-gray-50 p-6 sm:p-8 rounded-2xl border border-gray-100">
+        {/* Tipo de fondo */}
         <div>
           <label className="block text-sm font-medium mb-2">Tipo de fondo</label>
           <div className="flex gap-3">
             <button
               type="button"
-              onClick={() => {
-                setBackgroundType('image');
-                setYoutubeUrl('');
-              }}
+              onClick={() => { setBackgroundType('image'); setYoutubeUrl(''); }}
               className={`px-6 py-2 rounded-lg font-bold text-sm transition-colors ${
                 backgroundType === 'image'
                   ? 'bg-[#1c1c1c] text-[#fdce27] border-2 border-[#1c1c1c]'
@@ -286,11 +297,7 @@ const SlidersAdmin = () => {
             </button>
             <button
               type="button"
-              onClick={() => {
-                setBackgroundType('youtube');
-                setImagen(null);
-                setPreview(null);
-              }}
+              onClick={() => { setBackgroundType('youtube'); setImagen(null); setPreview(null); }}
               className={`px-6 py-2 rounded-lg font-bold text-sm transition-colors ${
                 backgroundType === 'youtube'
                   ? 'bg-[#1c1c1c] text-[#fdce27] border-2 border-[#1c1c1c]'
@@ -323,7 +330,7 @@ const SlidersAdmin = () => {
             <label className="border-2 border-dashed border-gray-300 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#fdce27] hover:bg-[#fdce27]/5 transition-all">
               <ImageIcon className="text-gray-400 w-10 h-10" />
               <span className="text-sm text-gray-600">
-                {editingId ? 'Cambiar imagen (opcional)' : 'Arrastra o haz click para subir una imagen'}
+                {editingId ? 'Cambiar imagen (opcional)' : 'Arrastrá o hacé click para subir una imagen'}
               </span>
               <input
                 type="file"
@@ -334,15 +341,78 @@ const SlidersAdmin = () => {
                   if (!file) return;
                   setImagen(file);
                   setPreview(URL.createObjectURL(file));
+                  setFocalPoint({ x: 50, y: 50 });
                 }}
               />
             </label>
 
             {preview && (
-              <img
-                src={preview}
-                className="w-full h-48 object-cover rounded-xl border"
-              />
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-gray-600">
+                  Arrastrá el punto para elegir qué parte se muestra en mobile
+                </p>
+
+                {/* Imagen completa con punto arrastrable */}
+                <div
+                  ref={containerRef}
+                  className="relative w-full rounded-xl overflow-hidden border-2 border-gray-200 select-none"
+                  style={{ height: '200px', cursor: isDragging ? 'grabbing' : 'crosshair' }}
+                  onMouseDown={handleDragStart}
+                  onMouseMove={handleDragMove}
+                  onMouseUp={handleDragEnd}
+                  onMouseLeave={handleDragEnd}
+                  onTouchStart={handleDragStart}
+                  onTouchMove={handleDragMove}
+                  onTouchEnd={handleDragEnd}
+                >
+                  <img
+                    src={preview}
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                    draggable={false}
+                  />
+
+                  {/* Líneas guía */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div
+                      className="absolute w-full h-px bg-white/40"
+                      style={{ top: `${focalPoint.y}%` }}
+                    />
+                    <div
+                      className="absolute h-full w-px bg-white/40"
+                      style={{ left: `${focalPoint.x}%` }}
+                    />
+                  </div>
+
+                  {/* Punto arrastrable */}
+                  <div
+                    className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2"
+                    style={{ left: `${focalPoint.x}%`, top: `${focalPoint.y}%` }}
+                  >
+                    <div className="relative flex items-center justify-center w-7 h-7">
+                      <div className="absolute w-7 h-7 rounded-full bg-black/30 animate-ping" />
+                      <div className="w-5 h-5 rounded-full bg-[#fdce27] border-2 border-white shadow-lg" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Preview mobile debajo */}
+                <div className="flex flex-col items-center gap-2 pt-1">
+                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Vista Mobile
+                  </span>
+                  <div
+                    className="relative rounded-3xl overflow-hidden border-4 border-[#1c1c1c] shadow-xl"
+                    style={{ width: '120px', height: '240px' }}
+                  >
+                    <img
+                      src={preview}
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                      style={{ objectPosition: toObjPos(focalPoint) }}
+                      draggable={false}
+                    />
+                  </div>
+                </div>
+              </div>
             )}
           </>
         ) : (
@@ -366,7 +436,7 @@ const SlidersAdmin = () => {
           {editingId && (
             <button
               type="button"
-              onClick={handleCancelEdit}
+              onClick={resetForm}
               className="border-2 border-gray-200 text-gray-600 font-bold px-6 py-3 rounded-xl hover:bg-white flex items-center gap-2 transition-colors"
             >
               <X size={16} />
@@ -397,13 +467,12 @@ const SlidersAdmin = () => {
         {mensaje && <p className="text-green-600 text-sm">{mensaje}</p>}
       </form>
 
-      <h3 className="text-lg font-black text-[#1c1c1c] mb-6 pt-6 border-t border-gray-100">Orden y Gestión de Sliders</h3>
+      <h3 className="text-lg font-black text-[#1c1c1c] mb-6 pt-6 border-t border-gray-100">
+        Orden y Gestión de Sliders
+      </h3>
 
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext
-          items={slides.map((s) => s.id)}
-          strategy={verticalListSortingStrategy}
-        >
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleSlidesReorder}>
+        <SortableContext items={slides.map((s) => s.id)} strategy={verticalListSortingStrategy}>
           <div className="space-y-3">
             {slides.map((slide) => (
               <SortableItem

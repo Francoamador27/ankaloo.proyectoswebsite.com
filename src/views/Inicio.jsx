@@ -24,10 +24,10 @@ const Inicio = () => {
     <>
       <div className="">
         <FeatureSection />
-        <AnkalooHighlights />
         <Suspense fallback={<div style={{ minHeight: 320 }} />}>
           <CategoriasServicios />
         </Suspense>
+        <AnkalooHighlights />
         <Suspense fallback={<div style={{ minHeight: 520 }} />}>
           <ServiciosFront sliders />
         </Suspense>

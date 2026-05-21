@@ -70,7 +70,7 @@ export default function Compromiso() {
           {/* Eyebrow */}
 
           {/* Título */}
-          <h1 className="text-4xl  text md:text-4xl font-black text-[#1c1c1c] tracking-tighter leading-none mb-5">
+          <h1 className="text-4xl md:text-5xl font-black text-[#1c1c1c] leading-tight mb-5">
             Nuestro <span className="text-green-600">Compromiso</span>
           </h1>
 

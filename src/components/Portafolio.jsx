@@ -21,10 +21,17 @@ export default function Portafolio() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    clienteAxios.get("/api/portafolio-categorias").then(({ data }) => {
-      const items = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
-      setCategorias(items);
-    }).catch((error) => console.error("Error al obtener categorías:", error));
+    clienteAxios
+      .get("/api/portafolio-categorias")
+      .then(({ data }) => {
+        const items = Array.isArray(data?.data)
+          ? data.data
+          : Array.isArray(data)
+            ? data
+            : [];
+        setCategorias(items);
+      })
+      .catch((error) => console.error("Error al obtener categorías:", error));
   }, []);
 
   useEffect(() => {
@@ -32,9 +39,14 @@ export default function Portafolio() {
     const params = new URLSearchParams({ sort: "position", dir: "asc" });
 
     if (selectedCategory !== "all") {
-      const parentCat = categorias.find((c) => String(c.id) === selectedCategory);
+      const parentCat = categorias.find(
+        (c) => String(c.id) === selectedCategory,
+      );
       if (parentCat && (parentCat.children || []).length > 0) {
-        const ids = [parentCat.id, ...(parentCat.children || []).map((c) => c.id)];
+        const ids = [
+          parentCat.id,
+          ...(parentCat.children || []).map((c) => c.id),
+        ];
         params.set("category", ids.join(","));
       } else {
         params.set("category", selectedCategory);
@@ -45,7 +57,8 @@ export default function Portafolio() {
       params.set("q", searchQuery.trim());
     }
 
-    clienteAxios.get(`/api/portafolios?${params.toString()}`)
+    clienteAxios
+      .get(`/api/portafolios?${params.toString()}`)
       .then(({ data }) => setPortafolios(data.data || []))
       .catch((error) => console.error("Error al obtener portafolios:", error))
       .finally(() => setLoading(false));
@@ -131,30 +144,27 @@ export default function Portafolio() {
             <aside className="lg:col-span-1">
               <div className="sticky space-y-4 top-6">
                 {/* Búsqueda */}
-                <div className="p-4 transition-shadow bg-white border shadow-sm rounded-xl border-slate-200 hover:shadow-md">
-                  <div className="flex items-center gap-2 mb-2">
-                    <svg className="w-5 h-5 text-[#fdce27]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <label className="text-sm font-semibold text-slate-900">Buscar equipo</label>
-                  </div>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => { setSearchQuery(e.target.value); setPagina(1); }}
-                    placeholder="Nombre o descripción..."
-                    className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:border-[#fdce27] focus:outline-none focus:ring-2 focus:ring-[#fdce27]/20 transition-all duration-200 text-sm"
-                  />
-                </div>
 
                 {/* Categorías */}
                 {categorias.length > 0 && (
                   <div className="p-4 transition-shadow bg-white border shadow-sm rounded-xl border-slate-200 hover:shadow-md">
                     <div className="flex items-center gap-2 mb-3">
-                      <svg className="w-5 h-5 text-[#fdce27]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      <svg
+                        className="w-5 h-5 text-[#fdce27]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                        />
                       </svg>
-                      <label className="text-sm font-semibold text-slate-900">Tipo de Equipo</label>
+                      <label className="text-sm font-semibold text-slate-900">
+                        Tipo de Equipo
+                      </label>
                     </div>
                     <div className="space-y-2">
                       <button
@@ -199,7 +209,9 @@ export default function Portafolio() {
                                 <button
                                   key={subcat.id}
                                   type="button"
-                                  onClick={() => handleCategorySelect(String(subcat.id))}
+                                  onClick={() =>
+                                    handleCategorySelect(String(subcat.id))
+                                  }
                                   className={`w-full px-3 py-2 text-xs font-black transition-all text-left pl-6 border-l-2 ${
                                     selectedCategory === String(subcat.id)
                                       ? "bg-[#1c1c1c] text-[#fdce27] border-[#fdce27]"
@@ -242,7 +254,10 @@ export default function Portafolio() {
                         <ChevronLeft className="w-4 h-4" />
                       </button>
 
-                      {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((n) => (
+                      {Array.from(
+                        { length: totalPaginas },
+                        (_, i) => i + 1,
+                      ).map((n) => (
                         <button
                           key={n}
                           onClick={() => irAPagina(n)}

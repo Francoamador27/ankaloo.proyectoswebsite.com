@@ -172,59 +172,59 @@ const QuienesSomos = () => {
           )}
         </div>
 
-        {/* Propósito + Valores */}
-        <section className="relative overflow-hidden bg-white  shadow-xl rounded-3xl  p-8 md:p-12">
-          <div className="grid gap-10 md:grid-cols-2 items-center">
-            {/* Columna texto */}
-            <div>
-              <h2 className="mb-6 text-xl font-black text-slate-900">
-                Propósito
-              </h2>
-              <p className="mb-2 text-lg leading-relaxed text-slate-600">
-                Nuestro propósito es contribuir positivamente a la comunidad y
-                al desarrollo de nuestros colaboradores, disfrutando cada paso
-                del camino y asumiendo los desafíos como una oportunidad para
-                crecer.
-              </p>
-              <div className="pt-2 border-t border-slate-100">
-                <h3 className="mb-4 text-xl font-black text-slate-900">
-                  Valores
-                </h3>
-                <div className="space-y-3 text-base leading-relaxed text-slate-600">
-                  <p>
-                    Fomentamos relaciones basadas en el respeto y la empatía,
-                    promoviendo calidad, profesionalismo y eficiencia en cada
-                    proyecto.
-                  </p>
-                  <p>
-                    Cumplimos los acuerdos asumidos, adoptando soluciones
-                    innovadoras para generar valor.
-                  </p>
-                  <p>
-                    Trabajamos priorizando el bienestar de las personas, la
-                    rentabilidad y la sostenibilidad ambiental, contribuyendo al
-                    desarrollo integral de la comunidad.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Columna imagen */}
-            {company?.imagen_corporativa && (
-              <div className="relative w-full h-72 md:h-[420px] rounded-2xl overflow-hidden">
-                <img
-                  src={
-                    company.imagen_corporativa.startsWith("http")
-                      ? company.imagen_corporativa
-                      : `${import.meta.env.VITE_API_URL}/${company.imagen_corporativa}`
-                  }
-                  alt="Equipo e Infraestructura Anka Loo"
-                  className="object-cover w-full h-full transition-transform duration-700 hover:scale-105"
-                />
-              </div>
-            )}
+        {/* Imagen corporativa */}
+        {company?.imagen_corporativa && (
+          <div className="mb-10 w-full rounded-3xl overflow-hidden shadow-xl">
+            <img
+              src={
+                company.imagen_corporativa.startsWith("http")
+                  ? company.imagen_corporativa
+                  : `${import.meta.env.VITE_API_URL}/${company.imagen_corporativa}`
+              }
+              alt="Equipo e Infraestructura Anka Loo"
+              className="w-full h-72 md:h-[420px] object-cover transition-transform duration-700 hover:scale-105"
+            />
           </div>
-        </section>
+        )}
+
+        {/* Propósito + Valores */}
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Propósito */}
+          <div className="bg-white border border-slate-100 shadow-xl rounded-3xl p-8">
+            <h2 className="mb-4 text-xl font-black text-slate-900">
+              Propósito
+            </h2>
+            <p className="text-base leading-relaxed text-slate-600">
+              Nuestro propósito es contribuir positivamente a la comunidad y
+              al desarrollo de nuestros colaboradores, disfrutando cada paso
+              del camino y asumiendo los desafíos como una oportunidad para
+              crecer.
+            </p>
+          </div>
+
+          {/* Valores */}
+          <div className="bg-white border border-slate-100 shadow-xl rounded-3xl p-8">
+            <h3 className="mb-4 text-xl font-black text-slate-900">
+              Valores
+            </h3>
+            <div className="space-y-3 text-base leading-relaxed text-slate-600">
+              <p>
+                Fomentamos relaciones basadas en el respeto y la empatía,
+                promoviendo calidad, profesionalismo y eficiencia en cada
+                proyecto.
+              </p>
+              <p>
+                Cumplimos los acuerdos asumidos, adoptando soluciones
+                innovadoras para generar valor.
+              </p>
+              <p>
+                Trabajamos priorizando el bienestar de las personas, la
+                rentabilidad y la sostenibilidad ambiental, contribuyendo al
+                desarrollo integral de la comunidad.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Misión y Visión */}
         <div className="grid gap-6 mt-10 md:grid-cols-2">

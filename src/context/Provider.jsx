@@ -141,6 +141,7 @@ const Provider = ({ children }) => {
     text_color: settings?.footer_text_color || '#1c1c1c',
     greyscale: !!settings?.footer_greyscale,
     bg_image: settings?.footer_bg_image ? (settings.footer_bg_image.startsWith('http') ? settings.footer_bg_image : `${API_BASE}${settings.footer_bg_image}`) : null,
+    bg_position: settings?.footer_bg_position || '50% 50%',
     logo: settings?.footer_logo ? (settings.footer_logo.startsWith('http') ? settings.footer_logo : `${API_BASE}${settings.footer_logo}`) : null,
     logo1: settings?.footer_logo1 ? (settings.footer_logo1.startsWith('http') ? settings.footer_logo1 : `${API_BASE}${settings.footer_logo1}`) : null,
     logo2: settings?.footer_logo2 ? (settings.footer_logo2.startsWith('http') ? settings.footer_logo2 : `${API_BASE}${settings.footer_logo2}`) : null,
