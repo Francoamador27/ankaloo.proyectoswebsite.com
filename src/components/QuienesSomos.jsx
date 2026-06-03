@@ -42,7 +42,7 @@ const QuienesSomos = () => {
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" },
     );
     observer.observe(el);
   }, []);
@@ -156,20 +156,6 @@ const QuienesSomos = () => {
             sostenibilidad ambiental, contribuyendo al desarrollo integral de la
             comunidad.
           </p>
-          {brochure && (
-            <div className="mt-6">
-              <a
-                href={brochure.archivo}
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#fdce27] text-slate-900 font-bold px-6 py-3 rounded-xl hover:brightness-90 transition-all"
-              >
-                <Download size={18} />
-                Descargar brochure en PDF
-              </a>
-            </div>
-          )}
         </div>
 
         {/* Imagen corporativa */}
@@ -182,7 +168,7 @@ const QuienesSomos = () => {
                   : `${import.meta.env.VITE_API_URL}/${company.imagen_corporativa}`
               }
               alt="Equipo e Infraestructura Anka Loo"
-              className="w-full h-72 md:h-[420px] object-cover transition-transform duration-700 hover:scale-105"
+              className="w-full h-auto object-contain transition-transform duration-700 hover:scale-105"
             />
           </div>
         )}
@@ -195,18 +181,15 @@ const QuienesSomos = () => {
               Propósito
             </h2>
             <p className="text-base leading-relaxed text-slate-600">
-              Nuestro propósito es contribuir positivamente a la comunidad y
-              al desarrollo de nuestros colaboradores, disfrutando cada paso
-              del camino y asumiendo los desafíos como una oportunidad para
-              crecer.
+              Nuestro propósito es contribuir positivamente a la comunidad y al
+              desarrollo de nuestros colaboradores, disfrutando cada paso del
+              camino y asumiendo los desafíos como una oportunidad para crecer.
             </p>
           </div>
 
           {/* Valores */}
           <div className="bg-white border border-slate-100 shadow-xl rounded-3xl p-8">
-            <h3 className="mb-4 text-xl font-black text-slate-900">
-              Valores
-            </h3>
+            <h3 className="mb-4 text-xl font-black text-slate-900">Valores</h3>
             <div className="space-y-3 text-base leading-relaxed text-slate-600">
               <p>
                 Fomentamos relaciones basadas en el respeto y la empatía,
@@ -256,8 +239,11 @@ const QuienesSomos = () => {
         {/* Líderes */}
         {lideres && lideres.length > 0 && (
           <div className="mt-10">
-            <h2 ref={equipoRef} className="qs-equipo mb-8 text-2xl font-black text-slate-900">
-              Nuestro Equipo
+            <h2
+              ref={equipoRef}
+              className="qs-equipo mb-8 text-2xl font-black text-slate-900"
+            >
+              Nuestro Equipo Gerencial{" "}
             </h2>
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {lideres.map((lider) => (

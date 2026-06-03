@@ -8,7 +8,8 @@ import lineasDer from "../assets/lineasamarillasder.png";
 
 export default function CategoriasServicios() {
   const { pathname } = useLocation();
-  const isServiciosRoot = pathname === "/servicios" || pathname === "/servicios/";
+  const isServiciosRoot =
+    pathname === "/servicios" || pathname === "/servicios/";
   const [categorias, setCategorias] = useState([]);
 
   const titleRef = useCallback((el) => {
@@ -20,7 +21,7 @@ export default function CategoriasServicios() {
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" },
     );
     observer.observe(el);
   }, []);
@@ -34,7 +35,7 @@ export default function CategoriasServicios() {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
     observer.observe(el);
   }, []);
@@ -136,16 +137,19 @@ export default function CategoriasServicios() {
               animation: textFadeUp 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             }
           `}</style>
-          <h2 ref={titleRef} className="anim-title text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight">
+          <h2
+            ref={titleRef}
+            className="anim-title text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight"
+          >
             Nuestros <span className="text-[#fdce27]">Servicios</span>
           </h2>
-          <p ref={textRef} className="anim-text max-w-7xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
+          <p
+            ref={textRef}
+            className="anim-text max-w-7xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]"
+          >
             Cumpliendo 20 años, la empresa reafirma su propósito de contribuir
             positivamente a la comunidad poniendo a disposición su experiencia y
-            recorrido en pos del desarrollo de nuevos mercados. Asumiendo
-            desafíos de ingeniería con una gestión profesional que garantiza
-            resultados que cumplen las expectativas de los más exigentes
-            sectores productivos.
+            recorrido en pos del desarrollo de nuevos mercados.
           </p>
         </div>
 

@@ -4,8 +4,21 @@ import { Leaf, Users, ShieldCheck, MapPin } from "lucide-react";
 
 export default function AnkalooHighlights() {
   const cardRefs = useRef([]);
+  const titleRef = useRef(null);
 
   useEffect(() => {
+    const titleEl = titleRef.current;
+    const titleObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          titleEl.classList.add("visible");
+          titleObserver.disconnect();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    if (titleEl) titleObserver.observe(titleEl);
+
     const observers = cardRefs.current.filter(Boolean).map((card) => {
       const observer = new IntersectionObserver(
         ([entry]) => {
@@ -14,31 +27,36 @@ export default function AnkalooHighlights() {
             observer.disconnect();
           }
         },
-        { threshold: 0.25 }
+        { threshold: 0.25 },
       );
       observer.observe(card);
       return observer;
     });
-    return () => observers.forEach((obs) => obs.disconnect());
+    return () => {
+      titleObserver.disconnect();
+      observers.forEach((obs) => obs.disconnect());
+    };
   }, []);
 
   const items = [
     {
-      icon: <Leaf size={36} strokeWidth={1.5} />,
+      icon: <Leaf size={36} strokeWidth={1.5} className="text-green-500" />,
       title: "Compromiso con la sustentabilidad",
-      desc: "En Anka Loo trabajamos con una mirada de triple impacto en el desempeño de las tareas y procesos.",
+      desc: "Trabajamos con una mirada de triple impacto en el desempeño de las tareas y procesos.",
       button: "Ver ",
       route: "/compromiso",
     },
     {
-      icon: <Users size={36} strokeWidth={1.5} />,
+      icon: <Users size={36} strokeWidth={1.5} className="text-blue-500" />,
       title: "Nuestra Gente",
       desc: "Nuestro diferencial está en la gestión de nuestra gente y en la incorporación de tecnología para cumplir plazos, optimizar costos y satisfacer a nuestros clientes.",
       button: "Ver",
       route: "/quienes-somos",
     },
     {
-      icon: <ShieldCheck size={36} strokeWidth={1.5} />,
+      icon: (
+        <ShieldCheck size={36} strokeWidth={1.5} className="text-orange-500" />
+      ),
       title: "Calidad Certificada",
       desc: "Certificados ISO 9001, 14001 y 45001 que garantizan nuestros estándares de calidad.",
       button: "Ver ",
@@ -47,7 +65,7 @@ export default function AnkalooHighlights() {
   ];
 
   return (
-    <section className="bg-slate-50 py-10 px-6 lg:px-20">
+    <section className="bg-slate-50 py-20 px-6 lg:px-20">
       <style>{`
         @keyframes fadeSlideUp {
           from { opacity: 0; transform: translateY(40px); }
@@ -59,7 +77,17 @@ export default function AnkalooHighlights() {
         .highlight-card.visible {
           animation: fadeSlideUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
+        .anim-title { opacity: 0; }
+        .anim-title.visible {
+          animation: fadeSlideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
       `}</style>
+      <h2
+        ref={titleRef}
+        className="anim-title text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight text-center"
+      >
+        Nuestro <span className="text-[#fdce27]">Diferencial</span>
+      </h2>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((item, idx) => (
@@ -70,9 +98,7 @@ export default function AnkalooHighlights() {
               style={{ animationDelay: `${idx * 0.15}s` }}
             >
               {/* Icono */}
-              <div className="text-slate-400 group-hover:text-[#1c1c1c] transition-colors duration-300 mb-4">
-                {item.icon}
-              </div>
+              <div className="mb-4">{item.icon}</div>
 
               {/* Acento dorado */}
               <div className="w-5 h-1.5 bg-[#fdce27] mb-4"></div>

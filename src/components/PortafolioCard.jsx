@@ -1,6 +1,6 @@
-import { ArrowRight } from 'lucide-react';
+import { ZoomIn } from 'lucide-react';
 
-export default function PortafolioCard({ proyecto }) {
+export default function PortafolioCard({ proyecto, onImageClick }) {
   const getImageUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http') || path.startsWith('blob:') || path.startsWith('data:')) {
@@ -23,12 +23,15 @@ export default function PortafolioCard({ proyecto }) {
   return (
     <div className="group relative bg-white border border-slate-200 border-b-4 border-b-[#fdce27] overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 h-full flex flex-col">
       {/* Imagen */}
-      <div className="relative h-64 md:h-72 overflow-hidden">
+      <div
+        className="relative h-64 md:h-72 overflow-hidden cursor-zoom-in"
+        onClick={() => proyecto.imagen && onImageClick?.(getImageUrl(proyecto.imagen))}
+      >
         {proyecto.imagen ? (
           <img
             src={getImageUrl(proyecto.imagen)}
             alt={proyecto.titulo}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#1c1c1c] via-[#2c2c2c] to-[#3a3a3a] flex items-center justify-center">
@@ -36,11 +39,14 @@ export default function PortafolioCard({ proyecto }) {
           </div>
         )}
 
-        {/* Etiqueta PROYECTO */}
-
-
-        {/* Overlay sutil al hover */}
-        <div className="absolute inset-0 bg-[#fdce27]/0 group-hover:bg-[#fdce27]/10 transition-all duration-500" />
+        {/* Icono zoom al hover */}
+        {proyecto.imagen && (
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
+            <div className="w-12 h-12 flex items-center justify-center bg-[#fdce27] rounded-full">
+              <ZoomIn className="w-5 h-5 text-[#1c1c1c]" />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Contenido */}

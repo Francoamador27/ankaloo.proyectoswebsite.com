@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import useCont from "../hooks/useCont";
 import SEOHead from "./Head/Head";
 import PortafolioCard from "./PortafolioCard";
+import Lightbox from "./Lightbox";
 import { Loader, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import clienteAxios from "../config/axios";
 import lineasIzq from "../assets/lineasamarillasizq.png";
@@ -18,6 +19,17 @@ export default function Portafolio() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [openAccordions, setOpenAccordions] = useState(new Set());
   const [pagina, setPagina] = useState(1);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
+
+  const getImageUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:") || path.startsWith("data:")) return path;
+    const cleanPath = String(path).replace(/^\/+/, "");
+    if (cleanPath.startsWith("storage/")) return `${import.meta.env.VITE_API_URL}/${cleanPath}`;
+    if (cleanPath.startsWith("portafolio/") || cleanPath.startsWith("portafolio-galeria/"))
+      return `${import.meta.env.VITE_API_URL}/storage/uploads/${cleanPath}`;
+    return `${import.meta.env.VITE_API_URL}/${cleanPath}`;
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -84,6 +96,16 @@ export default function Portafolio() {
     return portafolios.slice(inicio, inicio + POR_PAGINA);
   }, [portafolios, pagina]);
 
+  const lightboxImages = useMemo(
+    () => portafoliosPaginados.filter((p) => p.imagen).map((p) => getImageUrl(p.imagen)),
+    [portafoliosPaginados],
+  );
+
+  const handleImageClick = (url) => {
+    const idx = lightboxImages.indexOf(url);
+    if (idx !== -1) setLightboxIndex(idx);
+  };
+
   const irAPagina = (n) => {
     setPagina(n);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -91,6 +113,15 @@ export default function Portafolio() {
 
   return (
     <>
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={lightboxImages}
+          currentIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onPrev={() => setLightboxIndex((i) => (i - 1 + lightboxImages.length) % lightboxImages.length)}
+          onNext={() => setLightboxIndex((i) => (i + 1) % lightboxImages.length)}
+        />
+      )}
       <SEOHead
         title={`Portafolio - ${company.name || "Anka Loo Construcciones"}`}
         description="Descubre nuestros proyectos y casos de éxito"
@@ -240,7 +271,11 @@ export default function Portafolio() {
                 <>
                   <div className="grid grid-cols-1 gap-4 mb-10 md:grid-cols-2 lg:grid-cols-3">
                     {portafoliosPaginados.map((proyecto) => (
-                      <PortafolioCard key={proyecto.id} proyecto={proyecto} />
+                      <PortafolioCard
+                        key={proyecto.id}
+                        proyecto={proyecto}
+                        onImageClick={handleImageClick}
+                      />
                     ))}
                   </div>
 
