@@ -115,6 +115,13 @@ const UseAuth = ({ middleware, url }) => {
       return;
     }
 
+    // Usuarios con rol RRHH (no admin completo) al panel RRHH
+    if (middleware === 'guest' && user?.rol === 'rrhh' && !user?.admin && location.pathname === '/auth/login') {
+      hasRedirectedRef.current = true;
+      navigate('/rrhh-dash');
+      return;
+    }
+
     // Usuarios comunes (NO admin)
     if (middleware === 'guest' && url && user && !user.admin) {
       hasRedirectedRef.current = true;

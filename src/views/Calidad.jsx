@@ -11,17 +11,21 @@ import {
 import SEOHead from "../components/Head/Head";
 import clienteAxios from "../config/axios";
 import useCont from "../hooks/useCont";
+import ImageSlider from "../components/ImageSlider";
 
 const fetcher = (url) => clienteAxios.get(url).then((res) => res.data.data);
 
+const fetcherSlider = (url) => clienteAxios.get(url).then((res) => res.data.data);
+
 export default function Calidad() {
-  const { company, settings } = useCont();
-  const API_BASE = import.meta.env.VITE_API_URL || "";
-  const imgCalidad = settings?.imagen_calidad
-    ? settings.imagen_calidad.startsWith("http")
-      ? settings.imagen_calidad
-      : `${API_BASE}${settings.imagen_calidad}`
-    : null;
+  const { company } = useCont();
+
+  const { data: imagenesCalidad = [] } = useSWR(
+    "/api/recursos-imagenes/calidad",
+    fetcherSlider,
+    { revalidateOnFocus: false }
+  );
+
   const {
     data: certificados,
     error,
@@ -149,13 +153,12 @@ export default function Calidad() {
                 )}
               </div>
 
-              {/* Columna imagen */}
-              {imgCalidad && (
+              {/* Columna imagen / slider */}
+              {imagenesCalidad.length > 0 && (
                 <div className="rounded-2xl overflow-hidden shadow-lg">
-                  <img
-                    src={imgCalidad}
-                    alt="Calidad Anka Loo"
-                    className="w-full h-96 object-cover"
+                  <ImageSlider
+                    images={imagenesCalidad}
+                    imgClassName="w-full h-96 object-cover"
                   />
                 </div>
               )}

@@ -27,7 +27,6 @@ const usuario = () => {
     apepa: "",
     direc: "",
     sex: "",
-    grup: "",
     phon: "",
     cump: "",
     state: 1,
@@ -38,7 +37,7 @@ const usuario = () => {
     dni: "",
     codigo_postal: "",
     provincia: "",
-    rol: 3, // 1=Admin, 2=diseño, 3=usuario
+    rol_string: "", // "" = usuario normal, "rrhh" = acceso RRHH
   });
 
   const [loading, setLoading] = useState(isEditing);
@@ -64,7 +63,6 @@ const usuario = () => {
           apepa: data.apepa ?? "",
           direc: data.direc ?? "",
           sex: data.sex ?? "",
-          grup: data.grup ?? "",
           phon: data.phon ?? "",
           cump: toYMD(data.cump),
           state: data.state ?? 1,
@@ -74,7 +72,7 @@ const usuario = () => {
           dni: (data.dni ?? data.user?.dni) ?? "",
           codigo_postal: (data.codigo_postal ?? data.user?.codigo_postal) ?? "",
           provincia: (data.provincia ?? data.user?.provincia) ?? "",
-          rol: Number((data.rol ?? data.user?.rol) ?? 3),
+          rol_string: (data.rol ?? data.user?.rol) === "rrhh" ? "rrhh" : "",
 
           // password NO se rellena en edición
           password: "",
@@ -97,7 +95,7 @@ const usuario = () => {
     const { name, value } = e.target;
     setPaciente((prev) => ({
       ...prev,
-      [name]: name === "state" || name === "rol" ? Number(value) : value,
+      [name]: name === "state" ? Number(value) : value,
     }));
   }, []);
 
@@ -118,12 +116,10 @@ const usuario = () => {
     try {
       // -------- patients (tabla patients)
       const patientPayload = {
-     
         nompa: usuario.nompa?.trim(),
         apepa: usuario.apepa || null,
         direc: usuario.direc || null,
         sex: usuario.sex || null,
-        grup: usuario.grup || null,
         phon: usuario.phon || null,
         cump: usuario.cump ? toYMD(usuario.cump) : null,
         state: usuario.state ?? 1,
@@ -135,7 +131,7 @@ const usuario = () => {
         dni: usuario.dni || null,
         codigo_postal: usuario.codigo_postal || null,
         provincia: usuario.provincia || null,
-        rol: Number(usuario.rol ?? 3),
+        rol: usuario.rol_string || null, // null = usuario normal, 'rrhh' = acceso RRHH
         ...(isCreating
           ? { password: usuario.password }
           : (usuario.password?.trim() ? { password: usuario.password } : {})),
@@ -346,19 +342,6 @@ const usuario = () => {
                   />
                 </div>
 
-                {/* Grupo */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Grupo</label>
-                  <input
-                    type="text"
-                    name="grup"
-                    value={usuario.grup || ""}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 hover:border-gray-400 bg-gray-50 focus:bg-white"
-                    placeholder="O+, A-, etc."
-                  />
-                </div>
-
                 {/* Teléfono */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
@@ -400,19 +383,23 @@ const usuario = () => {
                   />
                 </div>
 
-                {/* Rol */}
+                {/* Tipo de usuario */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Rol</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de usuario</label>
                   <select
-                    name="rol"
-                    value={usuario.rol ?? 3}
+                    name="rol_string"
+                    value={usuario.rol_string ?? ""}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white"
                   >
-                    <option value={1}>Admin</option>
-                    <option value={2}>diseño</option>
-                    <option value={3}>usuario</option>
+                    <option value="">Usuario normal</option>
+                    <option value="rrhh">RRHH</option>
                   </select>
+                  {usuario.rol_string === "rrhh" && (
+                    <p className="mt-1.5 text-xs text-amber-600 flex items-center gap-1">
+                      <span>⚠</span> Este usuario podrá acceder al panel de Gestión de RRHH.
+                    </p>
+                  )}
                 </div>
 
                 {/* Password (solo creación o si se rellena) */}

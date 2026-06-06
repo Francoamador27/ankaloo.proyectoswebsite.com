@@ -15,9 +15,11 @@ import SEOHead from "./Head/Head";
 import MagicBento from "./MagicBento";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
+import ImageSlider from "./ImageSlider";
 
 const fetcher = (url) => clienteAxios(url).then((res) => res.data);
 const fetcherList = (url) => clienteAxios(url).then((res) => res.data.data);
+const fetcherSlider = (url) => clienteAxios(url).then((res) => res.data.data);
 
 // Carga perezosa del componente 3D pesado
 const Lanyard = lazy(() => import("./Lanyard"));
@@ -55,6 +57,12 @@ const QuienesSomos = () => {
   const { data: lideres } = useSWR("/api/lideres", fetcherList, {
     revalidateOnFocus: false,
   });
+
+  const { data: imagenesCorporativa = [] } = useSWR(
+    "/api/recursos-imagenes/corporativa",
+    fetcherSlider,
+    { revalidateOnFocus: false }
+  );
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -158,17 +166,12 @@ const QuienesSomos = () => {
           </p>
         </div>
 
-        {/* Imagen corporativa */}
-        {company?.imagen_corporativa && (
+        {/* Imagen corporativa — slider */}
+        {imagenesCorporativa.length > 0 && (
           <div className="mb-10 w-full rounded-3xl overflow-hidden shadow-xl">
-            <img
-              src={
-                company.imagen_corporativa.startsWith("http")
-                  ? company.imagen_corporativa
-                  : `${import.meta.env.VITE_API_URL}/${company.imagen_corporativa}`
-              }
-              alt="Equipo e Infraestructura Anka Loo"
-              className="w-full h-auto object-contain transition-transform duration-700 hover:scale-105"
+            <ImageSlider
+              images={imagenesCorporativa}
+              imgClassName="w-full max-h-[600px] object-cover"
             />
           </div>
         )}

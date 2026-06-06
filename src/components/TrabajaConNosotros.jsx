@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import useSWR from "swr";
 import TurnstileCaptcha from "../components/TurnstileCaptcha";
 import clienteAxios from "../config/axios";
 import Alerta from "../components/Alerta";
@@ -40,17 +41,11 @@ const PILLARS = [
   },
 ];
 
-const VACANTES = [
-  { area: "Obra civil", rol: "Jefe de Obra", ubicacion: "Córdoba" },
-  { area: "Logística", rol: "Responsable de Almacén", ubicacion: "Córdoba" },
-  {
-    area: "Corporativo",
-    rol: "Analista de Capital Humano",
-    ubicacion: "Remoto",
-  },
-];
-
 const TrabajaConNosotros = () => {
+  const { data: vacantesData } = useSWR("/api/vacantes", () =>
+    clienteAxios("/api/vacantes").then((res) => res.data)
+  );
+  const VACANTES = vacantesData?.data ?? [];
   const formRef = useRef(null);
   const formSectionRef = useRef(null);
   const turnstileRef = useRef(null);
@@ -58,6 +53,27 @@ const TrabajaConNosotros = () => {
   const [estadoMensaje, setEstadoMensaje] = useState({ tipo: "", texto: "" });
   const [loading, setLoading] = useState(false);
   const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
+
+  // Combobox "Área de interés"
+  const [comboInput, setComboInput] = useState("");
+  const [comboOpen, setComboOpen] = useState(false);
+  const comboRef = useRef(null);
+
+  // Sincronizar display del combobox cuando se selecciona una vacante desde la lista
+  useEffect(() => {
+    setComboInput(puestoSeleccionado);
+  }, [puestoSeleccionado]);
+
+  // Cerrar dropdown al hacer click afuera
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (comboRef.current && !comboRef.current.contains(e.target)) {
+        setComboOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSelectVacante = (rol) => {
     setPuestoSeleccionado(rol);
@@ -67,7 +83,8 @@ const TrabajaConNosotros = () => {
     });
   };
   const { company } = useCont();
-  const videoEmbedUrl = getYouTubeEmbedUrl(company?.video_quienes_somos);
+  // Prioriza el video específico de RRHH; si no hay, usa el video general
+  const videoEmbedUrl = getYouTubeEmbedUrl(company?.rrhh_video || company?.video_quienes_somos);
 
   const isLocal = import.meta.env.VITE_ENTORNO === "local";
 
@@ -161,6 +178,17 @@ const TrabajaConNosotros = () => {
         </div>
       </div>
 
+      {/* ── IMAGEN BANNER RRHH ── */}
+      {company?.rrhh_imagen && (
+        <div className="w-full max-h-80 overflow-hidden">
+          <img
+            src={company.rrhh_imagen}
+            alt="Anka Loo — Trabaja con nosotros"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
       {/* ── VIDEO ── */}
       {videoEmbedUrl && (
         <div className="w-full aspect-video bg-black">
@@ -237,29 +265,35 @@ const TrabajaConNosotros = () => {
               </h2>
             </div>
             <div className="divide-y divide-slate-100">
-              {VACANTES.map((v) => (
-                <button
-                  key={v.rol}
-                  type="button"
-                  onClick={() => handleSelectVacante(v.rol)}
-                  className="w-full flex items-center justify-between px-8 py-4 hover:bg-[#fdce27]/5 transition-colors cursor-pointer text-left"
-                >
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.08em] text-slate-400 mb-0.5">
-                      {v.area}
-                    </p>
-                    <p className="text-sm font-semibold text-slate-800">
-                      {v.rol}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500">
-                      {v.ubicacion}
-                    </span>
-                    <span className="text-[#fdce27] text-lg font-bold">→</span>
-                  </div>
-                </button>
-              ))}
+              {VACANTES.length === 0 ? (
+                <p className="px-8 py-6 text-sm text-slate-400">
+                  No hay posiciones abiertas en este momento.
+                </p>
+              ) : (
+                VACANTES.map((v) => (
+                  <button
+                    key={v.id ?? v.titulo}
+                    type="button"
+                    onClick={() => handleSelectVacante(v.titulo)}
+                    className="w-full flex items-center justify-between px-8 py-4 hover:bg-[#fdce27]/5 transition-colors cursor-pointer text-left"
+                  >
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.08em] text-slate-400 mb-0.5">
+                        {v.area}
+                      </p>
+                      <p className="text-sm font-semibold text-slate-800">
+                        {v.titulo}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500">
+                        {v.ubicacion}
+                      </span>
+                      <span className="text-[#fdce27] text-lg font-bold">→</span>
+                    </div>
+                  </button>
+                ))
+              )}
             </div>
             <p className="px-8 py-4 text-xs text-slate-400 border-t border-slate-100">
               ¿No ves tu perfil? Dejanos tu CV de todas formas ↓
@@ -298,19 +332,69 @@ const TrabajaConNosotros = () => {
                     className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
                   />
                 </div>
-                <div className="flex flex-col gap-1.5">
+                {/* ── Combobox área de interés ── */}
+                <div className="flex flex-col gap-1.5" ref={comboRef}>
                   <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
                     Área de interés{" "}
                     <span className="normal-case">(opcional)</span>
                   </label>
-                  <input
-                    type="text"
-                    name="puesto_interes"
-                    placeholder="Ej: Operador de Maquinaria, Ingeniero Civil..."
-                    value={puestoSeleccionado}
-                    onChange={(e) => setPuestoSeleccionado(e.target.value)}
-                    className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
-                  />
+
+                  {/* Input oculto que viaja con el form */}
+                  <input type="hidden" name="puesto_interes" value={puestoSeleccionado} />
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      autoComplete="off"
+                      placeholder="Buscá o elegí una posición..."
+                      value={comboInput}
+                      onFocus={() => setComboOpen(true)}
+                      onChange={(e) => {
+                        setComboInput(e.target.value);
+                        setPuestoSeleccionado(e.target.value);
+                        setComboOpen(true);
+                      }}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-9 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
+                    />
+                    {/* Chevron */}
+                    <span
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                      aria-hidden
+                    >
+                      ▾
+                    </span>
+
+                    {/* Dropdown */}
+                    {comboOpen && (() => {
+                      const filtradas = VACANTES.filter((v) =>
+                        v.titulo.toLowerCase().includes(comboInput.toLowerCase())
+                      );
+                      const opciones = [...filtradas, { id: "__otros__", titulo: "Otros" }];
+                      return (
+                        <ul className="absolute z-30 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-52 overflow-y-auto">
+                          {opciones.map((v) => (
+                            <li
+                              key={v.id}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setComboInput(v.titulo);
+                                setPuestoSeleccionado(v.titulo);
+                                setComboOpen(false);
+                              }}
+                              className={`px-4 py-2.5 text-sm cursor-pointer flex items-center justify-between transition-colors
+                                ${puestoSeleccionado === v.titulo ? "bg-[#fdce27]/15 text-[#1c1c1c] font-semibold" : "text-slate-700 hover:bg-slate-50"}
+                                ${v.id === "__otros__" ? "border-t border-slate-100 text-slate-500 italic" : ""}`}
+                            >
+                              {v.titulo}
+                              {puestoSeleccionado === v.titulo && (
+                                <span className="text-[#d9a800] not-italic">✓</span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      );
+                    })()}
+                  </div>
                 </div>
               </div>
 

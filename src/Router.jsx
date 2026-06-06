@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./layout/Layout";
 import AuthLayout from "./layout/AuthLayout";
 import AdminLayout from "./layout/AdminLayout";
+import RRHHLayout from "./layout/RRHHLayout";
 import ErrorBoundary from "./components/ErrorBoundary";
 const Posts = lazy(() => import("./views/Posts"));
 const Inicio = lazy(() => import("./views/Inicio"));
@@ -92,6 +93,8 @@ const AdminBrochure = lazy(() => import("./views/AdminBrochure"));
 const Brochure = lazy(() => import("./components/Brochure"));
 const AdminLideresList = lazy(() => import("./views/AdminLideresList"));
 const AdminLiderForm = lazy(() => import("./views/AdminLiderForm"));
+const VacantesAdmin = lazy(() => import("./views/VacantesAdmin"));
+const RRHHConfig = lazy(() => import("./views/RRHHConfig"));
 
 const suspense = (node) => (
   <Suspense fallback={<div style={{ minHeight: 200 }} />}>{node}</Suspense>
@@ -246,6 +249,16 @@ const router = createBrowserRouter([
       },
       { path: "/admin-dash/footer", element: suspense(<AdminFooter />) },
       { path: "/admin-dash/brochure", element: suspense(<AdminBrochure />) },
+    ],
+  },
+  {
+    path: "/rrhh-dash",
+    element: <RRHHLayout />,
+    children: [
+      { index: true, element: suspense(<LeadsRRHH />) },
+      { path: "/rrhh-dash/postulaciones", element: suspense(<LeadsRRHH />) },
+      { path: "/rrhh-dash/vacantes", element: suspense(<VacantesAdmin />) },
+      { path: "/rrhh-dash/configuracion", element: suspense(<RRHHConfig />) },
     ],
   },
   {

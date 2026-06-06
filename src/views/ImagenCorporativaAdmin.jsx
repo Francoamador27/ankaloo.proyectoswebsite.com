@@ -1,40 +1,127 @@
 import React, { useState, useEffect } from 'react';
 import clienteAxios from '../config/axios';
-import { Image as ImageIcon, CheckCircle, Loader, Youtube, Leaf } from 'lucide-react';
+import { CheckCircle, Loader, Youtube, Plus, Trash2, X } from 'lucide-react';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+// ─── Sección de slider: lista de imágenes + botón agregar ────────────────────
+function SliderSection({ title, subtitle, color = '#fdce27', tipo }) {
+  const token = localStorage.getItem('AUTH_TOKEN');
+  const [imagenes, setImagenes] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(null);
 
-const toAbsolute = (url) =>
-  url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
+  useEffect(() => {
+    clienteAxios.get(`/api/recursos-imagenes/${tipo}`)
+      .then(({ data }) => setImagenes(data.data || []))
+      .catch(() => setError('Error al cargar las imágenes'))
+      .finally(() => setCargando(false));
+  }, [tipo]);
 
-function UploadZone({ file, currentUrl, accept = 'image/*', onChange, icon: Icon, label, hint }) {
-  const preview = file ? URL.createObjectURL(file) : toAbsolute(currentUrl);
+  const handleUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+
+    setUploading(true);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.append('imagen', file);
+      const { data } = await clienteAxios.post(`/api/recursos-imagenes/${tipo}`, formData, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+      });
+      setImagenes(prev => [...prev, data.imagen]);
+    } catch {
+      setError('Error al subir la imagen. Verificá que sea JPG/PNG/WEBP y menos de 4 MB.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    setError(null);
+    try {
+      await clienteAxios.delete(`/api/recursos-imagenes/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setImagenes(prev => prev.filter(img => img.id !== id));
+    } catch {
+      setError('Error al eliminar la imagen.');
+    }
+  };
+
   return (
-    <div className="space-y-4">
-      <label className="border-4 border-dashed border-gray-100 hover:border-[#fdce27] rounded-3xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-gray-50 transition-all">
-        <Icon className="text-gray-300 w-12 h-12" />
-        <span className="text-sm font-bold text-gray-500 text-center">
-          {file ? file.name : label}
-        </span>
-        <span className="text-xs text-gray-400 tracking-wider font-semibold">{hint}</span>
-        <input type="file" accept={accept} hidden onChange={onChange} />
-      </label>
-      {preview && (
-        <div className="bg-gray-50 p-4 rounded-2xl border-2 border-gray-100 flex flex-col items-center">
-          <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-3 w-full text-left">
-            Vista previa actual:
-          </p>
-          <img
-            src={preview}
-            alt="preview"
-            className="max-h-56 w-auto object-contain rounded-xl shadow-lg border-4 border-white"
-          />
+    <div className="bg-white p-6 lg:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+      <div>
+        <h2 className="text-xl font-black text-[#1c1c1c] uppercase tracking-tight">
+          {title.split(' ').map((word, i) =>
+            i === title.split(' ').length - 1
+              ? <span key={i} style={{ color }}> {word}</span>
+              : <span key={i}>{word} </span>
+          )}
+        </h2>
+        <p className="text-gray-500 text-sm mt-1">{subtitle}</p>
+      </div>
+
+      {error && (
+        <div className="p-3 rounded-xl font-bold flex items-center gap-2 text-sm bg-red-50 text-red-600 border border-red-200">
+          <X size={14} className="shrink-0" /> {error}
         </div>
+      )}
+
+      {/* Grid de imágenes existentes */}
+      {cargando ? (
+        <div className="flex justify-center py-8">
+          <Loader className="animate-spin text-[#fdce27] w-8 h-8" />
+        </div>
+      ) : imagenes.length > 0 ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {imagenes.map((img) => (
+            <div key={img.id} className="relative group rounded-2xl overflow-hidden border-2 border-gray-100 bg-gray-50">
+              <img
+                src={img.path}
+                alt=""
+                className="w-full h-36 object-cover"
+              />
+              <button
+                onClick={() => handleDelete(img.id)}
+                className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                title="Eliminar imagen"
+              >
+                <Trash2 size={13} />
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-sm text-gray-400 font-medium py-4">
+          Todavía no hay imágenes. Agregá la primera.
+        </p>
+      )}
+
+      {/* Botón agregar */}
+      <label className={`border-4 border-dashed border-gray-100 hover:border-[#fdce27] rounded-3xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-gray-50 transition-all ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
+        {uploading
+          ? <Loader className="text-[#fdce27] w-8 h-8 animate-spin" />
+          : <Plus className="text-gray-300 w-8 h-8" />
+        }
+        <span className="text-sm font-bold text-gray-500">
+          {uploading ? 'Subiendo imagen...' : 'Agregar imagen'}
+        </span>
+        <span className="text-xs text-gray-400 tracking-wider font-semibold">JPG, PNG o WEBP — máx. 4 MB</span>
+        <input type="file" accept="image/*" hidden onChange={handleUpload} disabled={uploading} />
+      </label>
+
+      {imagenes.length > 0 && (
+        <p className="text-xs text-gray-400 text-center font-medium">
+          {imagenes.length} {imagenes.length === 1 ? 'imagen cargada' : 'imágenes cargadas'} · el orden del slider sigue el orden de subida
+        </p>
       )}
     </div>
   );
 }
 
+// ─── Sección genérica con botón guardar (video, compromiso) ──────────────────
 function ResourceSection({ title, subtitle, color = '#fdce27', children, onSave, saving, saved, error }) {
   return (
     <div className="bg-white p-6 lg:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
@@ -74,15 +161,11 @@ function ResourceSection({ title, subtitle, color = '#fdce27', children, onSave,
   );
 }
 
+// ─── Componente principal ─────────────────────────────────────────────────────
 export default function RecursosAdmin() {
   const token = localStorage.getItem('AUTH_TOKEN');
   const [cargando, setCargando] = useState(true);
-  const [settings, setSettings] = useState({});
 
-  // Estado por sección
-  const [imgCorp, setImgCorp] = useState(null);
-  const [imgCalidad, setImgCalidad] = useState(null);
-  const [imgCompromiso, setImgCompromiso] = useState(null);
   const [videoUrl, setVideoUrl] = useState('');
 
   const [saving, setSaving] = useState({});
@@ -91,7 +174,6 @@ export default function RecursosAdmin() {
 
   useEffect(() => {
     clienteAxios.get('/api/settings').then(({ data }) => {
-      setSettings(data);
       setVideoUrl(data.video_quienes_somos || '');
     }).finally(() => setCargando(false));
   }, []);
@@ -103,10 +185,9 @@ export default function RecursosAdmin() {
     try {
       const formData = new FormData();
       Object.entries(fields).forEach(([k, v]) => { if (v !== null && v !== undefined) formData.append(k, v); });
-      const { data } = await clienteAxios.post('/api/settings', formData, {
+      await clienteAxios.post('/api/settings', formData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
       });
-      setSettings(data.settings);
       setSaved(s => ({ ...s, [key]: true }));
       setTimeout(() => setSaved(s => ({ ...s, [key]: false })), 3000);
     } catch {
@@ -134,43 +215,19 @@ export default function RecursosAdmin() {
         <p className="text-gray-500 font-medium">Administrá las imágenes y videos que se muestran en las distintas secciones del sitio.</p>
       </div>
 
-      {/* Imagen Corporativa */}
-      <ResourceSection
+      {/* Imagen Corporativa — slider multi-imagen */}
+      <SliderSection
         title="Imagen Corporativa"
-        subtitle="Se muestra en la sección 'Nuestra Misión' dentro de Quiénes Somos."
-        onSave={() => save('corp', { imagen_corporativa: imgCorp })}
-        saving={saving.corp}
-        saved={saved.corp}
-        error={errors.corp}
-      >
-        <UploadZone
-          file={imgCorp}
-          currentUrl={settings.imagen_corporativa}
-          onChange={e => setImgCorp(e.target.files?.[0] || null)}
-          icon={ImageIcon}
-          label="Clic para seleccionar imagen corporativa"
-          hint="JPG, PNG o WEBP — máx. 4 MB"
-        />
-      </ResourceSection>
+        subtitle="Se muestran como slider en la sección 'Quiénes Somos'. Podés agregar varias fotos."
+        tipo="corporativa"
+      />
 
-      {/* Imagen Calidad */}
-      <ResourceSection
+      {/* Imagen Calidad — slider multi-imagen */}
+      <SliderSection
         title="Imagen Calidad"
-        subtitle="Se muestra en la página de Calidad Certificada."
-        onSave={() => save('calidad', { imagen_calidad: imgCalidad })}
-        saving={saving.calidad}
-        saved={saved.calidad}
-        error={errors.calidad}
-      >
-        <UploadZone
-          file={imgCalidad}
-          currentUrl={settings.imagen_calidad}
-          onChange={e => setImgCalidad(e.target.files?.[0] || null)}
-          icon={ImageIcon}
-          label="Clic para seleccionar imagen de calidad"
-          hint="JPG, PNG o WEBP — máx. 4 MB"
-        />
-      </ResourceSection>
+        subtitle="Se muestran como slider en la página de Calidad Certificada. Podés agregar varias fotos."
+        tipo="calidad"
+      />
 
       {/* Video Quiénes Somos */}
       <ResourceSection
@@ -207,25 +264,13 @@ export default function RecursosAdmin() {
         </div>
       </ResourceSection>
 
-      {/* Imagen Compromiso */}
-      <ResourceSection
+      {/* Imagen Compromiso — slider multi-imagen */}
+      <SliderSection
         title="Imagen Compromiso"
-        subtitle="Se muestra en la página de Compromiso Ambiental."
+        subtitle="Se muestran como slider en la página de Compromiso Ambiental. Podés agregar varias fotos."
         color="rgb(22 163 74)"
-        onSave={() => save('compromiso', { imagen_compromiso: imgCompromiso })}
-        saving={saving.compromiso}
-        saved={saved.compromiso}
-        error={errors.compromiso}
-      >
-        <UploadZone
-          file={imgCompromiso}
-          currentUrl={settings.imagen_compromiso}
-          onChange={e => setImgCompromiso(e.target.files?.[0] || null)}
-          icon={Leaf}
-          label="Clic para seleccionar imagen de compromiso"
-          hint="JPG, PNG o WEBP — máx. 4 MB"
-        />
-      </ResourceSection>
+        tipo="compromiso"
+      />
     </div>
   );
 }

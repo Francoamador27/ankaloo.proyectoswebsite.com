@@ -114,6 +114,12 @@ const Provider = ({ children }) => {
       : `${API_BASE}${settings.logo}`
     : null;
 
+  const buildUrl = (path) => {
+    if (!path) return null;
+    if (path.startsWith("http")) return path;
+    return `${API_BASE}${path}`;
+  };
+
   const company = {
     name: settings?.company_name || "",
     logo: logoUrl,
@@ -124,6 +130,8 @@ const Provider = ({ children }) => {
     imagen_calidad: settings?.imagen_calidad || "",
     video_quienes_somos: settings?.video_quienes_somos || "",
     imagen_compromiso: settings?.imagen_compromiso || "",
+    rrhh_video: settings?.rrhh_video || "",
+    rrhh_imagen: buildUrl(settings?.rrhh_imagen),
   };
 
 

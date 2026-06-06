@@ -7,8 +7,11 @@ import {
   Recycle,
   ShieldCheck,
 } from "lucide-react";
+import useSWR from "swr";
 import SEOHead from "../components/Head/Head";
 import useCont from "../hooks/useCont";
+import clienteAxios from "../config/axios";
+import ImageSlider from "../components/ImageSlider";
 
 const iniciativas = [
   {
@@ -49,14 +52,16 @@ const iniciativas = [
   },
 ];
 
+const fetcherSlider = (url) => clienteAxios.get(url).then((res) => res.data.data);
+
 export default function Compromiso() {
-  const { company, settings } = useCont();
-  const API_BASE = import.meta.env.VITE_API_URL || "";
-  const imgCompromiso = settings?.imagen_compromiso
-    ? settings.imagen_compromiso.startsWith("http")
-      ? settings.imagen_compromiso
-      : `${API_BASE}${settings.imagen_compromiso}`
-    : null;
+  const { company } = useCont();
+
+  const { data: imagenesCompromiso = [] } = useSWR(
+    "/api/recursos-imagenes/compromiso",
+    fetcherSlider,
+    { revalidateOnFocus: false }
+  );
 
   return (
     <>
@@ -103,12 +108,11 @@ export default function Compromiso() {
             </span>{" "}
             en cumplimiento de la legislación vigente.
           </p>
-          {imgCompromiso && (
+          {imagenesCompromiso.length > 0 && (
             <div className="mb-12 rounded-3xl overflow-hidden shadow-xl border border-slate-100">
-              <img
-                src={imgCompromiso}
-                alt="Compromiso Ambiental Anka Loo"
-                className="w-full max-h-150 object-cover"
+              <ImageSlider
+                images={imagenesCompromiso}
+                imgClassName="w-full max-h-[600px] object-cover"
               />
             </div>
           )}
