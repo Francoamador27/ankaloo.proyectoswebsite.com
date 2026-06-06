@@ -82,7 +82,7 @@ export default function Calidad() {
               </p>
             </div>
           ) : (
-            <div className="max-w-4xl mx-auto grid grid-cols-3 gap-5 justify-items-center">
+            <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-5 justify-items-center px-10 sm:px-0">
               {certificados.map((cert, index) => (
                 <article
                   key={cert.id}
