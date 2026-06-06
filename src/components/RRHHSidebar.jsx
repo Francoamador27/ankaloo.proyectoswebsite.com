@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { LogOut, Settings, Home, Users, ListChecks, Briefcase } from "lucide-react";
+import { LogOut, Settings, Home, Users, ListChecks, Briefcase, LifeBuoy } from "lucide-react";
 import {
   Drawer,
   List,
@@ -159,6 +159,32 @@ const RRHHSidebar = () => {
             </ListItemButton>
           </Tooltip>
         )}
+
+        {/* Soporte Técnico */}
+        <Tooltip title={!open ? "Soporte Técnico" : ""} placement="right">
+          <ListItemButton
+            component="a"
+            href="https://dashboard.proyectoswebsite.com/dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+              mx: 1,
+              mb: 0.5,
+              borderRadius: 2,
+              color: "#64748b",
+              "&:hover": { backgroundColor: "#f8f9fa", color: "#1c1c1c" },
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : "auto", justifyContent: "center", color: "inherit" }}>
+              <LifeBuoy size={18} />
+            </ListItemIcon>
+            {open && (
+              <ListItemText primary="Soporte Técnico" primaryTypographyProps={{ fontSize: "0.8rem", fontWeight: 500 }} />
+            )}
+          </ListItemButton>
+        </Tooltip>
 
         {/* Logout */}
         <Tooltip title={!open ? "Cerrar sesión" : ""} placement="right">
