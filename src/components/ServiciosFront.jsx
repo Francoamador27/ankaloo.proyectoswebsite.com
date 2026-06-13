@@ -111,7 +111,7 @@ export default function ServiciosSwiper() {
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -180px 0px" },
     );
     observer.observe(el);
   }, []);
@@ -124,7 +124,7 @@ export default function ServiciosSwiper() {
       const perView = Math.ceil(
         typeof swiper.params.slidesPerView === "number"
           ? swiper.params.slidesPerView
-          : 1
+          : 1,
       );
       const realIdx = swiper.realIndex ?? 0;
       for (let i = 0; i < perView; i++) {
@@ -176,7 +176,7 @@ export default function ServiciosSwiper() {
       />
       <SEOHead
         priority="high"
-        title={`Anka Loo Construcciones | Obras e Infraestructura en Córdoba`}
+        title={`Anka Loo Anka Loo | Obras e Infraestructura en Córdoba`}
         description="Empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento y urbanizaciones."
       />
 
@@ -189,13 +189,16 @@ export default function ServiciosSwiper() {
       <div className="relative z-10 mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-20 text-center">
-          <h2 ref={titleRef} className="serv-title text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight">
+          <h2
+            ref={titleRef}
+            className="serv-title text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight"
+          >
             Nuestras <span className="text-[#fdce27]">Obras</span>
           </h2>
 
           <p className="max-w-2xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
-            En Anka Loo Construcciones brindamos servicios de infraestructura en
-            obras hidráulicas, viales, de urbanización y saneamiento.
+            En Anka Loo Anka Loo brindamos servicios de infraestructura en obras
+            hidráulicas, viales, de urbanización y saneamiento.
           </p>
         </div>
 

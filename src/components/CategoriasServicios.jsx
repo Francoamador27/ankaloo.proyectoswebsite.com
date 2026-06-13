@@ -143,14 +143,6 @@ export default function CategoriasServicios() {
           >
             Nuestros <span className="text-[#fdce27]">Servicios</span>
           </h2>
-          <p
-            ref={textRef}
-            className="anim-text max-w-7xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]"
-          >
-            Cumpliendo 20 años, la empresa reafirma su propósito de contribuir
-            positivamente a la comunidad poniendo a disposición su experiencia y
-            recorrido en pos del desarrollo de nuevos mercados.
-          </p>
         </div>
 
         {/* Grid */}

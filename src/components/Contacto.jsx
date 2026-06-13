@@ -106,8 +106,8 @@ const Contacto = () => {
       />
       <SEOHead
         priority="low"
-        title={`Anka Loo Construcciones | Contacto`}
-        description={`Contactate con Anka Loo Construcciones para conocer nuestras soluciones tecnológicas. Te ayudamos a digitalizar tu empresa.`}
+        title={`Anka Loo  | Contacto`}
+        description={`Contactate con Anka Loo  para conocer nuestras soluciones tecnológicas. Te ayudamos a digitalizar tu empresa.`}
       />
 
       {/* Glow decorativo */}
@@ -307,7 +307,6 @@ const Contacto = () => {
 
             <div className="mt-12 pt-8 border-t border-[#fdce27]/20 relative z-10"></div>
           </div>
-
         </div>
       </div>
     </section>

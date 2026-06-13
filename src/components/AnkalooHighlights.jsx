@@ -49,7 +49,7 @@ export default function AnkalooHighlights() {
     {
       icon: <Users size={36} strokeWidth={1.5} className="text-blue-500" />,
       title: "Nuestra Gente",
-      desc: "Nuestro diferencial está en la gestión de nuestra gente y en la incorporación de tecnología para cumplir plazos, optimizar costos y satisfacer a nuestros clientes.",
+      desc: " Formamos un equipo comprometido, profesional y colaborativo, que trabaja con responsabilidad y vocación de mejora continua para generar valor en cada proyecto que hacemos.",
       button: "Ver",
       route: "/quienes-somos",
     },

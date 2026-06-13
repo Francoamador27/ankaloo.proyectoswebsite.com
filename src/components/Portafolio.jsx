@@ -23,10 +23,19 @@ export default function Portafolio() {
 
   const getImageUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:") || path.startsWith("data:")) return path;
+    if (
+      path.startsWith("http") ||
+      path.startsWith("blob:") ||
+      path.startsWith("data:")
+    )
+      return path;
     const cleanPath = String(path).replace(/^\/+/, "");
-    if (cleanPath.startsWith("storage/")) return `${import.meta.env.VITE_API_URL}/${cleanPath}`;
-    if (cleanPath.startsWith("portafolio/") || cleanPath.startsWith("portafolio-galeria/"))
+    if (cleanPath.startsWith("storage/"))
+      return `${import.meta.env.VITE_API_URL}/${cleanPath}`;
+    if (
+      cleanPath.startsWith("portafolio/") ||
+      cleanPath.startsWith("portafolio-galeria/")
+    )
       return `${import.meta.env.VITE_API_URL}/storage/uploads/${cleanPath}`;
     return `${import.meta.env.VITE_API_URL}/${cleanPath}`;
   };
@@ -97,7 +106,10 @@ export default function Portafolio() {
   }, [portafolios, pagina]);
 
   const lightboxImages = useMemo(
-    () => portafoliosPaginados.filter((p) => p.imagen).map((p) => getImageUrl(p.imagen)),
+    () =>
+      portafoliosPaginados
+        .filter((p) => p.imagen)
+        .map((p) => getImageUrl(p.imagen)),
     [portafoliosPaginados],
   );
 
@@ -118,12 +130,18 @@ export default function Portafolio() {
           images={lightboxImages}
           currentIndex={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
-          onPrev={() => setLightboxIndex((i) => (i - 1 + lightboxImages.length) % lightboxImages.length)}
-          onNext={() => setLightboxIndex((i) => (i + 1) % lightboxImages.length)}
+          onPrev={() =>
+            setLightboxIndex(
+              (i) => (i - 1 + lightboxImages.length) % lightboxImages.length,
+            )
+          }
+          onNext={() =>
+            setLightboxIndex((i) => (i + 1) % lightboxImages.length)
+          }
         />
       )}
       <SEOHead
-        title={`Portafolio - ${company.name || "Anka Loo Construcciones"}`}
+        title={`Portafolio - ${company.name || "Anka Loo "}`}
         description="Descubre nuestros proyectos y casos de éxito"
       />
 

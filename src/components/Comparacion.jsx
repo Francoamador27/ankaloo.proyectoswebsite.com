@@ -8,7 +8,7 @@ const Comparacion = () => {
         <div className="text-center mb-20">
           <h2 className="text-5xl lg:text-6xl font-black text-slate-900 mb-6">
             Transformación Digital con{" "}
-            <span className="text-[#003366]">Anka Loo Construcciones</span>
+            <span className="text-[#003366]">Anka Loo </span>
           </h2>
           <p className="text-2xl text-slate-600 font-light max-w-2xl mx-auto">
             Descubre la diferencia entre sistemas heredados y soluciones
@@ -60,9 +60,7 @@ const Comparacion = () => {
               <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
                 <span className="text-3xl">🚀</span>
               </div>
-              <h3 className="text-3xl font-black text-white">
-                Anka Loo Construcciones
-              </h3>
+              <h3 className="text-3xl font-black text-white">Anka Loo</h3>
             </div>
             <ul className="space-y-6">
               {[

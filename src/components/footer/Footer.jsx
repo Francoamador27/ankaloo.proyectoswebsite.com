@@ -47,7 +47,7 @@ export default function Footer() {
         <>
           <style>{`
             @media (max-width: 1023px) {
-              .footer-bg-img { object-position: ${footer.bg_position || 'center'} !important; }
+              .footer-bg-img { object-position: ${footer.bg_position || "center"} !important; }
             }
           `}</style>
           <div
@@ -201,7 +201,7 @@ export default function Footer() {
               {company.address &&
                 (() => {
                   const mapUrl = company.address
-                    ? "https://www.google.com/maps/place/Anka+Loo+Construcciones/@-31.377188,-64.124414,17z/data=!4m6!3m5!1s0x9432a280e165d4c1:0xc5edd79764ccc652!8m2!3d-31.3760341!4d-64.124197!16s%2Fg%2F11b8v9jfg9?hl=es-419&entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D"
+                    ? "https://www.google.com/maps/place/Anka+Loo+Anka Loo/@-31.377188,-64.124414,17z/data=!4m6!3m5!1s0x9432a280e165d4c1:0xc5edd79764ccc652!8m2!3d-31.3760341!4d-64.124197!16s%2Fg%2F11b8v9jfg9?hl=es-419&entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D"
                     : null;
                   return mapUrl ? (
                     <a
@@ -228,7 +228,7 @@ export default function Footer() {
                   );
                 })()}
               <a
-                href="https://ar.linkedin.com/company/ankaloo-construcciones"
+                href="https://ar.linkedin.com/company/ankaloo-Anka Loo"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start gap-3 hover:text-[#fdce27] transition-colors group opacity-70 hover:opacity-100"
@@ -322,7 +322,7 @@ export default function Footer() {
             <p>
               © {currentYear}{" "}
               <span className="font-black" style={{ color: footer.text_color }}>
-                Anka Loo Construcciones
+                Anka Loo Anka Loo
               </span>{" "}
               — Todos los derechos reservados
             </p>
@@ -336,7 +336,7 @@ export default function Footer() {
       {/* FloatingWhatsApp */}
       {/* <FloatingWhatsApp
                 phoneNumber={contact.whatsapp || "+5493510000000"}
-                accountName={company.name || "Anka Loo Construcciones"}
+                accountName={company.name || "Anka Loo Anka Loo"}
                 avatar={logo_blanco}
                 statusMessage="Construcción e Infraestructura"
                 chatMessage="¡Hola! 👋 ¿En qué podemos ayudarte hoy?"

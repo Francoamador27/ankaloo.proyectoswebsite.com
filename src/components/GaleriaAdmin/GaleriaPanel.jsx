@@ -35,7 +35,7 @@ const SortableImage = ({ img, onDelete }) => {
       </div>
       <img
         src={`${import.meta.env.VITE_API_URL}/storage/uploads${img.imagen}`}
-        alt="Galería de proyectos de Anka Loo Construcciones – soluciones tecnológicas innovadoras"
+        alt="Galería de proyectos de Anka Loo Anka Loo – soluciones tecnológicas innovadoras"
         className="object-cover w-full h-full"
       />
       <button

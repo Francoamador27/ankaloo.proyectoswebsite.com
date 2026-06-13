@@ -61,13 +61,13 @@ const QuienesSomos = () => {
   const { data: imagenesCorporativa = [] } = useSWR(
     "/api/recursos-imagenes/corporativa",
     fetcherSlider,
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false },
   );
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "GeneralContractor",
-    name: company?.name || "Anka Loo Construcciones",
+    name: company?.name || "Anka Loo ",
     url: window?.location?.origin || "",
     logo: logoUrl || `${window?.location?.origin || ""}/logo.png`,
     description:
@@ -109,8 +109,8 @@ const QuienesSomos = () => {
         }}
       />
       <SEOHead
-        title={`Anka Loo Construcciones | Obras Hidráulicas, Viales y Saneamiento en Córdoba`}
-        description={`Anka Loo Construcciones: empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento y ambientales. Calidad, experiencia y tecnología de vanguardia en cada proyecto.`}
+        title={`Anka Loo  | Obras Hidráulicas, Viales y Saneamiento en Córdoba`}
+        description={`Anka Loo : empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento y ambientales. Calidad, experiencia y tecnología de vanguardia en cada proyecto.`}
       />
 
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-slate-50 to-white" />
@@ -136,7 +136,7 @@ const QuienesSomos = () => {
           <div className="max-w-5xl mx-auto mb-16 rounded-3xl overflow-hidden shadow-xl border border-slate-100 aspect-video">
             <iframe
               src={videoEmbedUrl}
-              title="Video Anka Loo Construcciones"
+              title="Video Anka Loo "
               className="w-full h-full"
               allowFullScreen
             />
@@ -145,24 +145,34 @@ const QuienesSomos = () => {
         {/* Historia */}
         <div className="p-8 mb-16 bg-white border shadow-lg border-slate-100 rounded-3xl md:p-12">
           <h2 className="mb-4 text-2xl font-black text-slate-900">Historia</h2>
-          <p className="text-lg leading-relaxed text-slate-600">
-            Anka Loo se constituye formalmente en 2006, a partir de la
-            trayectoria iniciada en 1976 por{" "}
-            <strong>Marcelo Indalecio Boidi</strong> en el sector de la
-            construcción. Su desarrollo independiente se caracterizó por una
-            sólida gestión operativa y presencia en obra.
+          <p className="text-base leading-relaxed text-slate-600 font-light">
+            <strong>Anka Loo</strong> se constituye formalmente en 2006, a
+            partir de la trayectoria iniciada en 1976 por{" "}
+            <strong className="text-slate-900 font-semibold">
+              Marcelo Indalecio Boidi
+            </strong>{" "}
+            en el sector de la construcción. Su desarrollo independiente se
+            caracterizó por una sólida gestión operativa y presencia en obra. A
+            comienzos de la década del 2000, la demanda de obras hidráulicas y
+            de movimiento de suelos consolida su especialización en
+            infraestructura.
           </p>
-          <p className="mt-4 text-lg leading-relaxed text-slate-600">
-            En la actualidad somos una empresa especializada en servicios de
-            infraestructura vial, hidráulica, de saneamiento y ambiental, que
-            brinda soluciones de calidad. Nuestro diferencial está en la gestión
-            de nuestra gente y en la incorporación de tecnología que nos permite
-            cumplir plazos, optimizar costos y construir relaciones a largo
-            plazo con nuestros clientes. En{" "}
-            <strong className="text-[#fdce27]">Anka Loo</strong> trabajamos
-            priorizando el bienestar de las personas, la rentabilidad y la
-            sostenibilidad ambiental, contribuyendo al desarrollo integral de la
-            comunidad.
+          <p className="mt-4 text-base leading-relaxed text-slate-600 font-light">
+            La incorporación de la segunda generación impulsó la
+            profesionalización de la gestión y la planificación estratégica a
+            mediano y largo plazo. La expansión hacia la provincia de Córdoba en
+            2009 y la adjudicación de obras mediante licitación pública marcaron
+            etapas relevantes en su crecimiento y posicionamiento.
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-slate-600 font-light">
+            En la actualidad Anka Loo es una empresa que integra capacidad
+            técnica, gestión profesional y una destreza operativa que le permite
+            adaptarse a la demanda del sector, manteniendo valores de trabajo
+            esenciales como la{" "}
+            <strong className="text-slate-900 font-semibold">
+              coherencia y el cumplimiento de acuerdos
+            </strong>
+            .
           </p>
         </div>
 

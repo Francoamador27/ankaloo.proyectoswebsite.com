@@ -97,7 +97,7 @@ export default function PortafolioDetail() {
   return (
     <>
       <SEOHead
-        title={`${proyecto.titulo} - Portafolio | ${company.name || "Anka Loo Construcciones"}`}
+        title={`${proyecto.titulo} - Portafolio | ${company.name || "Anka Loo "}`}
         description={proyecto.descripcion}
       />
 

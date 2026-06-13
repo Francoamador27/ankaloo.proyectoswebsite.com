@@ -10,7 +10,7 @@ export default function Sede() {
   return (
     <>
       <SEOHead
-        title={`Nuestra Sede - ${company.name || "Anka Loo Construcciones"}`}
+        title={`Nuestra Sede - ${company.name || "Anka Loo Anka Loo"}`}
         description="Conoce nuestra ubicación, horarios de atención y medios de contacto."
       />
 

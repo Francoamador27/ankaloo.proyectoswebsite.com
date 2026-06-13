@@ -26,7 +26,7 @@ const testimonials = [
     name: "Juan Martínez",
     role: "Director de IT",
     content:
-      "Anka Loo Construcciones transformó nuestro sistema de gestión con una solución personalizada. Su equipo fue profesional y el resultado superó nuestras expectativas. ¡Muy recomendados!",
+      "Anka Loo  transformó nuestro sistema de gestión con una solución personalizada. Su equipo fue profesional y el resultado superó nuestras expectativas. ¡Muy recomendados!",
     rating: 5,
     image: "JM",
   },
@@ -34,7 +34,7 @@ const testimonials = [
     name: "Andrea López",
     role: "CEO E-commerce",
     content:
-      "El desarrollo de nuestra plataforma digital con Anka Loo Construcciones fue impecable. Escalabilidad, seguridad y un equipo que entiende nuestro negocio. Excelente ROI.",
+      "El desarrollo de nuestra plataforma digital con Anka Loo  fue impecable. Escalabilidad, seguridad y un equipo que entiende nuestro negocio. Excelente ROI.",
     rating: 5,
     image: "AL",
   },

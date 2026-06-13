@@ -19,7 +19,7 @@ export default function QuienesSomos() {
         {/* Header SEO */}
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-black text-[#1c1c1c] mb-4 tracking-tight ">
-            Somos Anka Loo Construcciones
+            Somos Anka Loo
           </h2>
           <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed mb-6">
             Empresa constructora de Córdoba especializada en obras hidráulicas,

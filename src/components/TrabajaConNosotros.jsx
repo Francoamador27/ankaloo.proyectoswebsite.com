@@ -43,7 +43,7 @@ const PILLARS = [
 
 const TrabajaConNosotros = () => {
   const { data: vacantesData } = useSWR("/api/vacantes", () =>
-    clienteAxios("/api/vacantes").then((res) => res.data)
+    clienteAxios("/api/vacantes").then((res) => res.data),
   );
   const VACANTES = vacantesData?.data ?? [];
   const formRef = useRef(null);
@@ -84,7 +84,9 @@ const TrabajaConNosotros = () => {
   };
   const { company } = useCont();
   // Prioriza el video específico de RRHH; si no hay, usa el video general
-  const videoEmbedUrl = getYouTubeEmbedUrl(company?.rrhh_video || company?.video_quienes_somos);
+  const videoEmbedUrl = getYouTubeEmbedUrl(
+    company?.rrhh_video || company?.video_quienes_somos,
+  );
 
   const isLocal = import.meta.env.VITE_ENTORNO === "local";
 
@@ -155,8 +157,8 @@ const TrabajaConNosotros = () => {
     <section className="relative overflow-hidden">
       <SEOHead
         priority="low"
-        title="Anka Loo Construcciones | Trabaja Con Nosotros"
-        description="Envía tu CV y únete al equipo de Anka Loo Construcciones. Buscamos profesionales talentosos para impulsar grandes obras de infraestructura."
+        title="Anka Loo Anka Loo | Trabaja Con Nosotros"
+        description="Envía tu CV y únete al equipo de Anka Loo Anka Loo. Buscamos profesionales talentosos para impulsar grandes obras de infraestructura."
       />
 
       {/* ── HERO ── */}
@@ -191,13 +193,15 @@ const TrabajaConNosotros = () => {
 
       {/* ── VIDEO ── */}
       {videoEmbedUrl && (
-        <div className="w-full aspect-video bg-black">
-          <iframe
-            src={videoEmbedUrl}
-            title="Video Anka Loo Construcciones"
-            className="w-full h-full"
-            allowFullScreen
-          />
+        <div className="max-w-5xl mx-auto px-6 py-10">
+          <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden">
+            <iframe
+              src={videoEmbedUrl}
+              title="Video Anka Loo Anka Loo"
+              className="w-full h-full"
+              allowFullScreen
+            />
+          </div>
         </div>
       )}
 
@@ -289,7 +293,9 @@ const TrabajaConNosotros = () => {
                       <span className="text-xs px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500">
                         {v.ubicacion}
                       </span>
-                      <span className="text-[#fdce27] text-lg font-bold">→</span>
+                      <span className="text-[#fdce27] text-lg font-bold">
+                        →
+                      </span>
                     </div>
                   </button>
                 ))
@@ -340,7 +346,11 @@ const TrabajaConNosotros = () => {
                   </label>
 
                   {/* Input oculto que viaja con el form */}
-                  <input type="hidden" name="puesto_interes" value={puestoSeleccionado} />
+                  <input
+                    type="hidden"
+                    name="puesto_interes"
+                    value={puestoSeleccionado}
+                  />
 
                   <div className="relative">
                     <input
@@ -365,35 +375,43 @@ const TrabajaConNosotros = () => {
                     </span>
 
                     {/* Dropdown */}
-                    {comboOpen && (() => {
-                      const filtradas = VACANTES.filter((v) =>
-                        v.titulo.toLowerCase().includes(comboInput.toLowerCase())
-                      );
-                      const opciones = [...filtradas, { id: "__otros__", titulo: "Otros" }];
-                      return (
-                        <ul className="absolute z-30 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-52 overflow-y-auto">
-                          {opciones.map((v) => (
-                            <li
-                              key={v.id}
-                              onMouseDown={(e) => {
-                                e.preventDefault();
-                                setComboInput(v.titulo);
-                                setPuestoSeleccionado(v.titulo);
-                                setComboOpen(false);
-                              }}
-                              className={`px-4 py-2.5 text-sm cursor-pointer flex items-center justify-between transition-colors
+                    {comboOpen &&
+                      (() => {
+                        const filtradas = VACANTES.filter((v) =>
+                          v.titulo
+                            .toLowerCase()
+                            .includes(comboInput.toLowerCase()),
+                        );
+                        const opciones = [
+                          ...filtradas,
+                          { id: "__otros__", titulo: "Otros" },
+                        ];
+                        return (
+                          <ul className="absolute z-30 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-52 overflow-y-auto">
+                            {opciones.map((v) => (
+                              <li
+                                key={v.id}
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  setComboInput(v.titulo);
+                                  setPuestoSeleccionado(v.titulo);
+                                  setComboOpen(false);
+                                }}
+                                className={`px-4 py-2.5 text-sm cursor-pointer flex items-center justify-between transition-colors
                                 ${puestoSeleccionado === v.titulo ? "bg-[#fdce27]/15 text-[#1c1c1c] font-semibold" : "text-slate-700 hover:bg-slate-50"}
                                 ${v.id === "__otros__" ? "border-t border-slate-100 text-slate-500 italic" : ""}`}
-                            >
-                              {v.titulo}
-                              {puestoSeleccionado === v.titulo && (
-                                <span className="text-[#d9a800] not-italic">✓</span>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      );
-                    })()}
+                              >
+                                {v.titulo}
+                                {puestoSeleccionado === v.titulo && (
+                                  <span className="text-[#d9a800] not-italic">
+                                    ✓
+                                  </span>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        );
+                      })()}
                   </div>
                 </div>
               </div>

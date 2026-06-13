@@ -15,7 +15,8 @@ import ImageSlider from "../components/ImageSlider";
 
 const fetcher = (url) => clienteAxios.get(url).then((res) => res.data.data);
 
-const fetcherSlider = (url) => clienteAxios.get(url).then((res) => res.data.data);
+const fetcherSlider = (url) =>
+  clienteAxios.get(url).then((res) => res.data.data);
 
 export default function Calidad() {
   const { company } = useCont();
@@ -23,7 +24,7 @@ export default function Calidad() {
   const { data: imagenesCalidad = [] } = useSWR(
     "/api/recursos-imagenes/calidad",
     fetcherSlider,
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false },
   );
 
   const {
@@ -40,7 +41,7 @@ export default function Calidad() {
   return (
     <>
       <SEOHead
-        title={`Calidad y Certificaciones - ${company.name || "Anka Loo Construcciones"}`}
+        title={`Calidad y Certificaciones - ${company.name || "Anka Loo Anka Loo"}`}
         description="Conoce nuestras certificaciones de calidad y estándares de excelencia en infraestructura."
       />
 
@@ -57,7 +58,7 @@ export default function Calidad() {
             </h1>
             <p className="max-w-3xl mx-auto text-lg leading-relaxed font-light text-[#5a5a5a] animate-fadeInUp">
               En <strong>{company.name || "Anka Loo"} </strong>
-              contamos con certificaciones de calidad ISO que avalan cada uno de
+              En Ankaloo contamos con certificaciones de calidad ISO que avalan
               nuestros procesos constructivos.
             </p>
           </header>
@@ -120,49 +121,41 @@ export default function Calidad() {
             </div>
           )}
 
-          {/* Política de Gestión */}
-          <div className="mb-12 bg-[#f4f4f4] rounded-2xl p-8 lg:p-10 mt-10">
-            <div className="grid gap-8 md:grid-cols-2 items-center">
-              {/* Columna texto + botón */}
-              <div>
-                <p className="text-lg leading-relaxed font-light text-[#5a5a5a] mb-6">
-                  En{" "}
-                  <strong className="text-[#1c1c1c] font-black">
-                    Anka Loo
-                  </strong>{" "}
-                  definimos y cumplimos una{" "}
-                  <strong className="text-[#1c1c1c]">
-                    Política de Calidad, Medio Ambiente, Salud y Seguridad de
-                    los Trabajadores
-                  </strong>
-                  , que rige la gestión diaria y regula nuestro trabajo para el
-                  logro de los objetivos y la mejora continua de nuestros
-                  procesos.
-                </p>
-                {politicaUrl && (
-                  <a
-                    href={politicaUrl}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[#fdce27] hover:bg-[#1c1c1c] text-[#1c1c1c] hover:text-[#fdce27] text-[11px] font-black uppercase tracking-[0.15em] px-5 py-3.5 rounded-2xl transition-colors duration-300"
-                  >
-                    <Download size={16} strokeWidth={2.5} />
-                    <span>Descargar Política de Gestión</span>
-                  </a>
-                )}
-              </div>
-
-              {/* Columna imagen / slider */}
-              {imagenesCalidad.length > 0 && (
-                <div className="rounded-2xl overflow-hidden shadow-lg">
-                  <ImageSlider
-                    images={imagenesCalidad}
-                    imgClassName="w-full h-96 object-cover"
-                  />
-                </div>
-              )}
+          {/* Slider calidad — separado, arriba */}
+          {imagenesCalidad.length > 0 && (
+            <div className="mt-12 rounded-2xl overflow-hidden shadow-lg">
+              <ImageSlider
+                images={imagenesCalidad}
+                imgClassName="w-full max-h-[600px] object-cover"
+              />
             </div>
+          )}
+
+          {/* Política de Gestión — texto centrado ancho completo */}
+          <div className="mb-12 bg-[#f4f4f4] rounded-2xl p-8 lg:p-12 mt-8 flex flex-col items-center text-center">
+            <p className="text-lg leading-relaxed font-light text-[#5a5a5a] mb-6 max-w-2xl">
+              En{" "}
+              <strong className="text-[#1c1c1c] font-black">Anka Loo</strong>{" "}
+              definimos y cumplimos una{" "}
+              <strong className="text-[#1c1c1c]">
+                Política de Calidad, Medio Ambiente, Salud y Seguridad de los
+                Trabajadores
+              </strong>
+              , que rige la gestión diaria y regula nuestro trabajo para el
+              logro de los objetivos y la mejora continua de nuestros procesos.
+            </p>
+            {politicaUrl && (
+              <a
+                href={politicaUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-[#fdce27] hover:bg-[#1c1c1c] text-[#1c1c1c] hover:text-[#fdce27] text-[11px] font-black uppercase tracking-[0.15em] px-5 py-3.5 rounded-2xl transition-colors duration-300"
+              >
+                <Download size={16} strokeWidth={2.5} />
+                <span>Descargar Política de Gestión</span>
+              </a>
+            )}
           </div>
         </div>
       </div>

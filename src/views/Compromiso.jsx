@@ -52,7 +52,8 @@ const iniciativas = [
   },
 ];
 
-const fetcherSlider = (url) => clienteAxios.get(url).then((res) => res.data.data);
+const fetcherSlider = (url) =>
+  clienteAxios.get(url).then((res) => res.data.data);
 
 export default function Compromiso() {
   const { company } = useCont();
@@ -60,13 +61,13 @@ export default function Compromiso() {
   const { data: imagenesCompromiso = [] } = useSWR(
     "/api/recursos-imagenes/compromiso",
     fetcherSlider,
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false },
   );
 
   return (
     <>
       <SEOHead
-        title={`Compromiso Ambiental - ${company.name || "Anka Loo Construcciones"}`}
+        title={`Compromiso Ambiental - ${company.name || "Anka Loo Anka Loo"}`}
         description="Conocé nuestro compromiso con la sustentabilidad: biocombustibles, paneles solares, reforestación y gestión responsable de residuos."
       />
 

@@ -10,7 +10,7 @@ export default function SEOHead(props) {
     title: pTitle,
     description: pDesc,
     keywords,
-    author = company?.name ?? "Anka Loo Construcciones",
+    author = company?.name ?? "Anka Loo Anka Loo",
     canonical: pCanonical,
     robots = "index, follow",
     og = {},
@@ -36,13 +36,13 @@ export default function SEOHead(props) {
   } = props;
 
   // ---- Datos derivados
-  const siteName = company?.name ?? "Anka Loo Construcciones";
+  const siteName = company?.name ?? "Anka Loo Anka Loo";
   const defaultTitle = `${siteName} | Soluciones Tecnológicas Integrales`;
   const defaultDesc =
     pDesc ??
     (company
       ? `${company.name}: Soluciones de desarrollo de sistemas, software, hardware y marketing digital. Transformamos tu negocio con tecnología. ${company.address ?? ""} ${company.business_hours ? `· Horario: ${company.business_hours}` : ""}`.trim()
-      : "Anka Loo Construcciones: Acompañamos a las empresas en su transformación digital con soluciones integrales de desarrollo, software, hardware y marketing digital.");
+      : "Anka Loo Anka Loo: Acompañamos a las empresas en su transformación digital con soluciones integrales de desarrollo, software, hardware y marketing digital.");
 
   const title = pTitle ?? defaultTitle;
   const description = pDesc ?? defaultDesc;
@@ -122,7 +122,7 @@ export default function SEOHead(props) {
         name="keywords"
         content={
           keywords ||
-          "desarrollo de software, transformación digital, soluciones tecnológicas, sistemas personalizados, marketing digital, desarrollo web, aplicaciones móviles, consultoría IT, Anka Loo Construcciones"
+          "desarrollo de software, transformación digital, soluciones tecnológicas, sistemas personalizados, marketing digital, desarrollo web, aplicaciones móviles, consultoría IT, Anka Loo Anka Loo"
         }
         data-priority={precedence}
       />
