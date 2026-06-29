@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import clienteAxios from "../config/axios";
-import { Youtube, ImageIcon, Trash2, Save, ExternalLink } from "lucide-react";
+import { Youtube, ImageIcon, Trash2, Save, ExternalLink, FileArchive, Mail } from "lucide-react";
 
 const token = () => localStorage.getItem("AUTH_TOKEN");
 
@@ -12,15 +12,21 @@ const getYouTubeEmbedUrl = (url) => {
 };
 
 const RRHHConfig = () => {
-  const [config, setConfig] = useState({ rrhh_video: "", rrhh_imagen: null });
+  const [config, setConfig] = useState({ rrhh_video: "", rrhh_imagen: null, save_rrhh_pdf: false });
   const [loading, setLoading] = useState(true);
   const [savingVideo, setSavingVideo] = useState(false);
   const [savingImagen, setSavingImagen] = useState(false);
+  const [savingPdf, setSavingPdf] = useState(false);
   const [videoInput, setVideoInput] = useState("");
   const [imagenPreview, setImagenPreview] = useState(null);
   const [imagenFile, setImagenFile] = useState(null);
+  const [savePdf, setSavePdf] = useState(false);
+  const [rrhhEmail, setRrhhEmail] = useState("");
+  const [savingEmail, setSavingEmail] = useState(false);
   const [msgVideo, setMsgVideo] = useState({ tipo: "", texto: "" });
   const [msgImagen, setMsgImagen] = useState({ tipo: "", texto: "" });
+  const [msgPdf, setMsgPdf] = useState({ tipo: "", texto: "" });
+  const [msgEmail, setMsgEmail] = useState({ tipo: "", texto: "" });
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -32,6 +38,8 @@ const RRHHConfig = () => {
         setConfig(data);
         setVideoInput(data.rrhh_video || "");
         setImagenPreview(data.rrhh_imagen || null);
+        setSavePdf(!!data.save_rrhh_pdf);
+        setRrhhEmail(data.rrhh_email || "");
       } catch {
         // silencioso
       } finally {
@@ -51,7 +59,7 @@ const RRHHConfig = () => {
         { rrhh_video: videoInput },
         { headers: { Authorization: `Bearer ${token()}` } }
       );
-      setConfig((prev) => ({ ...prev, rrhh_video: data.rrhh_video }));
+      setConfig((prev) => ({ ...prev, rrhh_video: data.rrhh_video ?? videoInput }));
       setMsgVideo({ tipo: "ok", texto: "Video guardado correctamente." });
     } catch {
       setMsgVideo({ tipo: "err", texto: "Error al guardar el video." });
@@ -109,6 +117,42 @@ const RRHHConfig = () => {
     }
   };
 
+  const handleGuardarEmail = async (e) => {
+    e.preventDefault();
+    setSavingEmail(true);
+    setMsgEmail({ tipo: "", texto: "" });
+    try {
+      await clienteAxios.post(
+        "/api/rrhh-config",
+        { rrhh_email: rrhhEmail },
+        { headers: { Authorization: `Bearer ${token()}` } }
+      );
+      setMsgEmail({ tipo: "ok", texto: "Email guardado correctamente." });
+    } catch {
+      setMsgEmail({ tipo: "err", texto: "Error al guardar el email." });
+    } finally {
+      setSavingEmail(false);
+    }
+  };
+
+  const handleGuardarPdf = async (valor) => {
+    setSavingPdf(true);
+    setMsgPdf({ tipo: "", texto: "" });
+    try {
+      await clienteAxios.post(
+        "/api/rrhh-config",
+        { save_rrhh_pdf: valor },
+        { headers: { Authorization: `Bearer ${token()}` } }
+      );
+      setSavePdf(valor);
+      setMsgPdf({ tipo: "ok", texto: "Configuración guardada correctamente." });
+    } catch {
+      setMsgPdf({ tipo: "err", texto: "Error al guardar la configuración." });
+    } finally {
+      setSavingPdf(false);
+    }
+  };
+
   const embedUrl = getYouTubeEmbedUrl(videoInput);
 
   if (loading) return <p className="p-6 text-slate-500">Cargando configuración...</p>;
@@ -123,16 +167,85 @@ const RRHHConfig = () => {
         </p>
       </div>
 
+      {/* ── Sección Email RRHH ── */}
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
+          <div className="w-9 h-9 bg-indigo-50 rounded-xl flex items-center justify-center">
+            <Mail size={18} className="text-indigo-500" />
+          </div>
+          <div className="flex-1">
+            <h2 className="font-black text-slate-900 text-sm">Email de recepción</h2>
+            <p className="text-xs text-slate-400">Dirección a la que se enviarán las postulaciones recibidas.</p>
+          </div>
+          {rrhhEmail ? (
+            <span className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+              Configurado
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-100 px-2.5 py-1 rounded-full">
+              Sin configurar
+            </span>
+          )}
+        </div>
+
+        <form onSubmit={handleGuardarEmail} className="p-6 space-y-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-bold uppercase tracking-wide text-slate-500">
+              Email destino
+            </label>
+            <input
+              type="email"
+              value={rrhhEmail}
+              onChange={(e) => setRrhhEmail(e.target.value)}
+              placeholder="rrhh@empresa.com"
+              className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
+            />
+          </div>
+
+          {msgEmail.texto && (
+            <p className={`text-sm px-4 py-2.5 rounded-xl border ${
+              msgEmail.tipo === "ok"
+                ? "text-green-700 bg-green-50 border-green-200"
+                : "text-red-600 bg-red-50 border-red-200"
+            }`}>
+              {msgEmail.texto}
+            </p>
+          )}
+
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={savingEmail}
+              className="flex items-center gap-2 bg-[#fdce27] text-[#1c1c1c] font-bold text-sm px-5 py-2.5 rounded-xl hover:brightness-95 transition-all disabled:opacity-50"
+            >
+              <Save size={15} />
+              {savingEmail ? "Guardando..." : "Guardar email"}
+            </button>
+          </div>
+        </form>
+      </div>
+
       {/* ── Sección Video ── */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
         <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
           <div className="w-9 h-9 bg-red-50 rounded-xl flex items-center justify-center">
             <Youtube size={18} className="text-red-500" />
           </div>
-          <div>
+          <div className="flex-1">
             <h2 className="font-black text-slate-900 text-sm">Video de YouTube</h2>
             <p className="text-xs text-slate-400">Se mostrará debajo del hero en la página pública.</p>
           </div>
+          {config.rrhh_video ? (
+            <span className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+              Configurado
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-100 px-2.5 py-1 rounded-full">
+              Sin configurar
+            </span>
+          )}
         </div>
 
         <form onSubmit={handleGuardarVideo} className="p-6 space-y-4">
@@ -195,16 +308,83 @@ const RRHHConfig = () => {
         </form>
       </div>
 
+      {/* ── Sección Almacenamiento CVs ── */}
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
+          <div className="w-9 h-9 bg-amber-50 rounded-xl flex items-center justify-center">
+            <FileArchive size={18} className="text-amber-500" />
+          </div>
+          <div>
+            <h2 className="font-black text-slate-900 text-sm">Almacenamiento de CVs</h2>
+            <p className="text-xs text-slate-400">Controla si los archivos adjuntos se guardan en el servidor.</p>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-4">
+          <label className="flex items-start gap-4 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={savePdf}
+              onChange={(e) => setSavePdf(e.target.checked)}
+              disabled={savingPdf}
+              className="mt-0.5 w-4 h-4 accent-[#fdce27] cursor-pointer"
+            />
+            <div>
+              <p className="text-sm font-semibold text-slate-800 group-hover:text-slate-900 transition-colors">
+                Guardar archivos CV en el servidor
+              </p>
+              <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                Si está activo, el CV adjunto por cada postulante se almacena en el servidor
+                y podrás descargarlo desde el panel de postulaciones.
+                Si está desactivado, solo se guardan los datos del candidato.
+              </p>
+            </div>
+          </label>
+
+          {msgPdf.texto && (
+            <p className={`text-sm px-4 py-2.5 rounded-xl border ${
+              msgPdf.tipo === "ok"
+                ? "text-green-700 bg-green-50 border-green-200"
+                : "text-red-600 bg-red-50 border-red-200"
+            }`}>
+              {msgPdf.texto}
+            </p>
+          )}
+
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => handleGuardarPdf(savePdf)}
+              disabled={savingPdf}
+              className="flex items-center gap-2 bg-[#fdce27] text-[#1c1c1c] font-bold text-sm px-5 py-2.5 rounded-xl hover:brightness-95 transition-all disabled:opacity-50"
+            >
+              <Save size={15} />
+              {savingPdf ? "Guardando..." : "Guardar"}
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* ── Sección Imagen Banner ── */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
         <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
           <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center">
             <ImageIcon size={18} className="text-blue-500" />
           </div>
-          <div>
+          <div className="flex-1">
             <h2 className="font-black text-slate-900 text-sm">Imagen Banner</h2>
             <p className="text-xs text-slate-400">Imagen destacada para la sección de empleos.</p>
           </div>
+          {config.rrhh_imagen ? (
+            <span className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+              Configurada
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-100 px-2.5 py-1 rounded-full">
+              Sin configurar
+            </span>
+          )}
         </div>
 
         <div className="p-6 space-y-4">

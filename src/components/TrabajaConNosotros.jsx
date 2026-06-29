@@ -7,7 +7,13 @@ import useCont from "../hooks/useCont";
 import SEOHead from "./Head/Head";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
-import { Landmark, TrendingUp, Users, ShieldCheck } from "lucide-react";
+import { Landmark, TrendingUp, Users, ShieldCheck, FileText, X } from "lucide-react";
+
+const formatFileSize = (bytes) => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
 
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
@@ -49,10 +55,16 @@ const TrabajaConNosotros = () => {
   const formRef = useRef(null);
   const formSectionRef = useRef(null);
   const turnstileRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [captchaToken, setCaptchaToken] = useState("");
   const [estadoMensaje, setEstadoMensaje] = useState({ tipo: "", texto: "" });
   const [loading, setLoading] = useState(false);
   const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
+  const [cvFile, setCvFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    setCvFile(e.target.files?.[0] ?? null);
+  };
 
   // Combobox "Área de interés"
   const [comboInput, setComboInput] = useState("");
@@ -83,10 +95,7 @@ const TrabajaConNosotros = () => {
     });
   };
   const { company } = useCont();
-  // Prioriza el video específico de RRHH; si no hay, usa el video general
-  const videoEmbedUrl = getYouTubeEmbedUrl(
-    company?.rrhh_video || company?.video_quienes_somos,
-  );
+  const videoEmbedUrl = getYouTubeEmbedUrl(company?.rrhh_video);
 
   const isLocal = import.meta.env.VITE_ENTORNO === "local";
 
@@ -137,6 +146,9 @@ const TrabajaConNosotros = () => {
 
       formRef.current?.reset();
       setCaptchaToken("");
+      setCvFile(null);
+      setComboInput("");
+      setPuestoSeleccionado("");
       if (!isLocal && turnstileRef.current?.reset) turnstileRef.current.reset();
     } catch (error) {
       console.error("TrabajaConNosotros error:", error);
@@ -179,17 +191,6 @@ const TrabajaConNosotros = () => {
           </p>
         </div>
       </div>
-
-      {/* ── IMAGEN BANNER RRHH ── */}
-      {company?.rrhh_imagen && (
-        <div className="w-full max-h-80 overflow-hidden">
-          <img
-            src={company.rrhh_imagen}
-            alt="Anka Loo — Trabaja con nosotros"
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
 
       {/* ── VIDEO ── */}
       {videoEmbedUrl && (
@@ -257,6 +258,17 @@ const TrabajaConNosotros = () => {
               })}
             </div>
           </div>
+
+          {/* ── IMAGEN BANNER RRHH ── */}
+          {company?.rrhh_imagen && (
+            <div className="w-full aspect-video rounded-2xl overflow-hidden">
+              <img
+                src={company.rrhh_imagen}
+                alt="Anka Loo — Trabaja con nosotros"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
 
           {/* ── VACANTES ── */}
           <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
@@ -460,17 +472,50 @@ const TrabajaConNosotros = () => {
                 <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
                   CV / Portafolio
                 </label>
-                <label className="flex flex-col items-center gap-2 border border-dashed border-slate-300 rounded-xl p-5 text-center text-sm text-slate-400 bg-slate-50 cursor-pointer hover:border-[#fdce27] hover:bg-[#fdce27]/5 transition-all">
-                  <span className="text-xl">↑</span>
-                  <span>Subir archivo · PDF o Word, hasta 5 MB</span>
-                  <input
-                    type="file"
-                    name="cv"
-                    accept=".pdf,.doc,.docx"
-                    required
-                    hidden
-                  />
-                </label>
+                <input
+                  ref={fileInputRef}
+                  id="cv-input"
+                  type="file"
+                  name="cv"
+                  accept=".pdf,.doc,.docx"
+                  required={!cvFile}
+                  hidden
+                  onChange={handleFileChange}
+                />
+                {cvFile ? (
+                  <div className="flex items-center gap-3 border border-[#fdce27] bg-[#fdce27]/5 rounded-xl px-4 py-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#1c1c1c] flex items-center justify-center flex-shrink-0">
+                      <FileText size={18} className="text-[#fdce27]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-slate-800 truncate">
+                        {cvFile.name}
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        {formatFileSize(cvFile.size)}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCvFile(null);
+                        if (fileInputRef.current) fileInputRef.current.value = "";
+                      }}
+                      className="text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0 p-1"
+                      aria-label="Quitar archivo"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ) : (
+                  <label
+                    htmlFor="cv-input"
+                    className="flex flex-col items-center gap-2 border border-dashed border-slate-300 rounded-xl p-5 text-center text-sm text-slate-400 bg-slate-50 cursor-pointer hover:border-[#fdce27] hover:bg-[#fdce27]/5 transition-all"
+                  >
+                    <span className="text-xl">↑</span>
+                    <span>Subir archivo · PDF o Word, hasta 5 MB</span>
+                  </label>
+                )}
               </div>
 
               {!isLocal && (
