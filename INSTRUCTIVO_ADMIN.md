@@ -262,3 +262,4 @@ En la parte inferior del sidebar hay un enlace a **Soporte Técnico** que lleva 
 ## Cerrar sesión
 
 Botón rojo en la parte inferior del sidebar. Cierra la sesión y redirige al login.
+ño

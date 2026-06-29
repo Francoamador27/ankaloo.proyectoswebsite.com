@@ -103,11 +103,11 @@ const AdminSidebar = () => {
       icon: <Mail size={20} />,
       path: "/admin-dash/leads-contacto",
     },
-    {
-      text: "RRHH",
-      icon: <Briefcase size={20} />,
-      path: "/admin-dash/leads-rrhh",
-    },
+    // {
+    //   text: "RRHH",
+    //   icon: <Briefcase size={20} />,
+    //   path: "/admin-dash/leads-rrhh",
+    // },
     // { text: 'Testimonios', icon: <MessageSquareQuote size={20} />, path: '/admin-dash/testimonios' },
     // { text: 'Chatbot', icon: <Bot size={20} />, path: '/admin-dash/chatbot' },
     {
@@ -357,13 +357,23 @@ const AdminSidebar = () => {
               "&:hover": { backgroundColor: "#f8f9fa", color: "#1c1c1c" },
             }}
           >
-            <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : "auto", justifyContent: "center", color: "inherit" }}>
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 2 : "auto",
+                justifyContent: "center",
+                color: "inherit",
+              }}
+            >
               <LifeBuoy size={20} />
             </ListItemIcon>
             {open && (
               <ListItemText
                 primary="Soporte Técnico"
-                primaryTypographyProps={{ fontSize: "0.85rem", fontWeight: 500 }}
+                primaryTypographyProps={{
+                  fontSize: "0.85rem",
+                  fontWeight: 500,
+                }}
               />
             )}
           </ListItemButton>

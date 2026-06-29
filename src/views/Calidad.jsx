@@ -58,11 +58,20 @@ export default function Calidad() {
             </h1>
             <p className="max-w-3xl mx-auto text-lg leading-relaxed font-light text-[#5a5a5a] animate-fadeInUp">
               En <strong>{company.name || "Anka Loo"} </strong>
-              En Ankaloo contamos con certificaciones de calidad ISO que avalan
-              nuestros procesos constructivos.
+              contamos con certificaciones de calidad ISO que avalan nuestros
+              procesos constructivos.
             </p>
           </header>
+          {/* Slider calidad — separado, arriba */}
 
+          {imagenesCalidad.length > 0 && (
+            <div className="mt-12 rounded-2xl overflow-hidden shadow-lg">
+              <ImageSlider
+                images={imagenesCalidad}
+                imgClassName="w-full max-h-[600px] object-cover"
+              />
+            </div>
+          )}
           {/* Grilla de Certificados */}
           {isLoading ? (
             <div className="flex justify-center items-center py-24">
@@ -121,21 +130,10 @@ export default function Calidad() {
             </div>
           )}
 
-          {/* Slider calidad — separado, arriba */}
-          {imagenesCalidad.length > 0 && (
-            <div className="mt-12 rounded-2xl overflow-hidden shadow-lg">
-              <ImageSlider
-                images={imagenesCalidad}
-                imgClassName="w-full max-h-[600px] object-cover"
-              />
-            </div>
-          )}
-
           {/* Política de Gestión — texto centrado ancho completo */}
           <div className="mb-12 bg-[#f4f4f4] rounded-2xl p-8 lg:p-12 mt-8 flex flex-col items-center text-center">
             <p className="text-lg leading-relaxed font-light text-[#5a5a5a] mb-6 max-w-2xl">
-              En{" "}
-              <strong className="text-[#1c1c1c] font-black">Anka Loo</strong>{" "}
+              En <strong className="text-[#1c1c1c] font-black">Anka Loo</strong>{" "}
               definimos y cumplimos una{" "}
               <strong className="text-[#1c1c1c]">
                 Política de Calidad, Medio Ambiente, Salud y Seguridad de los

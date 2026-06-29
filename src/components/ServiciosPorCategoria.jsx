@@ -191,8 +191,8 @@ export default function ServiciosPorCategoria() {
         priority="high"
         title={
           isOverview
-            ? "Nuestros Servicios | Anka Loo Construcciones"
-            : `${categoriaInfo?.nombre || "Solución"} | Anka Loo Construcciones`
+            ? "Nuestros Servicios | Anka Loo "
+            : `${categoriaInfo?.nombre || "Solución"} | Anka Loo `
         }
         description={
           isOverview
@@ -376,7 +376,7 @@ export default function ServiciosPorCategoria() {
 
             <a
               href={WhatsappHref({
-                message: `Hola, vengo desde la web de Anka Loo Construcciones y me gustaría información sobre ${
+                message: `Hola, vengo desde la web de Anka Loo Anka Loo y me gustaría información sobre ${
                   categoriaInfo?.nombre || "los Servicios "
                 }.`,
               })}
