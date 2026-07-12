@@ -1,7 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import useSWR, { mutate } from 'swr';
+import * as XLSX from 'xlsx';
 import clienteAxios from '../config/axios';
-import { Eye, Trash2, Search, Filter, MessageCircle, Copy, Mail, Download, Check } from 'lucide-react';
+import { Eye, Trash2, Search, Filter, MessageCircle, Copy, Mail, Download, Check, FileSpreadsheet } from 'lucide-react';
+
+const ESTADOS_LABEL = {
+  nuevo: 'Nuevo',
+  en_proceso: 'En Proceso',
+  contactado: 'Contactado',
+  cerrado: 'Cerrado',
+};
 
 const LeadsRRHH = () => {
   const token = localStorage.getItem('AUTH_TOKEN');
@@ -15,6 +23,7 @@ const LeadsRRHH = () => {
   const [leadSeleccionado, setLeadSeleccionado] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [copiado, setCopiado] = useState(null);
+  const [exportando, setExportando] = useState(false);
 
   const query = useMemo(() => {
     const p = new URLSearchParams();
@@ -110,6 +119,60 @@ const LeadsRRHH = () => {
     }
   };
 
+  const handleExportarExcel = async () => {
+    setExportando(true);
+    try {
+      const p = new URLSearchParams();
+      if (busqueda.length >= 3) p.append('q', busqueda);
+      if (filtroEstado) p.append('estado', filtroEstado);
+      if (fechaInicio) p.append('fecha_inicio', fechaInicio);
+      if (fechaFin) p.append('fecha_fin', fechaFin);
+      p.append('per_page', 10000);
+      p.append('page', 1);
+
+      const { data: resultado } = await clienteAxios(`/api/leads-rrhh?${p.toString()}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
+      const filas = (resultado?.data ?? []).map((lead) => ({
+        Fecha: new Date(lead.created_at).toLocaleDateString('es-AR'),
+        Nombre: lead.nombre,
+        Email: lead.email,
+        Teléfono: lead.telefono,
+        Puesto: lead.puesto_interes || '--',
+        Estado: ESTADOS_LABEL[lead.estado] || lead.estado,
+        Notas: lead.notas || '',
+      }));
+
+      if (filas.length === 0) {
+        alert('No hay candidatos para exportar con los filtros actuales.');
+        return;
+      }
+
+      const hoja = XLSX.utils.json_to_sheet(filas);
+      hoja['!cols'] = [
+        { wch: 12 },
+        { wch: 25 },
+        { wch: 28 },
+        { wch: 16 },
+        { wch: 20 },
+        { wch: 14 },
+        { wch: 40 },
+      ];
+
+      const libro = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(libro, hoja, 'Candidatos RRHH');
+
+      const fechaArchivo = new Date().toISOString().slice(0, 10);
+      XLSX.writeFile(libro, `candidatos-rrhh-${fechaArchivo}.xlsx`);
+    } catch (err) {
+      console.error(err);
+      alert('Error al exportar los candidatos a Excel.');
+    } finally {
+      setExportando(false);
+    }
+  };
+
   const handleCopiarTelefono = (telefono, identificador) => {
     navigator.clipboard.writeText(telefono);
     setCopiado(identificador);
@@ -140,11 +203,21 @@ const LeadsRRHH = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-black text-slate-900 mb-2">
-          Candidatos de <span className="text-green-600">RRHH</span>
-        </h1>
-        <p className="text-slate-600">Gestiona las solicitudes de empleo recibidas.</p>
+      <div className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-black text-slate-900 mb-2">
+            Candidatos de <span className="text-green-600">RRHH</span>
+          </h1>
+          <p className="text-slate-600">Gestiona las solicitudes de empleo recibidas.</p>
+        </div>
+        <button
+          onClick={handleExportarExcel}
+          disabled={exportando}
+          className="flex items-center gap-2 px-5 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+        >
+          <FileSpreadsheet size={18} />
+          {exportando ? 'Exportando...' : 'Exportar a Excel'}
+        </button>
       </div>
 
       {/* Stats Cards */}
