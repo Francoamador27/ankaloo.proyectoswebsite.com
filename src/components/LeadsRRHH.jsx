@@ -139,6 +139,7 @@ const LeadsRRHH = () => {
         Nombre: lead.nombre,
         Email: lead.email,
         Teléfono: lead.telefono,
+        Localidad: lead.localidad || '--',
         Puesto: lead.puesto_interes || '--',
         Estado: ESTADOS_LABEL[lead.estado] || lead.estado,
         Notas: lead.notas || '',
@@ -155,6 +156,7 @@ const LeadsRRHH = () => {
         { wch: 25 },
         { wch: 28 },
         { wch: 16 },
+        { wch: 20 },
         { wch: 20 },
         { wch: 14 },
         { wch: 40 },
@@ -255,7 +257,7 @@ const LeadsRRHH = () => {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
-                placeholder="Buscar por nombre, email, teléfono, puesto..."
+                placeholder="Buscar por nombre, email, teléfono, localidad, puesto..."
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-green-500/20 focus:border-green-600"
@@ -336,6 +338,9 @@ const LeadsRRHH = () => {
                   Contacto
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-black  tracking-wider text-slate-700">
+                  Localidad
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-black  tracking-wider text-slate-700">
                   Puesto
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-black  tracking-wider text-slate-700">
@@ -362,6 +367,11 @@ const LeadsRRHH = () => {
                   <td className="px-6 py-4">
                     <div className="text-sm text-slate-600">{lead.email}</div>
                     <div className="text-xs text-slate-500">{lead.telefono}</div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm text-slate-600 line-clamp-1">
+                      {lead.localidad || '--'}
+                    </div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-slate-600 line-clamp-1">
@@ -509,7 +519,7 @@ const LeadsRRHH = () => {
                       >
                         {copiado === 'modal' ? <Check size={15} /> : <Copy size={15} />}
                       </button>
-                      <a 
+                      <a
                         href={`https://wa.me/${leadSeleccionado.telefono.replace(/\D/g, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -518,6 +528,10 @@ const LeadsRRHH = () => {
                         <MessageCircle size={15} />
                       </a>
                     </p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-500 ">Localidad:</span>
+                    <p className="text-sm text-slate-900">{leadSeleccionado.localidad || '--'}</p>
                   </div>
                 </div>
               </div>

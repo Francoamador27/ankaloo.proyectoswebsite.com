@@ -7,7 +7,14 @@ import useCont from "../hooks/useCont";
 import SEOHead from "./Head/Head";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
-import { Landmark, TrendingUp, Users, ShieldCheck, FileText, X } from "lucide-react";
+import {
+  Landmark,
+  TrendingUp,
+  Users,
+  ShieldCheck,
+  FileText,
+  X,
+} from "lucide-react";
 
 const formatFileSize = (bytes) => {
   if (bytes < 1024) return `${bytes} B`;
@@ -28,22 +35,22 @@ const PILLARS = [
   {
     Icon: Landmark,
     title: "Proyectos de escala",
-    desc: "Trabajamos en obras de infraestructura vial e hidráulica con impacto real en la región.",
+    desc: "Trabajamos en obras de infraestructura con impacto en la comunidad.",
   },
   {
     Icon: TrendingUp,
     title: "Desarrollo profesional",
-    desc: "Programas de formación en liderazgo y competencias técnicas para todos los niveles.",
+    desc: " Fomentamos el crecimiento de cada persona con capacitaciones, oportunidades de desarrollo y un plan de carrera para todos los niveles.",
   },
   {
     Icon: Users,
     title: "Equipo comprometido",
-    desc: "Un equipo que apuesta al trabajo colaborativo y la mejora continua.",
+    desc: "Somos un equipo que apuesta al trabajo colaborativo y la mejora continua.",
   },
   {
     Icon: ShieldCheck,
     title: "Seguridad ante todo",
-    desc: "Nuestra cultura de HyS es parte de quiénes somos, en todas las áreas.",
+    desc: "Trabajamos para consolidar una cultura preventiva, donde el compromiso con la seguridad forma parte de cada tarea y de cada decisión.",
   },
 ];
 
@@ -69,12 +76,15 @@ const TrabajaConNosotros = () => {
   // Combobox "Área de interés"
   const [comboInput, setComboInput] = useState("");
   const [comboOpen, setComboOpen] = useState(false);
+  const [esOtroPuesto, setEsOtroPuesto] = useState(false);
+  const [otroPuestoTexto, setOtroPuestoTexto] = useState("");
   const comboRef = useRef(null);
 
   // Sincronizar display del combobox cuando se selecciona una vacante desde la lista
   useEffect(() => {
+    if (esOtroPuesto) return;
     setComboInput(puestoSeleccionado);
-  }, [puestoSeleccionado]);
+  }, [puestoSeleccionado, esOtroPuesto]);
 
   // Cerrar dropdown al hacer click afuera
   useEffect(() => {
@@ -89,6 +99,8 @@ const TrabajaConNosotros = () => {
 
   const handleSelectVacante = (rol) => {
     setPuestoSeleccionado(rol);
+    setEsOtroPuesto(false);
+    setOtroPuestoTexto("");
     formSectionRef.current?.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -110,6 +122,7 @@ const TrabajaConNosotros = () => {
       formData.append("nombre", fd.get("nombre")?.toString().trim() || "");
       formData.append("email", fd.get("email")?.toString().trim() || "");
       formData.append("telefono", fd.get("telefono")?.toString().trim() || "");
+      formData.append("localidad", fd.get("localidad")?.toString().trim() || "");
       formData.append(
         "puesto_interes",
         fd.get("puesto_interes")?.toString().trim() || "",
@@ -149,6 +162,8 @@ const TrabajaConNosotros = () => {
       setCvFile(null);
       setComboInput("");
       setPuestoSeleccionado("");
+      setEsOtroPuesto(false);
+      setOtroPuestoTexto("");
       if (!isLocal && turnstileRef.current?.reset) turnstileRef.current.reset();
     } catch (error) {
       console.error("TrabajaConNosotros error:", error);
@@ -230,12 +245,12 @@ const TrabajaConNosotros = () => {
         <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 space-y-16">
           {/* ── PILLARS ── */}
           <div>
-            <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-2">
-              Por qué Anka Loo
-            </p>
-            <h2 className="text-2xl font-black text-slate-900 mb-8">
+            <h2 className="text-2xl font-black text-slate-900 mb-1">
               Lo que nos hace diferentes
             </h2>
+            <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-8">
+              Por qué Anka Loo
+            </p>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {PILLARS.map((pillar) => {
                 const PillarIcon = pillar.Icon;
@@ -244,7 +259,7 @@ const TrabajaConNosotros = () => {
                     key={pillar.title}
                     className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:-translate-y-1 hover:shadow-md hover:border-[#fdce27] transition-all duration-300"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-[#1c1c1c] flex items-center justify-center mb-4">
+                    <div className="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center mb-4">
                       <PillarIcon size={18} className="text-[#fdce27]" />
                     </div>
                     <p className="text-sm font-semibold text-slate-900 mb-1">
@@ -262,6 +277,9 @@ const TrabajaConNosotros = () => {
           {/* ── IMAGEN BANNER RRHH ── */}
           {company?.rrhh_imagen && (
             <div className="w-full aspect-video rounded-2xl overflow-hidden">
+              <h2 className="text-2xl font-black text-slate-900 mb-8">
+                Nuestros espacios de trabajo
+              </h2>
               <img
                 src={company.rrhh_imagen}
                 alt="Anka Loo — Trabaja con nosotros"
@@ -324,11 +342,8 @@ const TrabajaConNosotros = () => {
             className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden"
           >
             <div className="bg-slate-50 px-8 pt-8 pb-6 border-b border-slate-100">
-              <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-2">
-                Postulate{" "}
-              </p>
               <h2 className="text-2xl font-black text-slate-900">
-                Contanos sobre vos
+                Enviar Curriculum CV / Resumen
               </h2>
             </div>
 
@@ -353,7 +368,7 @@ const TrabajaConNosotros = () => {
                 {/* ── Combobox área de interés ── */}
                 <div className="flex flex-col gap-1.5" ref={comboRef}>
                   <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
-                    Área de interés{" "}
+                    Puesto de interés{" "}
                     <span className="normal-case">(opcional)</span>
                   </label>
 
@@ -370,13 +385,14 @@ const TrabajaConNosotros = () => {
                       autoComplete="off"
                       placeholder="Buscá o elegí una posición..."
                       value={comboInput}
+                      disabled={esOtroPuesto}
                       onFocus={() => setComboOpen(true)}
                       onChange={(e) => {
                         setComboInput(e.target.value);
                         setPuestoSeleccionado(e.target.value);
                         setComboOpen(true);
                       }}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-9 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-9 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all disabled:opacity-60"
                     />
                     {/* Chevron */}
                     <span
@@ -388,6 +404,7 @@ const TrabajaConNosotros = () => {
 
                     {/* Dropdown */}
                     {comboOpen &&
+                      !esOtroPuesto &&
                       (() => {
                         const filtradas = VACANTES.filter((v) =>
                           v.titulo
@@ -405,6 +422,14 @@ const TrabajaConNosotros = () => {
                                 key={v.id}
                                 onMouseDown={(e) => {
                                   e.preventDefault();
+                                  if (v.id === "__otros__") {
+                                    setComboInput("Otros");
+                                    setPuestoSeleccionado("");
+                                    setEsOtroPuesto(true);
+                                    setOtroPuestoTexto("");
+                                    setComboOpen(false);
+                                    return;
+                                  }
                                   setComboInput(v.titulo);
                                   setPuestoSeleccionado(v.titulo);
                                   setComboOpen(false);
@@ -425,10 +450,42 @@ const TrabajaConNosotros = () => {
                         );
                       })()}
                   </div>
+
+                  {/* Input adicional para especificar el puesto cuando se elige "Otros" */}
+                  {esOtroPuesto && (
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <input
+                        type="text"
+                        autoFocus
+                        autoComplete="off"
+                        placeholder="Escribí el puesto que buscás..."
+                        value={otroPuestoTexto}
+                        maxLength={200}
+                        onChange={(e) => {
+                          setOtroPuestoTexto(e.target.value);
+                          setPuestoSeleccionado(e.target.value);
+                        }}
+                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEsOtroPuesto(false);
+                          setOtroPuestoTexto("");
+                          setComboInput("");
+                          setPuestoSeleccionado("");
+                        }}
+                        className="text-slate-400 hover:text-slate-600 transition-colors p-1 flex-shrink-0"
+                        aria-label="Volver a la lista de posiciones"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
                     Email
@@ -449,6 +506,18 @@ const TrabajaConNosotros = () => {
                     type="tel"
                     name="telefono"
                     placeholder="+54 351 ..."
+                    required
+                    className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs uppercase tracking-[0.08em] text-slate-400">
+                    Localidad
+                  </label>
+                  <input
+                    type="text"
+                    name="localidad"
+                    placeholder="Ej: Córdoba Capital"
                     required
                     className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all"
                   />
@@ -499,7 +568,8 @@ const TrabajaConNosotros = () => {
                       type="button"
                       onClick={() => {
                         setCvFile(null);
-                        if (fileInputRef.current) fileInputRef.current.value = "";
+                        if (fileInputRef.current)
+                          fileInputRef.current.value = "";
                       }}
                       className="text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0 p-1"
                       aria-label="Quitar archivo"
