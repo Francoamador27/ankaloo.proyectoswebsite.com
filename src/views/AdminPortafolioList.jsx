@@ -288,7 +288,7 @@ export default function AdminPortafolioList() {
   const validarArchivo = (file) => {
     const okType = /image\/(jpeg|png|webp)/.test(file.type);
     if (!okType) return 'Formato invalido. Solo JPG, PNG o WEBP.';
-    if (file.size > MAX_BYTES) return `Maximo ${MAX_MB}MB por imagen.`;
+    if (file.size > MAX_BYTES) return `Maximo ${MAX_MB}MB por imagen. Podes comprimirla en https://www.iloveimg.com/es/comprimir-imagen`;
     return null;
   };
 

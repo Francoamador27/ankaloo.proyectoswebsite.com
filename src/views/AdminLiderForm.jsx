@@ -49,9 +49,17 @@ export default function AdminLiderForm() {
     setLider({ ...lider, [name]: value });
   };
 
+  const MAX_MB = 5;
+  const MAX_BYTES = MAX_MB * 1024 * 1024;
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > MAX_BYTES) {
+      mostrarError(`La imagen no puede pesar más de ${MAX_MB}MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen`);
+      e.target.value = '';
+      return;
+    }
     setLider({ ...lider, imagen: file });
     const reader = new FileReader();
     reader.onloadend = () => setImagePreview(reader.result);
@@ -150,7 +158,7 @@ export default function AdminLiderForm() {
               />
             </div>
             <p className="text-sm text-slate-500 leading-relaxed italic mt-4">
-              Imagen circular del líder. Se recomienda foto cuadrada de al menos 300×300px. Formatos: jpg, png, webp (máx 2MB).
+              Imagen circular del líder. Se recomienda foto cuadrada de al menos 300×300px. Formatos: jpg, png, webp (máx 5MB).
             </p>
           </div>
         </div>

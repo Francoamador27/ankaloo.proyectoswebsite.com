@@ -198,9 +198,17 @@ export default function AdminPortafolio() {
     }
   };
 
+  const MAX_MB = 5;
+  const MAX_BYTES = MAX_MB * 1024 * 1024;
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > MAX_BYTES) {
+        mostrarError(`La imagen no puede pesar más de ${MAX_MB}MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen`);
+        e.target.value = '';
+        return;
+      }
       setProyecto({ ...proyecto, imagen: file });
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -213,6 +221,12 @@ export default function AdminPortafolio() {
   const handleGaleriaChange = (e) => {
     const files = e.target.files;
     if (files) {
+      const oversized = Array.from(files).some(file => file.size > MAX_BYTES);
+      if (oversized) {
+        mostrarError(`Alguna imagen supera ${MAX_MB}MB. Podés comprimirlas en https://www.iloveimg.com/es/comprimir-imagen`);
+        e.target.value = '';
+        return;
+      }
       Array.from(files).forEach(file => {
         setGaleria(prev => [...prev, {
           id: `new_${Date.now()}_${Math.random()}`,
@@ -334,7 +348,7 @@ export default function AdminPortafolio() {
               <label className="block w-full border-2 border-dashed border-slate-300 rounded-lg p-8 text-center cursor-pointer hover:bg-slate-50 transition-colors">
                 <Upload className="w-10 h-10 text-slate-400 mx-auto mb-2" />
                 <p className="text-sm text-slate-600 font-medium">Haz clic para subir imagen</p>
-                <p className="text-xs text-slate-500">PNG, JPG, WEBP (máx 2MB)</p>
+                <p className="text-xs text-slate-500">PNG, JPG, WEBP (máx 5MB)</p>
                 <input
                   type="file"
                   accept="image/*"
@@ -415,7 +429,7 @@ export default function AdminPortafolio() {
           <label className="block w-full border-2 border-dashed border-slate-300 rounded-lg p-8 text-center cursor-pointer hover:bg-slate-50 transition-colors mb-6">
             <Upload className="w-10 h-10 text-slate-400 mx-auto mb-2" />
             <p className="text-sm text-slate-600 font-medium">Arrastra imágenes aquí o haz clic</p>
-            <p className="text-xs text-slate-500">PNG, JPG, WEBP (máx 2MB cada una)</p>
+            <p className="text-xs text-slate-500">PNG, JPG, WEBP (máx 5MB cada una)</p>
             <input
               type="file"
               multiple

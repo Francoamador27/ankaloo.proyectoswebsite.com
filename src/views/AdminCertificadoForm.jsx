@@ -57,9 +57,17 @@ export default function AdminCertificadoForm() {
     setCertificado({ ...certificado, [name]: value });
   };
 
+  const MAX_MB = 5;
+  const MAX_BYTES = MAX_MB * 1024 * 1024;
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > MAX_BYTES) {
+        mostrarError(`La imagen no puede pesar más de ${MAX_MB}MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen`);
+        e.target.value = '';
+        return;
+      }
       setCertificado({ ...certificado, imagen: file });
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -179,7 +187,7 @@ export default function AdminCertificadoForm() {
             </div>
             <div className="space-y-4">
                 <p className="text-sm text-slate-500 leading-relaxed italic">
-                    Esta imagen se mostrará como miniatura en la sección de Calidad. Recomendado: formato .webp, .jpg o .png (Máx 2MB).
+                    Esta imagen se mostrará como miniatura en la sección de Calidad. Recomendado: formato .webp, .jpg o .png (Máx 5MB).
                 </p>
             </div>
           </div>

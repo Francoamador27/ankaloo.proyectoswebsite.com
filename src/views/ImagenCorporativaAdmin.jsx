@@ -17,10 +17,18 @@ function SliderSection({ title, subtitle, color = '#fdce27', tipo }) {
       .finally(() => setCargando(false));
   }, [tipo]);
 
+  const MAX_MB = 5;
+  const MAX_BYTES = MAX_MB * 1024 * 1024;
+
   const handleUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     e.target.value = '';
+
+    if (file.size > MAX_BYTES) {
+      setError(`La imagen no puede pesar más de ${MAX_MB}MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen`);
+      return;
+    }
 
     setUploading(true);
     setError(null);
@@ -32,7 +40,7 @@ function SliderSection({ title, subtitle, color = '#fdce27', tipo }) {
       });
       setImagenes(prev => [...prev, data.imagen]);
     } catch {
-      setError('Error al subir la imagen. Verificá que sea JPG/PNG/WEBP y menos de 4 MB.');
+      setError(`Error al subir la imagen. Verificá que sea JPG/PNG/WEBP y menos de ${MAX_MB}MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen`);
     } finally {
       setUploading(false);
     }
@@ -108,7 +116,7 @@ function SliderSection({ title, subtitle, color = '#fdce27', tipo }) {
         <span className="text-sm font-bold text-gray-500">
           {uploading ? 'Subiendo imagen...' : 'Agregar imagen'}
         </span>
-        <span className="text-xs text-gray-400 tracking-wider font-semibold">JPG, PNG o WEBP — máx. 4 MB</span>
+        <span className="text-xs text-gray-400 tracking-wider font-semibold">JPG, PNG o WEBP — máx. 5 MB</span>
         <input type="file" accept="image/*" hidden onChange={handleUpload} disabled={uploading} />
       </label>
 

@@ -76,8 +76,8 @@ const GaleriaPanel = () => {
 
   const handleChange = (e) => {
     const file = e.target.files[0];
-    if (file && file.size > 2097152) {
-      setError("La imagen no puede pesar más de 2MB");
+    if (file && file.size > 5242880) {
+      setError("La imagen no puede pesar más de 5MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen");
       setImagen(null);
       setPreview(null);
       return;
@@ -103,8 +103,8 @@ const GaleriaPanel = () => {
     e.stopPropagation();
     setDragActive(false);
     const file = e.dataTransfer.files[0];
-    if (file && file.size > 2097152) {
-      setError("La imagen no puede pesar más de 2MB");
+    if (file && file.size > 5242880) {
+      setError("La imagen no puede pesar más de 5MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen");
       setImagen(null);
       setPreview(null);
       return;
@@ -261,7 +261,7 @@ const GaleriaPanel = () => {
                   o arrastralo aquí
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
-                  Solo JPG, PNG o WEBP. Máx 2MB.
+                  Solo JPG, PNG o WEBP. Máx 5MB.
                 </p>
               </div>
               <input

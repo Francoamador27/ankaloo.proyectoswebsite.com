@@ -3,7 +3,7 @@ import useSWR, { mutate } from "swr";
 import clienteAxios from "../../config/axios";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
-const MAX_LOGO_MB = 2;
+const MAX_LOGO_MB = 5;
 const MAX_LOGO_BYTES = MAX_LOGO_MB * 1024 * 1024;
 const IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp", "image/svg+xml"];
 
@@ -70,7 +70,7 @@ const Company = () => {
       return;
     }
     if (file.size > MAX_LOGO_BYTES) {
-      setErr(`El logo supera ${MAX_LOGO_MB}MB.`);
+      setErr(`El logo supera ${MAX_LOGO_MB}MB. Podés comprimirlo en https://www.iloveimg.com/es/comprimir-imagen`);
       setLogoFile(null);
       setLogoPreview(null);
       return;
