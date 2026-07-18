@@ -122,7 +122,10 @@ const TrabajaConNosotros = () => {
       formData.append("nombre", fd.get("nombre")?.toString().trim() || "");
       formData.append("email", fd.get("email")?.toString().trim() || "");
       formData.append("telefono", fd.get("telefono")?.toString().trim() || "");
-      formData.append("localidad", fd.get("localidad")?.toString().trim() || "");
+      formData.append(
+        "localidad",
+        fd.get("localidad")?.toString().trim() || "",
+      );
       formData.append(
         "puesto_interes",
         fd.get("puesto_interes")?.toString().trim() || "",
@@ -189,22 +192,24 @@ const TrabajaConNosotros = () => {
       />
 
       {/* ── HERO ── */}
-      <div className="relative bg-[#1c1c1c] overflow-hidden px-6 sm:px-12 py-16 sm:py-20">
-        <div className="relative z-10 max-w-5xl mx-auto">
-          <p className="text-xs font-normal tracking-[0.15em] uppercase text-[#fdce27] mb-4">
-            Capital humano · Unite al equipo
-          </p>
-          <h1 className="text-4xl sm:text-5xl font-black text-[#f0ede6] leading-tight mb-5 max-w-xl">
-            Construimos obras.{" "}
-            <em className="not-italic text-[#fdce27]">Construimos carreras.</em>
+      <div className="relative overflow-hidden px-6 sm:px-12 py-16 sm:py-20">
+        <style>{`
+          @keyframes tcnSlideLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+          }
+          .tcn-title { animation: tcnSlideLeft 2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        `}</style>
+        <header className="relative z-10 max-w-5xl mx-auto text-center">
+          <h1 className="ct-title mt-6 mb-4 text-4xl lg:text-6xl font-black tracking-tight ">
+            Trabaja con <span className="text-[#fdce27]">Nosotros</span>
           </h1>
-          <p className="text-[#a0a0a0] text-base sm:text-lg font-light leading-relaxed max-w-md">
-            En Anka Loo creemos que los proyectos de infraestructura los hacen
-            las personas. Buscamos{" "}
-            <strong className="text-[#f0ede6] font-medium">personas</strong> que
-            quieran crecer junto con nosotros.
+          <p className="max-w-2xl mx-auto text-base md:text-lg text-slate-600 font-light">
+            Nuestra gente es el motor que impulsa cada proyecto. Por eso
+            buscamos sumar talentos con ganas de desarrollarse y crecer junto a
+            nosotros.
           </p>
-        </div>
+        </header>
       </div>
 
       {/* ── VIDEO ── */}
@@ -291,12 +296,13 @@ const TrabajaConNosotros = () => {
           {/* ── VACANTES ── */}
           <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
             <div className="px-8 pt-8 pb-4">
-              <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-2">
+              <h2 className="text-2xl font-black text-slate-900 mb-8">
                 Posiciones abiertas
-              </p>
-              <h2 className="text-2xl font-black text-slate-900">
-                ¿Hay algo para vos?
               </h2>
+
+              <p className="text-xs tracking-[0.15em] uppercase text-slate-400 mb-2">
+                ¿Hay algo para vos?
+              </p>
             </div>
             <div className="divide-y divide-slate-100">
               {VACANTES.length === 0 ? (
@@ -331,10 +337,10 @@ const TrabajaConNosotros = () => {
                 ))
               )}
             </div>
-            <p className="px-8 py-4 text-xs text-slate-400 border-t border-slate-100">
-              ¿No ves tu perfil? Dejanos tu CV de todas formas ↓
-            </p>
           </div>
+          <p className="text-2xl font-black text-slate-900 ">
+            ¿No ves tu perfil? Dejanos tu CV de todas formas
+          </p>
 
           {/* ── FORMULARIO ── */}
           <div

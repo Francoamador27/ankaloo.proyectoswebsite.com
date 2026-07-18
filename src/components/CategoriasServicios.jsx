@@ -139,10 +139,17 @@ export default function CategoriasServicios() {
           `}</style>
           <h2
             ref={titleRef}
-            className="anim-title text-4xl lg:text-6xl font-black text-[#1c1c1c] mb-6 tracking-tight"
+            className="anim-title mt-6 mb-4 text-4xl lg:text-6xl font-black tracking-tight text-center text-[#1c1c1c]"
           >
             Nuestros <span className="text-[#fdce27]">Servicios</span>
           </h2>
+          <p
+            ref={textRef}
+            className="anim-text max-w-2xl mx-auto text-base md:text-lg text-slate-600 font-light"
+          >
+            Conocé las categorías de servicios que ofrecemos para acompañar
+            cada etapa de tu obra.
+          </p>
         </div>
 
         {/* Grid */}
