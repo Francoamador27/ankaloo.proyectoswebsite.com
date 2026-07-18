@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import useSWR from "swr";
 import TurnstileCaptcha from "../components/TurnstileCaptcha";
 import clienteAxios from "../config/axios";
@@ -68,6 +69,7 @@ const TrabajaConNosotros = () => {
   const [loading, setLoading] = useState(false);
   const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
   const [cvFile, setCvFile] = useState(null);
+  const [vacanteDetalle, setVacanteDetalle] = useState(null);
 
   const handleFileChange = (e) => {
     setCvFile(e.target.files?.[0] ?? null);
@@ -105,6 +107,11 @@ const TrabajaConNosotros = () => {
       behavior: "smooth",
       block: "start",
     });
+  };
+
+  const handlePostularme = (v) => {
+    setVacanteDetalle(null);
+    handleSelectVacante(v.titulo);
   };
   const { company } = useCont();
   const videoEmbedUrl = getYouTubeEmbedUrl(company?.rrhh_video);
@@ -314,7 +321,7 @@ const TrabajaConNosotros = () => {
                   <button
                     key={v.id ?? v.titulo}
                     type="button"
-                    onClick={() => handleSelectVacante(v.titulo)}
+                    onClick={() => setVacanteDetalle(v)}
                     className="w-full flex items-center justify-between px-8 py-4 hover:bg-[#fdce27]/5 transition-colors cursor-pointer text-left"
                   >
                     <div>
@@ -324,6 +331,12 @@ const TrabajaConNosotros = () => {
                       <p className="text-sm font-semibold text-slate-800">
                         {v.titulo}
                       </p>
+                      {v.descripcion && (
+                        <div
+                          className="prose prose-sm max-w-none text-xs text-slate-500 mt-1 line-clamp-2 [&_p]:m-0 [&_ul]:m-0 [&_ul]:pl-4"
+                          dangerouslySetInnerHTML={{ __html: v.descripcion }}
+                        />
+                      )}
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-xs px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500">
@@ -628,6 +641,84 @@ const TrabajaConNosotros = () => {
           </div>
         </div>
       </div>
+
+      {/* ── POPUP DETALLE VACANTE ── */}
+      <AnimatePresence>
+        {vacanteDetalle && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[#1c1c1c]/50 backdrop-blur-sm p-4 pt-24 pb-10"
+            onClick={() => setVacanteDetalle(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 16, scale: 0.97 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[75vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="px-8 pt-7 pb-5 border-b border-slate-100 flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.15em] text-[#d9a800] font-semibold mb-1">
+                    {vacanteDetalle.area}
+                  </p>
+                  <h3 className="text-xl font-black text-slate-900 leading-tight">
+                    {vacanteDetalle.titulo}
+                  </h3>
+                  <span className="inline-block mt-3 text-xs px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500">
+                    {vacanteDetalle.ubicacion}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setVacanteDetalle(null)}
+                  className="text-slate-400 hover:text-slate-600 transition-colors p-1 flex-shrink-0"
+                  aria-label="Cerrar"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Descripción */}
+              <div className="px-8 py-6 overflow-y-auto">
+                {vacanteDetalle.descripcion ? (
+                  <div
+                    className="prose prose-sm max-w-none text-slate-600 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
+                    dangerouslySetInnerHTML={{ __html: vacanteDetalle.descripcion }}
+                  />
+                ) : (
+                  <p className="text-sm text-slate-400">
+                    Sin descripción disponible para esta posición.
+                  </p>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="px-8 py-5 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => setVacanteDetalle(null)}
+                  className="text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors px-5 py-2.5 rounded-xl hover:bg-slate-100"
+                >
+                  ← Volver atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handlePostularme(vacanteDetalle)}
+                  className="bg-[#fdce27] text-[#1c1c1c] font-bold text-sm px-6 py-2.5 rounded-xl hover:brightness-95 hover:scale-[1.02] active:scale-95 transition-all"
+                >
+                  Postularme →
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

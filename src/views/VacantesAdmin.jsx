@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import useSWR, { mutate } from "swr";
 import clienteAxios from "../config/axios";
 import { Plus, Pencil, Trash2, GripVertical, MapPin, Briefcase, ToggleLeft, ToggleRight, X } from "lucide-react";
+
+const TiptapEditor = lazy(() => import("../components/TiptapEditor/TiptapEditor"));
 
 const token = () => localStorage.getItem("AUTH_TOKEN");
 
@@ -157,7 +159,10 @@ const VacantesAdmin = () => {
                   </span>
                 </div>
                 {v.descripcion && (
-                  <p className="text-xs text-slate-400 mt-1.5 line-clamp-1">{v.descripcion}</p>
+                  <div
+                    className="text-xs text-slate-400 mt-1.5 prose prose-sm max-w-none line-clamp-1"
+                    dangerouslySetInnerHTML={{ __html: v.descripcion }}
+                  />
                 )}
               </div>
 
@@ -195,7 +200,7 @@ const VacantesAdmin = () => {
       {/* Modal crear/editar */}
       {modal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
               <h2 className="text-lg font-black text-slate-900">
                 {editando ? "Editar posición" : "Nueva posición"}
@@ -256,14 +261,19 @@ const VacantesAdmin = () => {
                 <label className="text-xs font-bold uppercase tracking-wide text-slate-500">
                   Descripción <span className="text-slate-400 normal-case">(opcional)</span>
                 </label>
-                <textarea
-                  name="descripcion"
-                  value={form.descripcion}
-                  onChange={handleChange}
-                  rows={3}
-                  placeholder="Breve descripción del rol y requisitos..."
-                  className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:border-[#fdce27] focus:ring-4 focus:ring-[#fdce27]/10 outline-none transition-all resize-none"
-                />
+                <Suspense
+                  fallback={
+                    <div className="border border-slate-200 rounded-xl p-4 text-sm text-slate-400">
+                      Cargando editor...
+                    </div>
+                  }
+                >
+                  <TiptapEditor
+                    content={form.descripcion}
+                    onChange={(html) => setForm((prev) => ({ ...prev, descripcion: html }))}
+                    placeholder="Breve descripción del rol y requisitos..."
+                  />
+                </Suspense>
               </div>
 
               <label className="flex items-center gap-3 cursor-pointer select-none">
