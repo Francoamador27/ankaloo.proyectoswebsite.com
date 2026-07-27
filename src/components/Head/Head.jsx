@@ -36,8 +36,8 @@ export default function SEOHead(props) {
   } = props;
 
   // ---- Datos derivados
-  const siteName = company?.name ?? "Anka Loo Anka Loo";
-  const defaultTitle = `${siteName} | Soluciones Tecnológicas Integrales`;
+  const siteName = company?.name ?? "Anka Loo ";
+  const defaultTitle = `${siteName} | `;
   const defaultDesc =
     pDesc ??
     (company
@@ -82,8 +82,7 @@ export default function SEOHead(props) {
                 addressCountry: "AR",
               }
             : undefined,
-          description:
-            "Soluciones tecnológicas integrales de desarrollo, software, hardware y marketing digital. Transformamos tu negocio con tecnología moderna.",
+          description: "",
           openingHoursSpecification: [
             {
               "@type": "OpeningHoursSpecification",
@@ -120,10 +119,7 @@ export default function SEOHead(props) {
       )}
       <meta
         name="keywords"
-        content={
-          keywords ||
-          "desarrollo de software, transformación digital, soluciones tecnológicas, sistemas personalizados, marketing digital, desarrollo web, aplicaciones móviles, consultoría IT, Anka Loo Anka Loo"
-        }
+        content={keywords || ""}
         data-priority={precedence}
       />
       {author && <meta name="author" content={author} />}

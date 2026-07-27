@@ -163,10 +163,7 @@ export default function ServicioDetails() {
     <>
       <SEOHead
         title={`${servicio?.titulo || "Servicio"} - Anka Loo Anka Loo`}
-        description={
-          servicio?.descripcion ||
-          "Soluciones tecnológicas especializadas de Anka Loo Anka Loo"
-        }
+        description={servicio?.descripcion || ""}
       />
 
       <div className="min-h-screen bg-[#f4f4f4]">

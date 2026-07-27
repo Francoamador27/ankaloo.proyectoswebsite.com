@@ -51,7 +51,7 @@ const Inicio = () => {
         </LazyRender> */}
         <SEOHead
           priority="high"
-          title={`${company.name} | Soluciones Tecnológicas`}
+          title={`${company.name} | Empresa Constructora`}
         />
       </div>
     </>

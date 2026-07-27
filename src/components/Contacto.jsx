@@ -104,11 +104,7 @@ const Contacto = () => {
           backgroundPosition: "right top",
         }}
       />
-      <SEOHead
-        priority="low"
-        title={`Anka Loo  | Contacto`}
-        description={`Contactate con Anka Loo  para conocer nuestras soluciones tecnológicas. Te ayudamos a digitalizar tu empresa.`}
-      />
+      <SEOHead priority="low" title={`Anka Loo  | Contacto`} description={``} />
 
       {/* Glow decorativo */}
       <div className="absolute -top-32 -right-40 w-[500px] h-[500px] bg-[#fdce27]/8 rounded-full blur-3xl"></div>

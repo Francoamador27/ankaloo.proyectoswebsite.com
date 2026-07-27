@@ -35,7 +35,7 @@ const SortableImage = ({ img, onDelete }) => {
       </div>
       <img
         src={`${import.meta.env.VITE_API_URL}/storage/uploads${img.imagen}`}
-        alt="Galería de proyectos de Anka Loo Anka Loo – soluciones tecnológicas innovadoras"
+        alt=""
         className="object-cover w-full h-full"
       />
       <button
@@ -77,7 +77,9 @@ const GaleriaPanel = () => {
   const handleChange = (e) => {
     const file = e.target.files[0];
     if (file && file.size > 5242880) {
-      setError("La imagen no puede pesar más de 5MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen");
+      setError(
+        "La imagen no puede pesar más de 5MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen",
+      );
       setImagen(null);
       setPreview(null);
       return;
@@ -104,7 +106,9 @@ const GaleriaPanel = () => {
     setDragActive(false);
     const file = e.dataTransfer.files[0];
     if (file && file.size > 5242880) {
-      setError("La imagen no puede pesar más de 5MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen");
+      setError(
+        "La imagen no puede pesar más de 5MB. Podés comprimirla en https://www.iloveimg.com/es/comprimir-imagen",
+      );
       setImagen(null);
       setPreview(null);
       return;
