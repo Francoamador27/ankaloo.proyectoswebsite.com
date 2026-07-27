@@ -10,8 +10,8 @@ import {
   Briefcase,
 } from "lucide-react";
 
-import logo from "../../assets/img/logo/logo_blanco.png";
-import logo_azul from "../../assets/img/logo/logo_ankaloo.png";
+import logo from "../../assets/img/logo/logo-blanco-ankaloo.png";
+import logo_azul from "../../assets/img/logo/logo-ankaloo.png";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

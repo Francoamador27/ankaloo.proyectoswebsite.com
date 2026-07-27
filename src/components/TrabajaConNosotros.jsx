@@ -287,18 +287,18 @@ const TrabajaConNosotros = () => {
           </div>
 
           {/* ── IMAGEN BANNER RRHH ── */}
-          {company?.rrhh_imagen && (
-            <div className="w-full aspect-video rounded-2xl overflow-hidden">
-              <h2 className="text-2xl font-black text-slate-900 mb-8">
-                Nuestros espacios de trabajo
-              </h2>
-              <img
-                src={company.rrhh_imagen}
-                alt="Anka Loo — Trabaja con nosotros"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
+          {/* {company?.rrhh_imagen && (
+            // <div className="w-full aspect-video rounded-2xl overflow-hidden">
+            //   <h2 className="text-2xl font-black text-slate-900 mb-8">
+            //     Nuestros espacios de trabajo
+            //   </h2>
+            //   <img
+            //     src={company.rrhh_imagen}
+            //     alt="Anka Loo — Trabaja con nosotros"
+            //     className="w-full h-full object-cover"
+            //   />
+            // </div>
+          )} */}
 
           {/* ── VACANTES ── */}
           <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
@@ -351,9 +351,6 @@ const TrabajaConNosotros = () => {
               )}
             </div>
           </div>
-          <p className="text-2xl font-black text-slate-900 ">
-            ¿No ves tu perfil? Dejanos tu CV de todas formas
-          </p>
 
           {/* ── FORMULARIO ── */}
           <div
@@ -689,7 +686,9 @@ const TrabajaConNosotros = () => {
                 {vacanteDetalle.descripcion ? (
                   <div
                     className="prose prose-sm max-w-none text-slate-600 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
-                    dangerouslySetInnerHTML={{ __html: vacanteDetalle.descripcion }}
+                    dangerouslySetInnerHTML={{
+                      __html: vacanteDetalle.descripcion,
+                    }}
                   />
                 ) : (
                   <p className="text-sm text-slate-400">
