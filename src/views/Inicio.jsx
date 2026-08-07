@@ -49,10 +49,7 @@ const Inicio = () => {
             <Contacto />
           </Suspense>
         </LazyRender> */}
-        <SEOHead
-          priority="high"
-          title={`${company.name} | Empresa Constructora`}
-        />
+        <SEOHead priority="high" title={`Anka Loo | Empresa Constructora`} />
       </div>
     </>
   );

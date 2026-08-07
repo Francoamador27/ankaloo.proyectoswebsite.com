@@ -176,7 +176,7 @@ export default function ServiciosSwiper() {
       />
       <SEOHead
         priority="high"
-        title={`Anka Loo Anka Loo | Obras e Infraestructura en Córdoba`}
+        title={`Anka Loo | Obras e Infraestructura en Córdoba`}
         description="Empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento y urbanizaciones."
       />
 
