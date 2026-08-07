@@ -143,13 +143,6 @@ export default function CategoriasServicios() {
           >
             Nuestros <span className="text-[#fdce27]">Servicios</span>
           </h2>
-          <p
-            ref={textRef}
-            className="anim-text max-w-2xl mx-auto text-base md:text-lg text-slate-600 font-light"
-          >
-            Conocé las categorías de servicios que ofrecemos para acompañar
-            cada etapa de tu obra.
-          </p>
         </div>
 
         {/* Grid */}
