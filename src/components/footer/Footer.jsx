@@ -228,7 +228,7 @@ export default function Footer() {
                   );
                 })()}
               <a
-                href="https://ar.linkedin.com/company/ankaloo-Anka Loo"
+                href="https://www.linkedin.com/company/66922668"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start gap-3 hover:text-[#fdce27] transition-colors group opacity-70 hover:opacity-100"

@@ -196,7 +196,7 @@ export default function ServiciosGrid() {
       />
       <SEOHead
         priority="high"
-        title={`Anka Loo Anka Loo | Obras e Infraestructura en Córdoba`}
+        title={`Anka Loo  | Obras e Infraestructura en Córdoba`}
         description="Empresa constructora de Córdoba: obras hidráulicas, viales, saneamiento, urbanizaciones y obras civiles con tecnología de vanguardia."
       />
 
