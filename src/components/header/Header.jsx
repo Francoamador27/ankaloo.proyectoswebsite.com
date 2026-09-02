@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
+import useSWR from "swr";
 import {
   Menu,
   X,
@@ -12,12 +13,20 @@ import {
 
 import logo from "../../assets/img/logo/logo-blanco-ankaloo.png";
 import logo_azul from "../../assets/img/logo/logo-ankaloo.png";
+import clienteAxios from "../../config/axios";
+
+const fetcher = (url) => clienteAxios(url).then((res) => res.data);
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
+
+  const { data } = useSWR("/api/brochure", fetcher, {
+    revalidateOnFocus: false,
+  });
+  const brochure = data?.data ?? null;
 
   // States for Auth (kept commented out as in original)
   /*
@@ -43,10 +52,15 @@ export default function Header() {
   const rightNav = [
     // { label: "Sede", href: "/sede" },
     { label: "Quiénes Somos", href: "/quienes-somos" },
-    {
-      label: "Brochure",
-      href: "https://api.ankaloo.com.ar/storage/uploads/brochures/1776908375_Ankaloo%20Brochure%202026-.pdf",
-    },
+    ...(brochure
+      ? [
+          {
+            label: "Brochure",
+            href: brochure.archivo,
+            external: true,
+          },
+        ]
+      : []),
     //i { label: "Blog", href: "/blog" },
     { label: "Contacto", href: "/contacto" },
     { label: "Trabaja con Nosotros", href: "/trabaja-con-nosotros" },
@@ -83,11 +97,28 @@ export default function Header() {
 
             {/* NAVEGACION (Desktop) */}
             <ul className="items-center hidden gap-1 lg:flex">
-              {[...leftNav, ...rightNav].map((item, i) => (
-                <li key={i}>
-                  <NavLink
-                    to={item.href}
-                    className={({ isActive }) => `
+              {[...leftNav, ...rightNav].map((item, i) =>
+                item.external ? (
+                  <li key={i}>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`relative px-5 py-2 text-[14px] font-bold tracking-tight transition-all duration-300 group ${
+                        useDarkStyle
+                          ? "text-slate-700 hover:text-[#1c1c1c]"
+                          : "text-white/90 hover:text-[#fdce27]"
+                      }`}
+                    >
+                      {item.label}
+                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#fdce27] transition-all duration-300 group-hover:w-3/4"></span>
+                    </a>
+                  </li>
+                ) : (
+                  <li key={i}>
+                    <NavLink
+                      to={item.href}
+                      className={({ isActive }) => `
                       relative px-5 py-2 text-[14px] font-bold tracking-tight  transition-all duration-300
                       ${
                         useDarkStyle
@@ -100,14 +131,15 @@ export default function Header() {
                       }
                       group
                     `}
-                  >
-                    {item.label}
-                    <span
-                      className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#fdce27] transition-all duration-300 group-hover:w-3/4 ${({ isActive }) => (isActive ? "w-3/4" : "")}`}
-                    ></span>
-                  </NavLink>
-                </li>
-              ))}
+                    >
+                      {item.label}
+                      <span
+                        className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#fdce27] transition-all duration-300 group-hover:w-3/4 ${({ isActive }) => (isActive ? "w-3/4" : "")}`}
+                      ></span>
+                    </NavLink>
+                  </li>
+                )
+              )}
             </ul>
 
             {/* MOBILE MENU BUTTON */}
@@ -137,12 +169,25 @@ export default function Header() {
             <div className={`absolute inset-0 bg-white`}></div>
 
             <ul className="relative space-y-2">
-              {[...leftNav, ...rightNav].map((item, i) => (
-                <li key={i}>
-                  <NavLink
-                    to={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={({ isActive }) => `
+              {[...leftNav, ...rightNav].map((item, i) =>
+                item.external ? (
+                  <li key={i}>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center px-6 py-4 rounded-2xl text-base font-bold tracking-tight transition-all text-slate-700 hover:bg-[#fdce27]/10"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ) : (
+                  <li key={i}>
+                    <NavLink
+                      to={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={({ isActive }) => `
                       flex items-center px-6 py-4 rounded-2xl text-base font-bold tracking-tight transition-all
                       ${
                         isActive
@@ -150,11 +195,12 @@ export default function Header() {
                           : "text-slate-700 hover:bg-[#fdce27]/10"
                       }
                     `}
-                  >
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                )
+              )}
             </ul>
           </div>
         </div>
