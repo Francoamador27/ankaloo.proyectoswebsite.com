@@ -158,6 +158,7 @@ const Provider = ({ children }) => {
   const social = {
     instagram: settings?.instagram || "",
     facebook: settings?.facebook || "",
+    youtube: settings?.footer_youtube || "",
   };
 
   return (

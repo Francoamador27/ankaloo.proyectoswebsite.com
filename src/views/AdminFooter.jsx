@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import clienteAxios from '../config/axios';
-import { Image as ImageIcon, CheckCircle, Loader, Palette, Type, Layout, Sliders, Trash2 } from 'lucide-react';
+import { Image as ImageIcon, CheckCircle, Loader, Palette, Type, Layout, Sliders, Trash2, Youtube } from 'lucide-react';
 import useCont from '../hooks/useCont';
 
 const toObjPos = ({ x, y }) => `${x}% ${y}%`;
@@ -28,6 +28,7 @@ const AdminFooter = () => {
     footer_bg_color: '#f8fafc',
     footer_text_color: '#1c1c1c',
     footer_greyscale: false,
+    footer_youtube: '',
   });
 
   const [images, setImages] = useState({
@@ -63,6 +64,7 @@ const AdminFooter = () => {
         footer_bg_color: data.footer_bg_color || '#f8fafc',
         footer_text_color: data.footer_text_color || '#1c1c1c',
         footer_greyscale: !!data.footer_greyscale,
+        footer_youtube: data.footer_youtube || '',
       });
 
       const getImageUrl = (path) => {
@@ -118,6 +120,7 @@ const AdminFooter = () => {
       formData.append('footer_text_color', settings.footer_text_color);
       formData.append('footer_greyscale', settings.footer_greyscale ? 1 : 0);
       formData.append('footer_bg_position', toObjPos(focalPoint));
+      formData.append('footer_youtube', settings.footer_youtube || '');
 
       if (images.footer_bg_image) formData.append('footer_bg_image', images.footer_bg_image);
       if (images.footer_logo1) formData.append('footer_logo1', images.footer_logo1);
@@ -371,6 +374,31 @@ const AdminFooter = () => {
                 />
               </div>
               <p className="text-[10px] text-[#d9a800] font-black uppercase tracking-widest">* Los títulos siempre se mantendrán amarillos</p>
+            </div>
+          </div>
+
+          {/* Redes Sociales */}
+          <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-[#fdce27]/10 rounded-lg text-[#d9a800]">
+                <Youtube size={20} />
+              </div>
+              <h2 className="text-xl font-black text-[#1c1c1c] uppercase tracking-wider">Redes Sociales</h2>
+            </div>
+
+            <div className="space-y-4">
+              <label className="block text-xs font-black text-gray-400 uppercase tracking-widest">Canal de YouTube (URL)</label>
+              <input
+                type="url"
+                name="footer_youtube"
+                value={settings.footer_youtube}
+                onChange={handleInputChange}
+                placeholder="https://www.youtube.com/@tucanal"
+                className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-4 font-medium text-[#1c1c1c]"
+              />
+              <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">
+                El ícono de YouTube solo aparece en el footer si cargás una URL.
+              </p>
             </div>
           </div>
 

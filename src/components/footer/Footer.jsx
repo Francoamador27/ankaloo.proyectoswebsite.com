@@ -1,5 +1,5 @@
 import logo_blanco from "../../assets/img/logo/logo_ankaloo.png";
-import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { Mail, Phone, MapPin } from "lucide-react";
 import useCont from "../../hooks/useCont";
 import { Link } from "react-router-dom";
@@ -9,9 +9,13 @@ import clienteAxios from "../../config/axios";
 const fetcher = (url) =>
   clienteAxios(url).then((res) => res.data.data ?? res.data);
 
+const YOUTUBE_URL_DEFAULT =
+  "https://www.youtube.com/@ankalooconstrucciones5735";
+
 export default function Footer() {
   const { company, contact, social, footer, settings } = useCont();
   const currentYear = new Date().getFullYear();
+  const youtubeUrl = social.youtube || YOUTUBE_URL_DEFAULT;
 
   const { data: certData } = useSWR("/api/certificados", fetcher, {
     revalidateOnFocus: false,
@@ -240,6 +244,21 @@ export default function Footer() {
                 />
                 <span className="text-sm">LinkedIn</span>
               </a>
+              {youtubeUrl && (
+                <a
+                  href={youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 hover:text-[#fdce27] transition-colors group opacity-70 hover:opacity-100"
+                  style={{ color: footer.text_color }}
+                >
+                  <FaYoutube
+                    size={18}
+                    className="flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
+                  />
+                  <span className="text-sm">YouTube</span>
+                </a>
+              )}
             </div>
           </div>
         </div>
