@@ -24,3 +24,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Instructivos internos (documentacion, no versionar)
+INSTRUCTIVO_*.md
+Instructivo_*.md
+INSTRUCTIVO_*.pdf
+Instructivo_*.pdf
