@@ -67,6 +67,10 @@ const ServicioDetails = lazy(() => import("./components/ServicioDetails"));
 const ServiciosPorCategoria = lazy(
   () => import("./components/ServiciosPorCategoria"),
 );
+const AbastecimientoParaObras = lazy(
+  () => import("./components/AbastecimientoParaObras"),
+);
+const PlantaDetalle = lazy(() => import("./components/PlantaDetalle"));
 const LeadsContacto = lazy(() => import("./components/LeadsContacto"));
 const LeadsRRHH = lazy(() => import("./components/LeadsRRHH"));
 const TrabajaConNosotros = lazy(
@@ -108,6 +112,14 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: suspense(<Inicio />) },
       { path: "/servicios", element: suspense(<CategoriasServicios />) },
+      {
+        path: "/servicios/abastecimiento-para-obras",
+        element: suspense(<AbastecimientoParaObras />),
+      },
+      {
+        path: "/servicios/abastecimiento-para-obras/:plantaId",
+        element: suspense(<PlantaDetalle />),
+      },
       { path: "/servicios/:categoria", element: suspense(<ServiciosGrid />) },
       { path: "/servicio/:slug", element: suspense(<ServicioDetails />) },
       { path: "/blog", element: suspense(<BlogList />) },

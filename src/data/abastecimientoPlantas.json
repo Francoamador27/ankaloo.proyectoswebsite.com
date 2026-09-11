@@ -1,0 +1,32 @@
+[
+  {
+    "id": "planta-hormigon",
+    "titulo": "Planta de Hormigón",
+    "subtitulo": "Planta Betonmac Neo Móvil 70/80",
+    "descripcion": [
+      "Capacidad de producción: hasta 70–80 m³/h.",
+      "Descarga sobre camión motohormigonero.",
+      "Situada estratégicamente en la ciudad de Río Cuarto para favorecer la logística y movimientos de insumos de provisión para las obras propias."
+    ],
+    "imagen": "/img/abastecimiento/planta-hormigon/hero.jpg",
+    "galeria": [
+      "/img/abastecimiento/planta-hormigon/galeria-1.jpg",
+      "/img/abastecimiento/planta-hormigon/galeria-2.jpg"
+    ]
+  },
+  {
+    "id": "planta-asfalto",
+    "titulo": "Planta de Asfalto",
+    "subtitulo": "Planta Magnum 140-i",
+    "descripcion": [
+      "Capacidad de producción: 140 ton/h.",
+      "Última generación y tecnología a nivel mundial.",
+      "Situada estratégicamente en la ciudad de Río Cuarto para favorecer la logística y movimientos de insumos de provisión para las obras propias."
+    ],
+    "imagen": "/img/abastecimiento/planta-asfalto/hero.png",
+    "galeria": [
+      "/img/abastecimiento/planta-asfalto/galeria-1.jpg",
+      "/img/abastecimiento/planta-asfalto/galeria-2.png"
+    ]
+  }
+]

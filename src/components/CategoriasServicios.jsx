@@ -1,16 +1,31 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import useSWR from "swr";
 import clienteAxios from "../config/axios";
 import CategoriaServicioCard from "./CategoriaServicioCard";
+import abastecimientoPlantas from "../data/abastecimientoPlantas.json";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
 
 export default function CategoriasServicios() {
   const { pathname } = useLocation();
+  const [searchParams] = useSearchParams();
+  const esInfraestructura = searchParams.get("menu") === "infraestructura";
   const isServiciosRoot =
     pathname === "/servicios" || pathname === "/servicios/";
   const [categorias, setCategorias] = useState([]);
+
+  // Accesos directos hardcodeados (no vienen de la API)
+  const categoriasHardcodeadas = abastecimientoPlantas.map((planta) => ({
+    id: `hc-${planta.id}`,
+    to: `/servicios/abastecimiento-para-obras/${planta.id}`,
+    nombre: planta.titulo,
+    descripcion: `<ul>${(planta.descripcion || [])
+      .map((item) => `<li>${item}</li>`)
+      .join("")}</ul>`,
+    imagen: planta.imagen,
+    enfasis: planta.subtitulo,
+  }));
 
   const titleRef = useCallback((el) => {
     if (!el) return;
@@ -141,7 +156,16 @@ export default function CategoriasServicios() {
             ref={titleRef}
             className="anim-title mt-6 mb-4 text-4xl lg:text-6xl font-black tracking-tight text-center text-[#1c1c1c]"
           >
-            Nuestros <span className="text-[#fdce27]">Servicios</span>
+            {esInfraestructura ? (
+              <>
+                Desarrollo de{" "}
+                <span className="text-[#fdce27]">infraestructura</span>
+              </>
+            ) : (
+              <>
+                Nuestros <span className="text-[#fdce27]">Servicios</span>
+              </>
+            )}
           </h2>
         </div>
 
@@ -150,6 +174,13 @@ export default function CategoriasServicios() {
           {categorias.map((categoria) => (
             <CategoriaServicioCard key={categoria.id} categoria={categoria} />
           ))}
+          {!esInfraestructura &&
+            categoriasHardcodeadas.map((categoria) => (
+              <CategoriaServicioCard
+                key={categoria.id}
+                categoria={categoria}
+              />
+            ))}
         </div>
       </div>
     </section>

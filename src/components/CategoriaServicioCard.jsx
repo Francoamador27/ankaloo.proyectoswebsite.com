@@ -5,6 +5,7 @@ import TiltedCard from "./TiltedCard";
 export default function CategoriaServicioCard({ categoria }) {
   const slug =
     categoria.nombre?.toLowerCase().replace(/\s+/g, "-") || categoria.id;
+  const to = categoria.to || `/servicios/${slug}`;
 
   const wrapperRef = useRef(null);
 
@@ -91,7 +92,7 @@ export default function CategoriaServicioCard({ categoria }) {
         }
       `}</style>
       <div ref={wrapperRef} className="cat-card">
-    <Link to={`/servicios/${slug}`}>
+    <Link to={to}>
       <div className="group relative h-auto min-h-[560px] lg:h-[580px] overflow-hidden shadow-xl border border-slate-200/10 transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1c1c1c]">
         {/* Línea dorada superior que aparece en hover */}
         <div className="absolute top-0 left-0 w-full h-1 bg-[#fdce27] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-30"></div>

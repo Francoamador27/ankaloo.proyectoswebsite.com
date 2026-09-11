@@ -1,0 +1,9 @@
+Imágenes de la Planta de Asfalto (Magnum 140-i).
+
+- hero.png      -> foto de fondo de la card en /servicios/abastecimiento-para-obras
+- galeria-1.jpg -> foto adicional, aparece en la galería al abrir el detalle
+- galeria-2.png -> foto adicional, aparece en la galería al abrir el detalle
+
+Para reemplazar o sumar fotos, subí el archivo con ese mismo nombre
+(o uno nuevo "galeria-3.jpg", etc.) y avisame para agregarlo en
+src/data/abastecimientoPlantas.json.
