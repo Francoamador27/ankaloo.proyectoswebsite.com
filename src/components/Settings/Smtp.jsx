@@ -12,6 +12,7 @@ const Smtp = ({ token, onSaved }) => {
   const [fromEmail, setFromEmail] = useState("");
   const [fromName, setFromName] = useState("");
   const [adminEmail, setAdminEmail] = useState("");
+  const [adminEmailCc, setAdminEmailCc] = useState("");
   const [rrhhEmail, setRrhhEmail] = useState("");
   const [saveRrhhPdf, setSaveRrhhPdf] = useState(false);
   const [showPass, setShowPass] = useState(false);
@@ -39,6 +40,7 @@ const Smtp = ({ token, onSaved }) => {
       setFromEmail(data?.from_email || "");
       setFromName(data?.from_name || "");
       setAdminEmail(data?.admin_email || "");
+      setAdminEmailCc(data?.admin_email_cc || "");
       setRrhhEmail(data?.rrhh_email || "");
       setSaveRrhhPdf(data?.save_rrhh_pdf || false);
     } catch (e) {
@@ -64,6 +66,7 @@ const Smtp = ({ token, onSaved }) => {
     if (!username.trim()) return setErr("Ingresá el usuario SMTP.");
     if (fromEmail && !EMAIL_RE.test(fromEmail)) return setErr("El email de remitente no es válido.");
     if (adminEmail && !EMAIL_RE.test(adminEmail)) return setErr("El email del administrador no es válido.");
+    if (adminEmailCc && !EMAIL_RE.test(adminEmailCc)) return setErr("El email en copia (CC) no es válido.");
     if (rrhhEmail && !EMAIL_RE.test(rrhhEmail)) return setErr("El email de RRHH no es válido.");
 
     const payload = {
@@ -75,6 +78,7 @@ const Smtp = ({ token, onSaved }) => {
       from_email: fromEmail || null,
       from_name: fromName || null,
       admin_email: adminEmail || null,
+      admin_email_cc: adminEmailCc || null,
       rrhh_email: rrhhEmail || null,
       save_rrhh_pdf: saveRrhhPdf,
     };
@@ -178,6 +182,15 @@ const Smtp = ({ token, onSaved }) => {
                  placeholder="admin@tu-dominio.com"
                  className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
           <p className="text-xs text-slate-500 mt-1">A este correo llegarán los mensajes de formularios de contacto.</p>
+        </div>
+
+        {/* EMAIL DESTINO - CC */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-slate-700 mb-1">Email en copia / CC (opcional)</label>
+          <input type="email" value={adminEmailCc} onChange={(e) => setAdminEmailCc(e.target.value)}
+                 placeholder="copia@tu-dominio.com"
+                 className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+          <p className="text-xs text-slate-500 mt-1">Este correo recibirá una copia (CC) de los mensajes de formularios de contacto, además del email de destino principal.</p>
         </div>
 
         {/* EMAIL RRHH */}
