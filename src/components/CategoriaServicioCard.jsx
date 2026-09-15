@@ -18,7 +18,7 @@ export default function CategoriaServicioCard({ categoria }) {
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -91,54 +91,53 @@ export default function CategoriaServicioCard({ categoria }) {
         }
       `}</style>
       <div ref={wrapperRef} className="cat-card">
-    <Link to={`/servicios/${slug}`}>
-      <div className="group relative h-auto min-h-[560px] lg:h-[580px] overflow-hidden shadow-xl border border-slate-200/10 transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1c1c1c]">
-        {/* Línea dorada superior que aparece en hover */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-[#fdce27] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-30"></div>
+        <Link to={`/servicios/${slug}`}>
+          <div className="group relative h-auto min-h-[560px] lg:h-[580px] overflow-hidden shadow-xl border border-slate-200/10 transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1c1c1c]">
+            {/* Línea dorada superior que aparece en hover */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-[#fdce27] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-30"></div>
 
-        {/* Fondo (Imagen o Patrón) */}
-        <div className="absolute inset-0 z-0">
-          {categoria.imagen ? (
-            <TiltedCard
-              imageSrc={categoria.imagen}
-              altText={categoria.nombre}
-              captionText={categoria.nombre}
-              containerHeight="100%"
-              containerWidth="100%"
-              imageHeight="100%"
-              imageWidth="100%"
-              rotateAmplitude={5}
-              scaleOnHover={1.12}
-              showMobileWarning={false}
-              displayOverlayContent={false}
-            />
-          ) : (
-            <div className="absolute inset-0 w-full h-full bg-[#1c1c1c]">
-              <div
-                className="absolute inset-0 opacity-10"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-                  backgroundSize: "24px 24px",
-                }}
-              ></div>
+            {/* Fondo (Imagen o Patrón) */}
+            <div className="absolute inset-0 z-0">
+              {categoria.imagen ? (
+                <TiltedCard
+                  imageSrc={categoria.imagen}
+                  altText={categoria.nombre}
+                  captionText={categoria.nombre}
+                  containerHeight="100%"
+                  containerWidth="100%"
+                  imageHeight="100%"
+                  imageWidth="100%"
+                  rotateAmplitude={5}
+                  scaleOnHover={1.12}
+                  showMobileWarning={false}
+                  displayOverlayContent={false}
+                />
+              ) : (
+                <div className="absolute inset-0 w-full h-full bg-[#1c1c1c]">
+                  <div
+                    className="absolute inset-0 opacity-10"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+                      backgroundSize: "24px 24px",
+                    }}
+                  ></div>
+                </div>
+              )}
+
+              {/* Filtro amarillo vibrante */}
+
+              {/* Overlay degradado suave */}
+              <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             </div>
-          )}
 
-          {/* Filtro amarillo vibrante */}
-          <div className="absolute inset-0 bg-[#fdce27]/70 mix-blend-multiply z-10 transition-all duration-500 group-hover:bg-[#fdce27]/80" />
-
-          {/* Overlay degradado suave */}
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        </div>
-
-        {/* Contenido: Relativo en mobile para dar altura, absoluto en desktop */}
-        <div className="relative z-20 lg:absolute lg:inset-0">
-          {cardContent}
-        </div>
+            {/* Contenido: Relativo en mobile para dar altura, absoluto en desktop */}
+            <div className="relative z-20 lg:absolute lg:inset-0">
+              {cardContent}
+            </div>
+          </div>
+        </Link>
       </div>
-    </Link>
-    </div>
     </>
   );
 }
