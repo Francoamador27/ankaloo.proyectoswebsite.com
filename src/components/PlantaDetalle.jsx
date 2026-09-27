@@ -163,12 +163,6 @@ export default function PlantaDetalle() {
                   </span>
                 </div>
 
-                {planta.subtitulo && (
-                  <p className="text-xs font-black uppercase tracking-widest text-[#d9a800] mb-6">
-                    {planta.subtitulo}
-                  </p>
-                )}
-
                 {Array.isArray(planta.descripcion) &&
                   planta.descripcion.length > 0 && (
                     <ul className="text-lg leading-relaxed text-[#5a5a5a] font-light mb-10 list-none p-0 m-0 space-y-3">

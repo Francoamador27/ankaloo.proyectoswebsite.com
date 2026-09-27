@@ -20,9 +20,6 @@ export default function CategoriasServicios() {
     id: `hc-${planta.id}`,
     to: `/servicios/abastecimiento-para-obras/${planta.id}`,
     nombre: planta.titulo,
-    descripcion: `<ul>${(planta.descripcion || [])
-      .map((item) => `<li>${item}</li>`)
-      .join("")}</ul>`,
     imagen: planta.imagen,
     enfasis: planta.subtitulo,
   }));

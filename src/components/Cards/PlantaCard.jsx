@@ -99,24 +99,6 @@ export default function PlantaCard({ planta }) {
                 </h3>
               </div>
 
-              {/* Descripción (como items) */}
-              {Array.isArray(planta.descripcion) &&
-                planta.descripcion.length > 0 && (
-                  <ul className="max-w-none text-[15px] font-medium text-slate-100 mb-6 list-none p-0 m-0">
-                    {planta.descripcion.map((item, idx) => (
-                      <li
-                        key={idx}
-                        className="relative pb-2 pl-5 leading-tight"
-                      >
-                        <span className="absolute left-0 top-[4px] text-[12px] font-black text-white">
-                          ❯
-                        </span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
               {/* CTA */}
               <div className={`mt-auto ${planta.subtitulo ? "pb-10" : ""}`}>
                 <div className="flex items-center gap-3 group/cta">
