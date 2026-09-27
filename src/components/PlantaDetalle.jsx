@@ -23,7 +23,7 @@ export default function PlantaDetalle() {
       <div className="min-h-screen bg-[#f4f4f4] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-black text-[#1c1c1c] mb-2 tracking-wide">
-            No encontramos esta planta
+            No encontramos esta planta.
           </h1>
           <Link
             to="/servicios/abastecimiento-para-obras"
