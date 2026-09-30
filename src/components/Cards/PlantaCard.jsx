@@ -5,16 +5,17 @@ import TiltedCard from "../TiltedCard";
 export default function PlantaCard({ planta }) {
   const [imgOk, setImgOk] = useState(false);
   const wrapperRef = useRef(null);
+  const imagenCard = planta.imagenCard || planta.imagen;
 
   // Precarga la imagen: solo mostramos TiltedCard si realmente existe,
   // sino queda el placeholder (mientras no se suba la foto real).
   useEffect(() => {
-    if (!planta.imagen) return;
+    if (!imagenCard) return;
     const img = new Image();
     img.onload = () => setImgOk(true);
     img.onerror = () => setImgOk(false);
-    img.src = planta.imagen;
-  }, [planta.imagen]);
+    img.src = imagenCard;
+  }, [imagenCard]);
 
   useEffect(() => {
     const el = wrapperRef.current;
@@ -54,7 +55,7 @@ export default function PlantaCard({ planta }) {
           <div className="absolute inset-0 z-0">
             {imgOk ? (
               <TiltedCard
-                imageSrc={planta.imagen}
+                imageSrc={imagenCard}
                 altText={planta.titulo}
                 captionText={planta.titulo}
                 containerHeight="100%"
@@ -82,15 +83,13 @@ export default function PlantaCard({ planta }) {
               </div>
             )}
 
-            {/* Filtro amarillo vibrante */}
-            <div className="absolute inset-0 bg-[#fdce27]/70 mix-blend-multiply z-10 transition-all duration-500 group-hover:bg-[#fdce27]/80" />
-
             {/* Overlay degradado suave */}
             <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           </div>
 
-          {/* Contenido */}
-          <div className="relative z-20 lg:absolute lg:inset-0">
+          {/* Contenido: sin descripción, así que va siempre absoluto para
+              que VER y el epígrafe queden anclados abajo en cualquier tamaño */}
+          <div className="absolute inset-0 z-20">
             <div className="relative z-10 h-full flex flex-col p-8 pt-32 lg:pt-[120px] text-white">
               {/* Título estilo tipología de obra */}
               <div className="mb-6">

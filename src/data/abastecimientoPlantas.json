@@ -7,6 +7,7 @@
       "Capacidad de producción: hasta 70–80 m³/h."
     ],
     "imagen": "/img/abastecimiento/planta-hormigon/hero.jpg",
+    "imagenCard": "/img/abastecimiento/planta-hormigon/portada-planta-hormigon.png",
     "galeria": [
       "/img/abastecimiento/planta-hormigon/galeria-1.jpg",
       "/img/abastecimiento/planta-hormigon/galeria-2.jpg"
@@ -20,6 +21,7 @@
       "Capacidad de producción: 140 ton/h."
     ],
     "imagen": "/img/abastecimiento/planta-asfalto/hero.png",
+    "imagenCard": "/img/abastecimiento/planta-asfalto/portada-planta-asfalto.png",
     "galeria": [
       "/img/abastecimiento/planta-asfalto/galeria-1.jpg",
       "/img/abastecimiento/planta-asfalto/galeria-2.png"

@@ -126,15 +126,21 @@ export default function CategoriaServicioCard({ categoria }) {
             </div>
           )}
 
-          {/* Filtro amarillo vibrante */}
-          <div className="absolute inset-0 bg-[#fdce27]/70 mix-blend-multiply z-10 transition-all duration-500 group-hover:bg-[#fdce27]/80" />
-
           {/* Overlay degradado suave */}
           <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         </div>
 
-        {/* Contenido: Relativo en mobile para dar altura, absoluto en desktop */}
-        <div className="relative z-20 lg:absolute lg:inset-0">
+        {/* Contenido: Relativo en mobile para dar altura, absoluto en desktop.
+            Si no hay descripción (cards hardcodeadas de plantas), el contenido
+            es corto y no da altura propia, así que va siempre absoluto para
+            que VER y el epígrafe queden anclados abajo. */}
+        <div
+          className={
+            categoria.descripcion
+              ? "relative z-20 lg:absolute lg:inset-0"
+              : "absolute inset-0 z-20"
+          }
+        >
           {cardContent}
         </div>
       </div>

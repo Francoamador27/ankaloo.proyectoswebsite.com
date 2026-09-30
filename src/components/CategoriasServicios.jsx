@@ -20,7 +20,7 @@ export default function CategoriasServicios() {
     id: `hc-${planta.id}`,
     to: `/servicios/abastecimiento-para-obras/${planta.id}`,
     nombre: planta.titulo,
-    imagen: planta.imagen,
+    imagen: planta.imagenCard || planta.imagen,
     enfasis: planta.subtitulo,
   }));
 
