@@ -128,8 +128,9 @@ const TiptapEditor = ({ content, onChange, placeholder = "Escribe aquí la descr
 
   // Actualizar contenido si cambia externamente (útil para edición)
   React.useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content);
+    if (!editor || editor.isDestroyed) return;
+    if ((content ?? "") !== editor.getHTML()) {
+      editor.commands.setContent(content ?? "", { emitUpdate: false });
     }
   }, [content, editor]);
 
