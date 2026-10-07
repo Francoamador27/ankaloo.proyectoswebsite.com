@@ -25,7 +25,7 @@ export default function CategoriaServicioCard({ categoria }) {
   }, []);
 
   const cardContent = (
-    <div className="relative z-10 h-full flex flex-col p-8 pt-32 lg:pt-[120px] text-white">
+    <div className="relative z-10 flex-1 h-full flex flex-col p-8 pt-32 lg:pt-[120px] text-white">
       {/* Título Estilo Vial */}
       <div className="mb-6">
         <h3 className="inline-block bg-[#5b5959e6]/95 px-5 py-3 text-2xl lg:text-2xl font-black uppercase tracking-tighter text-[#fdce27] border-l-[10px] border-[#fdce27] shadow-xl">
@@ -92,7 +92,7 @@ export default function CategoriaServicioCard({ categoria }) {
       `}</style>
       <div ref={wrapperRef} className="cat-card">
         <Link to={`/servicios/${slug}`}>
-          <div className="group relative h-auto min-h-[560px] lg:h-[580px] overflow-hidden shadow-xl border border-slate-200/10 transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1c1c1c]">
+          <div className="group relative flex flex-col h-auto min-h-[560px] lg:h-[580px] overflow-hidden shadow-xl border border-slate-200/10 transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1c1c1c]">
             {/* Línea dorada superior que aparece en hover */}
             <div className="absolute top-0 left-0 w-full h-1 bg-[#fdce27] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-30"></div>
 
@@ -132,7 +132,7 @@ export default function CategoriaServicioCard({ categoria }) {
             </div>
 
             {/* Contenido: Relativo en mobile para dar altura, absoluto en desktop */}
-            <div className="relative z-20 lg:absolute lg:inset-0">
+            <div className="relative z-20 flex-1 flex flex-col lg:absolute lg:inset-0">
               {cardContent}
             </div>
           </div>
