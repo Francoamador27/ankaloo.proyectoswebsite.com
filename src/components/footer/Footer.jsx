@@ -102,18 +102,6 @@ export default function Footer() {
                   <FaFacebook className="text-lg" />
                 </a>
               )}
-              {social.instagram && (
-                <a
-                  href={social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-white/10 hover:bg-[#fdce27] hover:text-[#1c1c1c] rounded-full transition-all duration-300 hover:scale-110 shadow-sm"
-                  title="Instagram"
-                  style={{ color: footer.text_color }}
-                >
-                  <FaInstagram className="text-lg" />
-                </a>
-              )}
             </div>
           </div>
 
@@ -257,6 +245,21 @@ export default function Footer() {
                     className="flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
                   />
                   <span className="text-sm">YouTube</span>
+                </a>
+              )}
+              {social.instagram && (
+                <a
+                  href={social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 hover:text-[#fdce27] transition-colors group opacity-70 hover:opacity-100"
+                  style={{ color: footer.text_color }}
+                >
+                  <FaInstagram
+                    size={18}
+                    className="flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
+                  />
+                  <span className="text-sm">Instagram</span>
                 </a>
               )}
             </div>
