@@ -232,21 +232,6 @@ export default function Footer() {
                 />
                 <span className="text-sm">LinkedIn</span>
               </a>
-              {youtubeUrl && (
-                <a
-                  href={youtubeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-3 hover:text-[#fdce27] transition-colors group opacity-70 hover:opacity-100"
-                  style={{ color: footer.text_color }}
-                >
-                  <FaYoutube
-                    size={18}
-                    className="flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
-                  />
-                  <span className="text-sm">YouTube</span>
-                </a>
-              )}
               {social.instagram && (
                 <a
                   href={social.instagram}
@@ -260,6 +245,21 @@ export default function Footer() {
                     className="flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
                   />
                   <span className="text-sm">Instagram</span>
+                </a>
+              )}
+              {youtubeUrl && (
+                <a
+                  href={youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 hover:text-[#fdce27] transition-colors group opacity-70 hover:opacity-100"
+                  style={{ color: footer.text_color }}
+                >
+                  <FaYoutube
+                    size={18}
+                    className="flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
+                  />
+                  <span className="text-sm">YouTube</span>
                 </a>
               )}
             </div>
