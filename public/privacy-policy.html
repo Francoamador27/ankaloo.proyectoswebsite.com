@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Política de Privacidad — AnkaLoo</title>
+  <meta name="description" content="Política de privacidad de la aplicación móvil AnkaLoo." />
+  <meta name="theme-color" content="#4C4C4E" />
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkFua2Fsb28iPjx0aXRsZT5BbmthbG9vPC90aXRsZT48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxNC4wOCIgZmlsbD0iIzRDNEM0RSIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC01NS43MDggLTk5LjM2NSkgc2NhbGUoMC4yMDI2OSkiPjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIC0xIDM3NC43NTA5IDYxNS45MTk2KSIgZD0iTTAgMC0xOC4zODYtNDcuNjA5SDE4LjYxMlpNNDAuNjgxLTEwNC43MjggMzAuNTA3LTc4LjMzNEgtMzAuNTE0TC00MC42NzMtMTA0LjcyOEgtNzguOTc2TC0xOC4zODYgNDAuMjUxSDE4LjE4OEw3OC43NzktMTA0LjcyOFoiIGZpbGw9IiNGRkZGRkYiLz48cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA1NjkuNTEyOSA3MjAuNjQ3MikiIGQ9Ik0wIDBILTEwNy4xMTNWMTQ0Ljk3OEgtNzEuMzk4VjMxLjE2M0gwWiIgZmlsbD0iI0U5QzUwMCIvPjwvZz48L3N2Zz4=" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Tokens del skin `minimal` del dashboard (src/assets/css/config/_theme-minimal.css + _root.css).
+       Página estática: no pasa por Tailwind ni por el build de Vite. */
+    :root {
+      color-scheme: light;
+      --font-body: "Hanken Grotesk", sans-serif;
+      --body-bg: #f1f1f5;
+      --body-color: #4c4c5c;
+      --card: #fff;
+      --heading: #313a46;
+      --primary: #4557a3;
+      --primary-hover: #34417a;
+      --primary-soft: rgba(69, 87, 163, 0.15);
+      --default-100: #f6f7fb;
+      --default-300: #e7e9eb;
+      --default-400: #9ba6b7;
+      --radius: 10px;
+      --shadow: 0px 1px 4px 0px rgba(130, 143, 163, 0.15);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --body-bg: #17181e;
+        --body-color: #aab8c5;
+        --card: #1e1f27;
+        --heading: #dce0fb;
+        --primary: #7c8fdc;
+        --primary-hover: #9aa9e6;
+        --primary-soft: rgba(124, 143, 220, 0.15);
+        --default-100: #272832;
+        --default-300: #293036;
+        --default-400: #8391a2;
+        --shadow: 0px 0px 30px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      min-height: 100vh;
+      background: var(--body-bg);
+      color: var(--body-color);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    .wrapper { max-width: 880px; margin: 0 auto; padding: 50px 16px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      padding: 30px 30px 24px;
+      border-bottom: 1px dashed var(--default-300);
+    }
+    .card-body { padding: 10px 30px 30px; }
+
+    .auth-logo img { height: 64px; display: block; }
+    .logo-dark { display: none !important; }
+    @media (prefers-color-scheme: dark) {
+      .logo-light { display: none !important; }
+      .logo-dark { display: block !important; }
+    }
+
+    h1 { margin: 22px 0 6px; color: var(--heading); font-size: 1.5rem; font-weight: 700; line-height: 1.3; }
+    .meta { margin: 0; color: var(--default-400); font-size: 0.8125rem; }
+    .badge {
+      display: inline-block; margin-top: 14px; padding: 3px 10px; border-radius: 999px;
+      background: var(--primary-soft); color: var(--primary); font-size: 0.75rem; font-weight: 500;
+    }
+
+    section { padding: 22px 0; border-bottom: 1px dashed var(--default-300); }
+    section:last-of-type { border-bottom: 0; padding-bottom: 0; }
+    .intro { padding-top: 20px; }
+
+    h2 {
+      display: flex; align-items: center; gap: 10px;
+      margin: 0 0 10px; color: var(--heading); font-size: 1rem; font-weight: 700; line-height: 1.4;
+    }
+    h2 .num {
+      flex: none; display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--primary-soft); color: var(--primary); font-size: 0.8125rem; font-weight: 700;
+    }
+    p, li { margin: 8px 0; }
+    ul { margin: 8px 0; padding-left: 1.25rem; }
+    li::marker { color: var(--primary); }
+    strong { color: var(--heading); font-weight: 700; }
+    a { color: var(--primary); text-decoration: none; font-weight: 500; }
+    a:hover { color: var(--primary-hover); text-decoration: underline; }
+    .muted { color: var(--default-400); font-size: 0.8125rem; }
+
+    .table-wrap { margin: 12px 0; border: 1px solid var(--default-300); border-radius: var(--radius); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px dashed var(--default-300); }
+    tbody tr:last-child td { border-bottom: 0; }
+    th { background: var(--default-100); color: var(--heading); font-weight: 700; white-space: nowrap; }
+    td:first-child { color: var(--heading); font-weight: 500; white-space: nowrap; }
+
+    .callout {
+      margin: 12px 0 0; padding: 12px 16px; border-radius: var(--radius);
+      background: var(--primary-soft); color: var(--heading);
+    }
+
+    .footer { margin: 30px 0 0; text-align: center; color: var(--default-400); font-size: 0.875rem; }
+
+    @media (max-width: 600px) {
+      .wrapper { padding: 24px 16px; }
+      .card-header { padding: 24px 20px 20px; }
+      .card-body { padding: 6px 20px 24px; }
+      .auth-logo img { height: 52px; }
+      h1 { font-size: 1.3rem; }
+
+      /* Tabla → una tarjeta por fila: tres columnas no entran a 360px. */
+      table, tbody, tr, td { display: block; }
+      thead { display: none; }
+      tr { padding: 12px 14px; border-bottom: 1px dashed var(--default-300); }
+      tbody tr:last-child { border-bottom: 0; }
+      td { padding: 0; border: 0; }
+      td:first-child { margin-bottom: 6px; white-space: normal; }
+      td + td { margin-top: 6px; }
+      td:nth-child(2)::before, td:nth-child(3)::before {
+        display: block; color: var(--default-400); font-size: 0.75rem; font-weight: 500;
+      }
+      td:nth-child(2)::before { content: "Datos"; }
+      td:nth-child(3)::before { content: "Finalidad"; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrapper">
+    <div class="card">
+      <header class="card-header">
+        <a class="auth-logo" href="/" aria-label="Ankaloo">
+          <img class="logo-light" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjI5NS43NSA0NjEuNzUgODc4LjAwIDI2Mi4yNSIgd2lkdGg9Ijg3OC4wMCIgaGVpZ2h0PSIyNjIuMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQW5rYWxvbyI+PHRpdGxlPkFua2Fsb288L3RpdGxlPjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIC0xIDkyNS43OTc5IDcyMC42NDcyKSIgZD0iTTAgMEgtMTA3LjExM1YxNDQuOTc4SC03MS4zOThWMzEuMTYzSDBaIiBmaWxsPSIjRTlDNTAwIi8+PHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgLTEgMTAxNy4zMjU3IDY2Ni4zMzU3KSIgZD0iTTAgMEMwIDE2Ljg3Ni0xMi43NyAyOC4xMzYtMjYuMTk3IDI4LjEzNi00MC4yNTggMjguMTM2LTUzLjAyIDE2Ljg3Ni01My4wMiAwLTUzLjAyLTE3LjA4OC00MC4yNTgtMjguMTM3LTI2LjE5Ny0yOC4xMzctMTIuNzctMjguMTM3IDAtMTcuMDg4IDAgME0zMy4zMDcgMEMzMy4zMDctMzQuNDAyIDYuMDQ1LTU3LjMzMS0yNi4xOTctNTcuMzMxLTU5LjA3NC01Ny4zMzEtODYuMzQzLTM0LjQwMi04Ni4zNDMgMC04Ni4zNDMgMzQuMTgyLTU5LjA3NCA1Ny4xMjYtMjYuMTk3IDU3LjEyNiA2LjA0NSA1Ny4xMjYgMzMuMzA3IDM0LjE4MiAzMy4zMDcgMCIgZmlsbD0iI0U5QzUwMCIvPjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIC0xIDExNDAuMjA2IDY2Ni4zMzU3KSIgZD0iTTAgMEMwIDE2Ljg3Ni0xMi43NyAyOC4xMzYtMjYuMTc1IDI4LjEzNi00MC4yNDMgMjguMTM2LTUzLjAxNCAxNi44NzYtNTMuMDE0IDAtNTMuMDE0LTE3LjA4OC00MC4yNDMtMjguMTM3LTI2LjE3NS0yOC4xMzctMTIuNzctMjguMTM3IDAtMTcuMDg4IDAgME0zMy4zMzYgMEMzMy4zMzYtMzQuNDAyIDYuMDUzLTU3LjMzMS0yNi4xNzUtNTcuMzMxLTU5LjA2Ni01Ny4zMzEtODYuMzQzLTM0LjQwMi04Ni4zNDMgMC04Ni4zNDMgMzQuMTgyLTU5LjA2NiA1Ny4xMjYtMjYuMTc1IDU3LjEyNiA2LjA1MyA1Ny4xMjYgMzMuMzM2IDM0LjE4MiAzMy4zMzYgMCIgZmlsbD0iI0U5QzUwMCIvPjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIC0xIDM3NC43NTA5IDYxNS45MTk2KSIgZD0iTTAgMC0xOC4zODYtNDcuNjA5SDE4LjYxMlpNNDAuNjgxLTEwNC43MjggMzAuNTA3LTc4LjMzNEgtMzAuNTE0TC00MC42NzMtMTA0LjcyOEgtNzguOTc2TC0xOC4zODYgNDAuMjUxSDE4LjE4OEw3OC43NzktMTA0LjcyOFoiIGZpbGw9IiM0QzRDNEUiLz48cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA1NjguNjE0NSA2NTQuMDAzNykiIGQ9Ik0wIDBWLTY2LjY0M0gtMzQuNDAyVi03LjM1OEMtMzQuNDAyIDUuNDE5LTQxLjk3OSAxNC4wNjgtNTMuMDE0IDE0LjA2OC02Ni42NTEgMTQuMDY4LTc1LjUyNyA0Ljc3Ny03NS41MjctMTYuMjI3Vi02Ni42NDNILTExMC4xNDdWNDEuOTc5SC03NS41MjdWMzEuNTk0Qy02Ny4zIDQwLjI1MS01NS44MjggNDUuMjE3LTQyLjE5OCA0NS4yMTctMTYuODY5IDQ1LjIxNyAwIDI3LjI3NiAwIDAiIGZpbGw9IiM0QzRDNEUiLz48cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA3NzEuNjk1OSA2NjYuMzM1NykiIGQ9Ik0wIDBDMCAxNi42NTctMTIuNTUxIDI4LjEzNi0yNi42MjcgMjguMTM2LTQxLjc4MiAyOC4xMzYtNTIuODAyIDE2LjY1Ny01Mi44MDIgMC01Mi44MDItMTYuODc2LTQxLjc4Mi0yOC4xMzctMjYuNjI3LTI4LjEzNy0xMi41NTEtMjguMTM3IDAtMTYuODc2IDAgME0zNC42MTMtNTQuMzEySDBWLTQ1LjY1NUMtOC40NTItNTMuMjMyLTE5LjcwNS01Ny41NTctMzMuNzY2LTU3LjU1Ny02Mi41NDUtNTcuNTU3LTg2Ljc4LTM0LjQwMi04Ni43OCAwLTg2Ljc4IDM0LjE4Mi02Mi41NDUgNTcuNTQ5LTMzLjc2NiA1Ny41NDktMTkuNzA1IDU3LjU0OS04LjQ1MiA1My4yMjQgMCA0NS42NDdWNTQuMzExSDM0LjYxM1oiIGZpbGw9IiM0QzRDNEUiLz48cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA2ODguNjM2IDYxMi4wMjUpIiBkPSJNMCAwSC0zNC45NzdMLTY5Ljc3My0zNi45OThILTc0LjU0MlY0Ny4xNzlILTEwOS4xNTVWLTEwOC42MjJILTc0LjU0MlYtNjkuNDczSC02OC4yNjNMLTMyLjk5NC0xMDguNjIySDExLjM3N0wtNDEuMjA2LTUxLjcyMloiIGZpbGw9IiM0QzRDNEUiLz48cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA4NjEuMzkzMyA1MjguMzY2MikiIGQ9Ik0wIDBDLS40NTMtMS44NTMtMi4zMzQtMi45ODMtNC4xNzItMi41MjMtNi4wMjUtMi4wNjQtNy4xNTQtLjE5Ny02LjY5NSAxLjY0OC02LjI0MyAzLjQ5My00LjM3NiA0LjYzMS0yLjUyMyA0LjE3Mi0uNjc4IDMuNzE5IC40NTIgMS44NDUgMCAwTS02My41NzMgNjAuMTk2Qy02MS4yODQgNjAuMzQ5LTU5LjI5MyA1OC41OTktNTkuMTYxIDU2LjMwMi01OS4wMTYgNTQuMDA1LTYwLjc2NSA1Mi4wMzUtNjMuMDU2IDUxLjg5Ny02NS4zNDYgNTEuNzU4LTY3LjMxNSA1My40OTQtNjcuNDYxIDU1Ljc5Mi02Ny42MTQgNTguMDgxLTY1Ljg2NCA2MC4wNTgtNjMuNTczIDYwLjE5Nk01NS40MTIgMjIuMjhDNDEuOTc5IDMyLjE2OSAxNy44NjEgMjYuNjE5IDIuNzA2IDkuNjcgMi43MDYgOS42Ny00NC45NzYgNTQuNTc0LTU1LjgyMSA2My45MDktNTUuODM2IDYzLjkwOS01NS44MzYgNjMuODk0LTU1Ljg1IDYzLjg5NC01OC4wNTMgNjUuNzUzLTYwLjkzMyA2Ni44MTgtNjQuMDMzIDY2LjYyMi02Ny4zIDY2LjQyNS03MC4xNjYgNjQuODc5LTcyLjEzNiA2Mi41NTlMLTcyLjE1MSA2Mi41NjctMTk3LjE5Ny03Mi40MjdILTE2My42MjdMLTY5LjcwNyA0Mi43Qy02NC43MzMgNDcuOTU4LTYwLjU3NiA0Ny4zNTQtNTYuMjM3IDQzLjc4Ny0yOS4xOTQgMjEuNTk1LTExLjMxOSA1LjkyOS0xMS4zMTkgNS45MjktMTEuODY2IDUuMDc1LTEyLjMxOCA0LjE0Mi0xMi41NzMgMy4xMDctMTMuODM1LTEuOTkxLTEwLjcyOC03LjE0LTUuNjIzLTguNDAyLTIuMzQxLTkuMjExIC45NTUtOC4xOSAzLjIyMy02LjAxTDQxLjY2NS00NS45NDdDNDEuNjY1LTQ1Ljk0NyA0NC4yODMtNTkuNDUzIDQ0LjY5Mi02Mi4wNzIgNDUuMS02NC42OTcgNDYuOTE2LTY1LjMxIDQ4LjA2OC02Mi4yODMgNDkuMjQyLTU5LjI1NiA1Ny44NDEtMzAuODIxIDU3Ljg0MS0zMC44MjEgNjcuNjcyIC44MjQgNjUuOTg3IDE0LjQ5MSA1NS40MTIgMjIuMjgiIGZpbGw9IiM0QzRDNEUiLz48L3N2Zz4=" alt="Ankaloo" />
+          <img class="logo-dark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjI5NS43NSA0NjEuNzUgODc4LjAwIDI2Mi4yNSIgd2lkdGg9Ijg3OC4wMCIgaGVpZ2h0PSIyNjIuMjUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQW5rYWxvbyI+PHRpdGxlPkFua2Fsb288L3RpdGxlPjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIC0xIDkyNS43OTc5IDcyMC42NDcyKSIgZD0iTTAgMEgtMTA3LjExM1YxNDQuOTc4SC03MS4zOThWMzEuMTYzSDBaIiBmaWxsPSIjRTlDNTAwIi8+PHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgLTEgMTAxNy4zMjU3IDY2Ni4zMzU3KSIgZD0iTTAgMEMwIDE2Ljg3Ni0xMi43NyAyOC4xMzYtMjYuMTk3IDI4LjEzNi00MC4yNTggMjguMTM2LTUzLjAyIDE2Ljg3Ni01My4wMiAwLTUzLjAyLTE3LjA4OC00MC4yNTgtMjguMTM3LTI2LjE5Ny0yOC4xMzctMTIuNzctMjguMTM3IDAtMTcuMDg4IDAgME0zMy4zMDcgMEMzMy4zMDctMzQuNDAyIDYuMDQ1LTU3LjMzMS0yNi4xOTctNTcuMzMxLTU5LjA3NC01Ny4zMzEtODYuMzQzLTM0LjQwMi04Ni4zNDMgMC04Ni4zNDMgMzQuMTgyLTU5LjA3NCA1Ny4xMjYtMjYuMTk3IDU3LjEyNiA2LjA0NSA1Ny4xMjYgMzMuMzA3IDM0LjE4MiAzMy4zMDcgMCIgZmlsbD0iI0U5QzUwMCIvPjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIC0xIDExNDAuMjA2IDY2Ni4zMzU3KSIgZD0iTTAgMEMwIDE2Ljg3Ni0xMi43NyAyOC4xMzYtMjYuMTc1IDI4LjEzNi00MC4yNDMgMjguMTM2LTUzLjAxNCAxNi44NzYtNTMuMDE0IDAtNTMuMDE0LTE3LjA4OC00MC4yNDMtMjguMTM3LTI2LjE3NS0yOC4xMzctMTIuNzctMjguMTM3IDAtMTcuMDg4IDAgME0zMy4zMzYgMEMzMy4zMzYtMzQuNDAyIDYuMDUzLTU3LjMzMS0yNi4xNzUtNTcuMzMxLTU5LjA2Ni01Ny4zMzEtODYuMzQzLTM0LjQwMi04Ni4zNDMgMC04Ni4zNDMgMzQuMTgyLTU5LjA2NiA1Ny4xMjYtMjYuMTc1IDU3LjEyNiA2LjA1MyA1Ny4xMjYgMzMuMzM2IDM0LjE4MiAzMy4zMzYgMCIgZmlsbD0iI0U5QzUwMCIvPjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIC0xIDM3NC43NTA5IDYxNS45MTk2KSIgZD0iTTAgMC0xOC4zODYtNDcuNjA5SDE4LjYxMlpNNDAuNjgxLTEwNC43MjggMzAuNTA3LTc4LjMzNEgtMzAuNTE0TC00MC42NzMtMTA0LjcyOEgtNzguOTc2TC0xOC4zODYgNDAuMjUxSDE4LjE4OEw3OC43NzktMTA0LjcyOFoiIGZpbGw9IiNGRkZGRkYiLz48cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA1NjguNjE0NSA2NTQuMDAzNykiIGQ9Ik0wIDBWLTY2LjY0M0gtMzQuNDAyVi03LjM1OEMtMzQuNDAyIDUuNDE5LTQxLjk3OSAxNC4wNjgtNTMuMDE0IDE0LjA2OC02Ni42NTEgMTQuMDY4LTc1LjUyNyA0Ljc3Ny03NS41MjctMTYuMjI3Vi02Ni42NDNILTExMC4xNDdWNDEuOTc5SC03NS41MjdWMzEuNTk0Qy02Ny4zIDQwLjI1MS01NS44MjggNDUuMjE3LTQyLjE5OCA0NS4yMTctMTYuODY5IDQ1LjIxNyAwIDI3LjI3NiAwIDAiIGZpbGw9IiNGRkZGRkYiLz48cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA3NzEuNjk1OSA2NjYuMzM1NykiIGQ9Ik0wIDBDMCAxNi42NTctMTIuNTUxIDI4LjEzNi0yNi42MjcgMjguMTM2LTQxLjc4MiAyOC4xMzYtNTIuODAyIDE2LjY1Ny01Mi44MDIgMC01Mi44MDItMTYuODc2LTQxLjc4Mi0yOC4xMzctMjYuNjI3LTI4LjEzNy0xMi41NTEtMjguMTM3IDAtMTYuODc2IDAgME0zNC42MTMtNTQuMzEySDBWLTQ1LjY1NUMtOC40NTItNTMuMjMyLTE5LjcwNS01Ny41NTctMzMuNzY2LTU3LjU1Ny02Mi41NDUtNTcuNTU3LTg2Ljc4LTM0LjQwMi04Ni43OCAwLTg2Ljc4IDM0LjE4Mi02Mi41NDUgNTcuNTQ5LTMzLjc2NiA1Ny41NDktMTkuNzA1IDU3LjU0OS04LjQ1MiA1My4yMjQgMCA0NS42NDdWNTQuMzExSDM0LjYxM1oiIGZpbGw9IiNGRkZGRkYiLz48cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA2ODguNjM2IDYxMi4wMjUpIiBkPSJNMCAwSC0zNC45NzdMLTY5Ljc3My0zNi45OThILTc0LjU0MlY0Ny4xNzlILTEwOS4xNTVWLTEwOC42MjJILTc0LjU0MlYtNjkuNDczSC02OC4yNjNMLTMyLjk5NC0xMDguNjIySDExLjM3N0wtNDEuMjA2LTUxLjcyMloiIGZpbGw9IiNGRkZGRkYiLz48cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA4NjEuMzkzMyA1MjguMzY2MikiIGQ9Ik0wIDBDLS40NTMtMS44NTMtMi4zMzQtMi45ODMtNC4xNzItMi41MjMtNi4wMjUtMi4wNjQtNy4xNTQtLjE5Ny02LjY5NSAxLjY0OC02LjI0MyAzLjQ5My00LjM3NiA0LjYzMS0yLjUyMyA0LjE3Mi0uNjc4IDMuNzE5IC40NTIgMS44NDUgMCAwTS02My41NzMgNjAuMTk2Qy02MS4yODQgNjAuMzQ5LTU5LjI5MyA1OC41OTktNTkuMTYxIDU2LjMwMi01OS4wMTYgNTQuMDA1LTYwLjc2NSA1Mi4wMzUtNjMuMDU2IDUxLjg5Ny02NS4zNDYgNTEuNzU4LTY3LjMxNSA1My40OTQtNjcuNDYxIDU1Ljc5Mi02Ny42MTQgNTguMDgxLTY1Ljg2NCA2MC4wNTgtNjMuNTczIDYwLjE5Nk01NS40MTIgMjIuMjhDNDEuOTc5IDMyLjE2OSAxNy44NjEgMjYuNjE5IDIuNzA2IDkuNjcgMi43MDYgOS42Ny00NC45NzYgNTQuNTc0LTU1LjgyMSA2My45MDktNTUuODM2IDYzLjkwOS01NS44MzYgNjMuODk0LTU1Ljg1IDYzLjg5NC01OC4wNTMgNjUuNzUzLTYwLjkzMyA2Ni44MTgtNjQuMDMzIDY2LjYyMi02Ny4zIDY2LjQyNS03MC4xNjYgNjQuODc5LTcyLjEzNiA2Mi41NTlMLTcyLjE1MSA2Mi41NjctMTk3LjE5Ny03Mi40MjdILTE2My42MjdMLTY5LjcwNyA0Mi43Qy02NC43MzMgNDcuOTU4LTYwLjU3NiA0Ny4zNTQtNTYuMjM3IDQzLjc4Ny0yOS4xOTQgMjEuNTk1LTExLjMxOSA1LjkyOS0xMS4zMTkgNS45MjktMTEuODY2IDUuMDc1LTEyLjMxOCA0LjE0Mi0xMi41NzMgMy4xMDctMTMuODM1LTEuOTkxLTEwLjcyOC03LjE0LTUuNjIzLTguNDAyLTIuMzQxLTkuMjExIC45NTUtOC4xOSAzLjIyMy02LjAxTDQxLjY2NS00NS45NDdDNDEuNjY1LTQ1Ljk0NyA0NC4yODMtNTkuNDUzIDQ0LjY5Mi02Mi4wNzIgNDUuMS02NC42OTcgNDYuOTE2LTY1LjMxIDQ4LjA2OC02Mi4yODMgNDkuMjQyLTU5LjI1NiA1Ny44NDEtMzAuODIxIDU3Ljg0MS0zMC44MjEgNjcuNjcyIC44MjQgNjUuOTg3IDE0LjQ5MSA1NS40MTIgMjIuMjgiIGZpbGw9IiNGRkZGRkYiLz48L3N2Zz4=" alt="Ankaloo" />
+        </a>
+        <h1>Política de Privacidad</h1>
+        <p class="meta">Aplicación móvil AnkaLoo</p>
+        <span class="badge">Última actualización: 19 de octubre de 2026</span>
+      </header>
+
+      <div class="card-body">
+        <section class="intro">
+          <p>
+            Esta política describe cómo la aplicación móvil <strong>AnkaLoo</strong> (en adelante, "la App"),
+            operada por <strong>Ankaloo</strong> (en adelante, "la Empresa", "nosotros"), recopila, usa, almacena y
+            protege la información de sus usuarios. Al utilizar la App, aceptás las prácticas descriptas aquí.
+          </p>
+        </section>
+
+        <section>
+          <h2><span class="num">1</span>Qué es la App y quién puede usarla</h2>
+          <p>
+            AnkaLoo es una herramienta de uso interno para el personal de la Empresa (operadores, supervisores y
+            administradores) que permite registrar partes diarios de maquinaria, checklists y solicitudes de
+            mantenimiento asociados a obras. <strong>No está dirigida al público general ni a menores de edad</strong>, y
+            las cuentas son creadas por la Empresa: no existe registro abierto.
+          </p>
+        </section>
+
+        <section>
+          <h2><span class="num">2</span>Información que recopilamos</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Categoría</th><th>Datos</th><th>Finalidad</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Cuenta</td>
+                  <td>Correo electrónico, nombre y rol asignado; credenciales de acceso (la contraseña se almacena cifrada con hash, nunca en texto plano).</td>
+                  <td>Autenticar al usuario y limitar el acceso según sus permisos.</td>
+                </tr>
+                <tr>
+                  <td>Datos operativos</td>
+                  <td>Partes diarios y de mantenimiento: obra, máquina, lecturas de horómetro/odómetro, horas trabajadas, resultados de checklist, observaciones y fechas.</td>
+                  <td>Gestión de la maquinaria y de las obras de la Empresa.</td>
+                </tr>
+                <tr>
+                  <td>Fotos</td>
+                  <td>Imágenes que el usuario toma o elige, por ejemplo la foto del horómetro, y otros adjuntos de un parte.</td>
+                  <td>Respaldo y verificación de los partes.</td>
+                </tr>
+                <tr>
+                  <td>Código QR</td>
+                  <td>Contenido del código QR de la máquina escaneado con la cámara.</td>
+                  <td>Identificar la máquina. La imagen de la cámara no se guarda al escanear.</td>
+                </tr>
+                <tr>
+                  <td>Datos técnicos</td>
+                  <td>Dirección IP y registros del servidor (fecha y hora, acción realizada).</td>
+                  <td>Seguridad, prevención de abuso y trazabilidad de cambios.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="callout">
+            <strong>No</strong> recopilamos ubicación geográfica, contactos, micrófono, datos de salud, datos de pago
+            ni identificadores publicitarios. La App no incluye publicidad ni herramientas de analítica o seguimiento de terceros.
+          </p>
+        </section>
+
+        <section>
+          <h2><span class="num">3</span>Permisos del dispositivo</h2>
+          <ul>
+            <li><strong>Cámara:</strong> para escanear el QR de la máquina y fotografiar el horómetro. Solo se usa mientras la App lo solicita.</li>
+            <li><strong>Fotos / archivos:</strong> para elegir una imagen existente del horómetro. La App accede únicamente a las imágenes que el usuario selecciona.</li>
+          </ul>
+          <p>Podés revocar estos permisos en cualquier momento desde los ajustes del dispositivo; algunas funciones dejarán de estar disponibles.</p>
+        </section>
+
+        <section>
+          <h2><span class="num">4</span>Almacenamiento en el dispositivo</h2>
+          <p>
+            La App guarda localmente la sesión (token de acceso), la obra seleccionada y borradores del formulario en
+            curso, con el único fin de mantener tu sesión y evitar que pierdas datos. Esta información se elimina al
+            cerrar sesión o al desinstalar la App.
+          </p>
+        </section>
+
+        <section>
+          <h2><span class="num">5</span>Con quién compartimos la información</h2>
+          <p>No vendemos ni alquilamos datos personales. Los datos pueden ser tratados por:</p>
+          <ul>
+            <li><strong>Sistema ERP Finnegans</strong> de la Empresa, donde se registran los partes y adjuntos operativos.</li>
+            <li><strong>Proveedores de infraestructura</strong> que alojan nuestros servidores y base de datos, bajo obligaciones de confidencialidad y seguridad.</li>
+            <li><strong>Autoridades</strong>, cuando una norma o una orden judicial lo exija.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2><span class="num">6</span>Seguridad</h2>
+          <p>
+            Las comunicaciones entre la App y nuestros servidores se realizan mediante HTTPS. El acceso está protegido por
+            autenticación y por permisos según el rol, las contraseñas se almacenan con hash y las acciones relevantes
+            quedan registradas en una bitácora de auditoría. Ningún sistema es infalible, pero aplicamos medidas
+            razonables para proteger tu información.
+          </p>
+        </section>
+
+        <section>
+          <h2><span class="num">7</span>Conservación</h2>
+          <p>
+            Conservamos los datos mientras la cuenta esté activa y mientras sean necesarios para la gestión de las obras y
+            el cumplimiento de obligaciones legales, contables y contractuales. Luego se eliminan o anonimizan.
+          </p>
+        </section>
+
+        <section>
+          <h2><span class="num">8</span>Tus derechos y eliminación de datos</h2>
+          <p>
+            Conforme a la Ley 25.326 de Protección de Datos Personales de la República Argentina, podés acceder a tus
+            datos, rectificarlos, actualizarlos o solicitar su supresión. Para ejercer estos derechos, o para pedir la
+            <strong>eliminación de tu cuenta y de los datos asociados</strong>, escribinos a
+            <a href="mailto:privacidad@ankaloo.com">privacidad@ankaloo.com</a> desde tu correo registrado. Responderemos dentro
+            de los plazos legales. Ciertos registros operativos pueden conservarse cuando exista una obligación legal o un
+            interés legítimo de la Empresa.
+          </p>
+          <p class="muted">
+            La Agencia de Acceso a la Información Pública (AAIP), en su carácter de órgano de control de la Ley 25.326,
+            tiene la atribución de atender denuncias y reclamos relativos al incumplimiento de las normas de protección de datos personales.
+          </p>
+        </section>
+
+        <section>
+          <h2><span class="num">9</span>Menores de edad</h2>
+          <p>La App no está dirigida a menores de 18 años y no recopilamos conscientemente datos de menores.</p>
+        </section>
+
+        <section>
+          <h2><span class="num">10</span>Cambios en esta política</h2>
+          <p>
+            Podemos actualizar esta política. Publicaremos la versión vigente en esta misma dirección con su fecha de
+            actualización; si el cambio es sustancial, lo comunicaremos a través de la App o por correo.
+          </p>
+        </section>
+
+        <section>
+          <h2><span class="num">11</span>Contacto</h2>
+          <p>
+            <strong>Ankaloo</strong><br />
+            Correo: <a href="mailto:privacidad@ankaloo.com">privacidad@ankaloo.com</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <p class="footer">© 2026 Ankaloo - by Anydevs</p>
+  </main>
+</body>
+</html>
