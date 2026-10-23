@@ -1,16 +1,30 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import useSWR from "swr";
 import clienteAxios from "../config/axios";
 import CategoriaServicioCard from "./CategoriaServicioCard";
+import { useAbastecimientos } from "../hooks/useAbastecimientos";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
 
 export default function CategoriasServicios() {
   const { pathname } = useLocation();
+  const [searchParams] = useSearchParams();
+  const esInfraestructura = searchParams.get("menu") === "infraestructura";
   const isServiciosRoot =
     pathname === "/servicios" || pathname === "/servicios/";
   const [categorias, setCategorias] = useState([]);
+
+  // Accesos directos a las plantas de Abastecimiento (se cargan desde el admin)
+  const { plantas: abastecimientoPlantas, isLoading: cargandoPlantas } =
+    useAbastecimientos();
+  const categoriasHardcodeadas = abastecimientoPlantas.map((planta) => ({
+    id: `hc-${planta.id}`,
+    to: `/servicios/abastecimiento-para-obras/${planta.id}`,
+    nombre: planta.titulo,
+    imagen: planta.imagenCard || planta.imagen,
+    enfasis: planta.subtitulo,
+  }));
 
   const titleRef = useCallback((el) => {
     if (!el) return;
@@ -62,7 +76,8 @@ export default function CategoriasServicios() {
     setCategorias(items);
   }, [data]);
 
-  if (isLoading) {
+  // Esperar también a las plantas para que la grilla no salte al aparecer
+  if (isLoading || (!esInfraestructura && cargandoPlantas)) {
     return (
       <section className="relative px-6 py-20 bg-white">
         <div className="mx-auto text-center max-w-7xl">
@@ -141,7 +156,16 @@ export default function CategoriasServicios() {
             ref={titleRef}
             className="anim-title mt-6 mb-4 text-4xl lg:text-6xl font-black tracking-tight text-center text-[#1c1c1c]"
           >
-            Nuestros <span className="text-[#fdce27]">Servicios</span>
+            {esInfraestructura ? (
+              <>
+                Desarrollo de{" "}
+                <span className="text-[#fdce27]">infraestructura</span>
+              </>
+            ) : (
+              <>
+                Nuestros <span className="text-[#fdce27]">Servicios</span>
+              </>
+            )}
           </h2>
         </div>
 
@@ -150,6 +174,13 @@ export default function CategoriasServicios() {
           {categorias.map((categoria) => (
             <CategoriaServicioCard key={categoria.id} categoria={categoria} />
           ))}
+          {!esInfraestructura &&
+            categoriasHardcodeadas.map((categoria) => (
+              <CategoriaServicioCard
+                key={categoria.id}
+                categoria={categoria}
+              />
+            ))}
         </div>
       </div>
     </section>

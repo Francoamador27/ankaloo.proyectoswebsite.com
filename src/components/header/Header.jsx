@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import {
@@ -16,6 +16,8 @@ import logo_azul from "../../assets/img/logo/logo-ankaloo.png";
 import clienteAxios from "../../config/axios";
 
 const fetcher = (url) => clienteAxios(url).then((res) => res.data);
+const ABASTECIMIENTO_HREF = "/servicios/abastecimiento-para-obras";
+const INFRAESTRUCTURA_HREF = "/servicios?menu=infraestructura";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,10 +25,50 @@ export default function Header() {
   const location = useLocation();
   const isHome = location.pathname === "/";
 
+  // Desplegable "Servicios" (desktop)
+  const [serviciosOpen, setServiciosOpen] = useState(false);
+  const serviciosRef = useRef(null);
+  const serviciosCloseTimer = useRef(null);
+
+  const abrirServiciosHover = () => {
+    clearTimeout(serviciosCloseTimer.current);
+    setServiciosOpen(true);
+  };
+  const cerrarServiciosHover = () => {
+    clearTimeout(serviciosCloseTimer.current);
+    serviciosCloseTimer.current = setTimeout(() => setServiciosOpen(false), 150);
+  };
+
+  // Desplegable "Servicios" (mobile, acordeón)
+  const [serviciosOpenMobile, setServiciosOpenMobile] = useState(false);
+
   const { data } = useSWR("/api/brochure", fetcher, {
     revalidateOnFocus: false,
   });
   const brochure = data?.data ?? null;
+
+  // Limpiar el timer del hover al desmontar
+  useEffect(() => {
+    return () => clearTimeout(serviciosCloseTimer.current);
+  }, []);
+
+  // Cerrar el desplegable de escritorio al hacer clic afuera
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (serviciosRef.current && !serviciosRef.current.contains(e.target)) {
+        setServiciosOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
+
+  // Cerrar todo al cambiar de página
+  useEffect(() => {
+    setServiciosOpen(false);
+    setServiciosOpenMobile(false);
+    setMobileMenuOpen(false);
+  }, [location.pathname, location.search]);
 
   // States for Auth (kept commented out as in original)
   /*
@@ -98,7 +140,57 @@ export default function Header() {
             {/* NAVEGACION (Desktop) */}
             <ul className="items-center hidden gap-1 lg:flex">
               {[...leftNav, ...rightNav].map((item, i) =>
-                item.external ? (
+                item.label === "Servicios" ? (
+                  <li
+                    key={i}
+                    className="relative"
+                    ref={serviciosRef}
+                    onMouseEnter={abrirServiciosHover}
+                    onMouseLeave={cerrarServiciosHover}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setServiciosOpen((o) => !o)}
+                      className={`relative px-5 py-2 text-[14px] font-bold tracking-tight transition-all duration-300 flex items-center gap-1 ${
+                        useDarkStyle
+                          ? "text-slate-700 hover:text-[#1c1c1c]"
+                          : "text-white/90 hover:text-[#fdce27]"
+                      }`}
+                    >
+                      Servicios
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-300 ${serviciosOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {/* Panel desplegable */}
+                    <div
+                      className={`absolute left-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transition-all duration-200 origin-top ${
+                        serviciosOpen
+                          ? "opacity-100 scale-100 visible"
+                          : "opacity-0 scale-95 invisible pointer-events-none"
+                      }`}
+                    >
+                      <div className="py-2">
+                        {/* Desarrollo de infraestructura */}
+                        <Link
+                          to={INFRAESTRUCTURA_HREF}
+                          className="block px-5 py-3 text-sm font-black tracking-tight text-slate-800 hover:bg-[#fdce27]/10 hover:text-[#1c1c1c] transition-colors"
+                        >
+                          Desarrollo de infraestructura
+                        </Link>
+
+                        {/* Abastecimiento para obras */}
+                        <Link
+                          to={ABASTECIMIENTO_HREF}
+                          className="block px-5 py-3 text-sm font-black tracking-tight text-slate-800 hover:bg-[#fdce27]/10 hover:text-[#1c1c1c] transition-colors border-t border-slate-100"
+                        >
+                          Abastecimiento para obras
+                        </Link>
+                      </div>
+                    </div>
+                  </li>
+                ) : item.external ? (
                   <li key={i}>
                     <a
                       href={item.href}
@@ -170,7 +262,39 @@ export default function Header() {
 
             <ul className="relative space-y-2">
               {[...leftNav, ...rightNav].map((item, i) =>
-                item.external ? (
+                item.label === "Servicios" ? (
+                  <li key={i}>
+                    <button
+                      type="button"
+                      onClick={() => setServiciosOpenMobile((o) => !o)}
+                      className="flex items-center justify-between w-full px-6 py-4 text-base font-bold tracking-tight text-left transition-all rounded-2xl text-slate-700 hover:bg-[#fdce27]/10"
+                    >
+                      Servicios
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-200 ${serviciosOpenMobile ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ${serviciosOpenMobile ? "max-h-[32rem] mt-1" : "max-h-0"}`}
+                    >
+                      <div className="pl-4 space-y-1">
+                        <Link
+                          to={INFRAESTRUCTURA_HREF}
+                          className="block px-4 py-3 text-sm font-bold rounded-xl text-slate-700 hover:bg-[#fdce27]/10"
+                        >
+                          Desarrollo de infraestructura
+                        </Link>
+                        <Link
+                          to={ABASTECIMIENTO_HREF}
+                          className="block px-4 py-3 text-sm font-bold rounded-xl text-slate-700 hover:bg-[#fdce27]/10"
+                        >
+                          Abastecimiento para obras
+                        </Link>
+                      </div>
+                    </div>
+                  </li>
+                ) : item.external ? (
                   <li key={i}>
                     <a
                       href={item.href}

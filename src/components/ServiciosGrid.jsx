@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  Link,
-  useSearchParams,
-  useParams,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import clienteAxios from "../config/axios";
 import SEOHead from "./Head/Head";
@@ -18,6 +13,7 @@ const POR_PAGINA = 12;
 export default function ServiciosGrid() {
   const { categoria: categoriaSlug } = useParams();
   const navigate = useNavigate();
+
   const [serviciosApi, setServiciosApi] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
