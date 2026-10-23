@@ -41,6 +41,7 @@ import {
   Award,
   PlaySquare,
   Layout,
+  Factory,
 } from "lucide-react";
 
 import UseAuth from "../hooks/useAuth";
@@ -70,6 +71,11 @@ const AdminSidebar = () => {
       text: "Obras",
       icon: <HardHat size={20} />,
       path: "/admin-dash/servicios",
+    },
+    {
+      text: "Abastecimiento",
+      icon: <Factory size={20} />,
+      path: "/admin-dash/abastecimiento",
     },
     {
       text: "Certificados",

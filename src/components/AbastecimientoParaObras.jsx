@@ -1,11 +1,13 @@
 import React, { useCallback } from "react";
 import PlantaCard from "./Cards/PlantaCard";
-import abastecimientoPlantas from "../data/abastecimientoPlantas.json";
+import { useAbastecimientos } from "../hooks/useAbastecimientos";
 import SEOHead from "./Head/Head";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
 
 export default function AbastecimientoParaObras() {
+  const { plantas, seccion, isLoading } = useAbastecimientos();
+
   const titleRef = useCallback((el) => {
     if (!el) return;
     const observer = new IntersectionObserver(
@@ -24,8 +26,8 @@ export default function AbastecimientoParaObras() {
     <section className="relative px-6 py-24 overflow-hidden bg-white">
       <SEOHead
         priority="high"
-        title="Abastecimiento para obras | Anka Loo"
-        description="Plantas propias de hormigón y asfalto de Anka Loo en Río Cuarto, al servicio de la logística y provisión de insumos para nuestras obras."
+        title={`${[seccion.titulo, seccion.titulo_destacado].filter(Boolean).join(" ")} | Anka Loo`}
+        description={seccion.seo_description}
       />
 
       <div
@@ -72,17 +74,29 @@ export default function AbastecimientoParaObras() {
             ref={titleRef}
             className="anim-title mt-6 mb-4 text-4xl lg:text-6xl font-black tracking-tight text-center text-[#1c1c1c]"
           >
-            Abastecimientos para{" "}
-            <span className="text-[#fdce27]">obras</span>
+            {seccion.titulo}{" "}
+            {seccion.titulo_destacado && (
+              <span className="text-[#fdce27]">{seccion.titulo_destacado}</span>
+            )}
           </h2>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
-          {abastecimientoPlantas.map((planta) => (
-            <PlantaCard key={planta.id} planta={planta} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div
+            role="status"
+            aria-label="Cargando"
+            className="flex items-center justify-center min-h-[560px] lg:min-h-[580px]"
+          >
+            <div className="w-12 h-12 border-4 border-[#fdce27] border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+            {plantas.map((planta) => (
+              <PlantaCard key={planta.id} planta={planta} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

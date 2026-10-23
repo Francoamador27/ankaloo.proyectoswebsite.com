@@ -23,6 +23,12 @@ const Portafolio = lazy(() => import("./components/Portafolio"));
 const PortafolioDetail = lazy(() => import("./components/PortafolioDetail"));
 const AdminPortafolioList = lazy(() => import("./views/AdminPortafolioList"));
 const AdminPortafolio = lazy(() => import("./views/AdminPortafolio"));
+const AdminAbastecimientoList = lazy(
+  () => import("./views/AdminAbastecimientoList"),
+);
+const AdminAbastecimientoForm = lazy(
+  () => import("./views/AdminAbastecimientoForm"),
+);
 const PagoResultado = lazy(() => import("./views/PagoResultado"));
 const NotFound = lazy(() => import("./components/NotFound"));
 const ResetPassword = lazy(() => import("./views/ResetPassword"));
@@ -197,6 +203,18 @@ const router = createBrowserRouter([
       {
         path: "/admin-dash/portafolio/:id",
         element: suspense(<AdminPortafolio />),
+      },
+      {
+        path: "/admin-dash/abastecimiento",
+        element: suspense(<AdminAbastecimientoList />),
+      },
+      {
+        path: "/admin-dash/abastecimiento/nuevo",
+        element: suspense(<AdminAbastecimientoForm />),
+      },
+      {
+        path: "/admin-dash/abastecimiento/:id",
+        element: suspense(<AdminAbastecimientoForm />),
       },
       { path: "/admin-dash/sliders", element: suspense(<SlidersAdmin />) },
       {

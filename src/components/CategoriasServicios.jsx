@@ -3,7 +3,7 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 import useSWR from "swr";
 import clienteAxios from "../config/axios";
 import CategoriaServicioCard from "./CategoriaServicioCard";
-import abastecimientoPlantas from "../data/abastecimientoPlantas.json";
+import { useAbastecimientos } from "../hooks/useAbastecimientos";
 import lineasIzq from "../assets/lineasamarillasizq.png";
 import lineasDer from "../assets/lineasamarillasder.png";
 
@@ -15,7 +15,9 @@ export default function CategoriasServicios() {
     pathname === "/servicios" || pathname === "/servicios/";
   const [categorias, setCategorias] = useState([]);
 
-  // Accesos directos hardcodeados (no vienen de la API)
+  // Accesos directos a las plantas de Abastecimiento (se cargan desde el admin)
+  const { plantas: abastecimientoPlantas, isLoading: cargandoPlantas } =
+    useAbastecimientos();
   const categoriasHardcodeadas = abastecimientoPlantas.map((planta) => ({
     id: `hc-${planta.id}`,
     to: `/servicios/abastecimiento-para-obras/${planta.id}`,
@@ -74,7 +76,8 @@ export default function CategoriasServicios() {
     setCategorias(items);
   }, [data]);
 
-  if (isLoading) {
+  // Esperar también a las plantas para que la grilla no salte al aparecer
+  if (isLoading || (!esInfraestructura && cargandoPlantas)) {
     return (
       <section className="relative px-6 py-20 bg-white">
         <div className="mx-auto text-center max-w-7xl">

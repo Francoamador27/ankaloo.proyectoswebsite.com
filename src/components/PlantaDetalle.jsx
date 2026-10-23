@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import SEOHead from "./Head/Head";
-import abastecimientoPlantas from "../data/abastecimientoPlantas.json";
+import { useAbastecimiento, htmlToText } from "../hooks/useAbastecimientos";
+import DescripcionHtml from "./Abastecimiento/DescripcionHtml";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import "swiper/css";
@@ -13,10 +14,14 @@ export default function PlantaDetalle() {
   const { plantaId } = useParams();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  const planta = abastecimientoPlantas.find((p) => p.id === plantaId);
+  const { planta, isLoading } = useAbastecimiento(plantaId);
   const imagenes = planta
     ? [planta.imagen, ...(planta.galeria || [])].filter(Boolean)
     : [];
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-[#f4f4f4]" />;
+  }
 
   if (!planta) {
     return (
@@ -39,8 +44,8 @@ export default function PlantaDetalle() {
   return (
     <>
       <SEOHead
-        title={`${planta.titulo} - Anka Loo`}
-        description={planta.descripcion?.join(" ") || ""}
+        title={planta.seoTitle || `${planta.titulo} - Anka Loo`}
+        description={planta.seoDescription || htmlToText(planta.descripcion)}
       />
 
       <div className="min-h-screen bg-[#f4f4f4]">
@@ -163,19 +168,7 @@ export default function PlantaDetalle() {
                   </span>
                 </div>
 
-                {Array.isArray(planta.descripcion) &&
-                  planta.descripcion.length > 0 && (
-                    <ul className="text-lg leading-relaxed text-[#5a5a5a] font-light mb-10 list-none p-0 m-0 space-y-3">
-                      {planta.descripcion.map((item, idx) => (
-                        <li key={idx} className="relative pl-6">
-                          <span className="absolute left-0 top-0 text-[#fdce27] font-black">
-                            ❯
-                          </span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                <DescripcionHtml html={planta.descripcion} className="mb-10" />
               </div>
             </div>
           </div>
