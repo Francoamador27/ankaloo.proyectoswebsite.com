@@ -172,12 +172,12 @@ export default function Header() {
                       }`}
                     >
                       <div className="py-2">
-                        {/* Desarrollo de infraestructura */}
+                        {/* Obras de infraestructura */}
                         <Link
                           to={INFRAESTRUCTURA_HREF}
                           className="block px-5 py-3 text-sm font-black tracking-tight text-slate-800 hover:bg-[#fdce27]/10 hover:text-[#1c1c1c] transition-colors"
                         >
-                          Desarrollo de infraestructura
+                          Obras de infraestructura
                         </Link>
 
                         {/* Abastecimiento para obras */}
@@ -283,7 +283,7 @@ export default function Header() {
                           to={INFRAESTRUCTURA_HREF}
                           className="block px-4 py-3 text-sm font-bold rounded-xl text-slate-700 hover:bg-[#fdce27]/10"
                         >
-                          Desarrollo de infraestructura
+                          Obras de infraestructura
                         </Link>
                         <Link
                           to={ABASTECIMIENTO_HREF}

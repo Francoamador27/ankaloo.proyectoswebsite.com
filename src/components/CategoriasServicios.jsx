@@ -158,7 +158,7 @@ export default function CategoriasServicios() {
           >
             {esInfraestructura ? (
               <>
-                Desarrollo de{" "}
+                Obras de{" "}
                 <span className="text-[#fdce27]">infraestructura</span>
               </>
             ) : (
