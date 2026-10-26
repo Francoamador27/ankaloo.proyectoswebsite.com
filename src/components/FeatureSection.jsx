@@ -32,7 +32,7 @@ function SlideBackground({ slide }) {
         <iframe
           className="w-full h-full scale-125 pointer-events-none"
           src={src}
-          title={slide.title}
+          title={slide.title || 'Video'}
           allow="autoplay; encrypted-media; picture-in-picture"
           allowFullScreen
         />
@@ -51,7 +51,7 @@ function SlideBackground({ slide }) {
         `}</style>
         <img
           src={slide.image}
-          alt={slide.title}
+          alt={slide.title || ''}
           className={`absolute inset-0 w-full h-full object-cover slide-img-${slide.id}`}
         />
       </>
@@ -107,9 +107,11 @@ function HeroSwiper({ slides }) {
               <div className="absolute inset-0 bg-black/50" />
               {/* Content */}
               <div className="relative z-10 w-full max-w-5xl px-16 lg:px-24 mx-auto text-center">
-                <h1 className="slide-title text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-[1.15] tracking-[0.02em] drop-shadow-lg">
-                  {slide.title}
-                </h1>
+                {slide.title && (
+                  <h1 className="slide-title text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-[1.15] tracking-[0.02em] drop-shadow-lg">
+                    {slide.title}
+                  </h1>
+                )}
 
                 {/* <p className="slide-desc max-w-xl mx-auto text-base md:text-lg text-white/75 font-light leading-relaxed">
                   {slide.description}

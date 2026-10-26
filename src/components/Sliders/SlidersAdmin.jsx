@@ -162,11 +162,6 @@ const SlidersAdmin = () => {
     setError(null);
     setMensaje(null);
 
-    if (!title.trim() || !description.trim()) {
-      setError('Titulo y descripcion son obligatorios');
-      return;
-    }
-
     if (backgroundType === 'image') {
       const currentSlide = slides.find((s) => s.id === editingId);
       if (!imagen && !currentSlide?.image) {
