@@ -49,7 +49,11 @@ const Inicio = () => {
             <Contacto />
           </Suspense>
         </LazyRender> */}
-        <SEOHead priority="high" title={`Anka Loo | Empresa Constructora`} />
+        <SEOHead
+          priority="high"
+          title={`Anka Loo | Empresa Constructora`}
+          description="Anka Loo: empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento, urbanizaciones y obras civiles. Calidad y experiencia en cada proyecto."
+        />
       </div>
     </>
   );

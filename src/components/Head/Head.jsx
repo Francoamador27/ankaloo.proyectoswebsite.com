@@ -41,8 +41,8 @@ export default function SEOHead(props) {
   const defaultDesc =
     pDesc ??
     (company
-      ? `${company.name}: Soluciones de desarrollo de sistemas, software, hardware y marketing digital. Transformamos tu negocio con tecnología. ${company.address ?? ""} ${company.business_hours ? `· Horario: ${company.business_hours}` : ""}`.trim()
-      : "Anka Loo Anka Loo: Acompañamos a las empresas en su transformación digital con soluciones integrales de desarrollo, software, hardware y marketing digital.");
+      ? `${company.name}: empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento y ambientales. ${company.address ?? ""} ${company.business_hours ? `· Horario: ${company.business_hours}` : ""}`.trim()
+      : "Anka Loo: empresa constructora de Córdoba especializada en obras hidráulicas, viales, saneamiento y ambientales.");
 
   const title = pTitle ?? defaultTitle;
   const description = pDesc ?? defaultDesc;
