@@ -8,17 +8,12 @@ import ErrorBoundary from "./components/ErrorBoundary";
 const Posts = lazy(() => import("./views/Posts"));
 const Inicio = lazy(() => import("./views/Inicio"));
 const Login = lazy(() => import("./views/Login"));
-const Register = lazy(() => import("./views/Register"));
 const MyAccount = lazy(() => import("./views/MyAccount"));
-const CheckOut = lazy(() => import("./views/CheckOut"));
 const Users = lazy(() => import("./views/Users"));
 const CartAbandoment = lazy(() => import("./views/CartAbandoment"));
 const DetalleOrden = lazy(() => import("./views/DetalleOrden"));
 const DetalleProducto = lazy(() => import("./views/DetalleProducto"));
 const DetalleCliente = lazy(() => import("./views/DetalleCliente"));
-const ComoComprar = lazy(() => import("./components/ComoComprar"));
-const Precios = lazy(() => import("./components/Precios"));
-const Ejemplos = lazy(() => import("./components/Ejemplos"));
 const Portafolio = lazy(() => import("./components/Portafolio"));
 const PortafolioDetail = lazy(() => import("./components/PortafolioDetail"));
 const AdminPortafolioList = lazy(() => import("./views/AdminPortafolioList"));
@@ -130,21 +125,16 @@ const router = createBrowserRouter([
       { path: "/servicio/:slug", element: suspense(<ServicioDetails />) },
       { path: "/blog", element: suspense(<BlogList />) },
       { path: "/blog/:slug", element: suspense(<BlogDetail />) },
-      { path: "/como-comprar", element: suspense(<ComoComprar />) },
       { path: "/contacto", element: suspense(<Contacto />) },
       {
         path: "/trabaja-con-nosotros",
         element: suspense(<TrabajaConNosotros />),
       },
       { path: "/quienes-somos", element: suspense(<QuienesSomos />) },
-      { path: "/precios", element: suspense(<Precios />) },
       { path: "/maquinarias", element: suspense(<Portafolio />) },
       { path: "/maquinarias/:id", element: suspense(<PortafolioDetail />) },
-      { path: "/galeria", element: suspense(<Ejemplos />) },
-      { path: "/finalizar-compra", element: suspense(<CheckOut />) },
       { path: "auth/login", element: suspense(<Login />) },
       { path: "auth/reset-password", element: suspense(<ResetPassword />) },
-      { path: "auth/register", element: suspense(<Register />) },
       { path: "/pagos/:estado", element: suspense(<PagoResultado />) },
       { path: "/sede", element: suspense(<Sede />) },
       { path: "/calidad", element: suspense(<Calidad />) },
