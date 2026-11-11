@@ -30,3 +30,6 @@ INSTRUCTIVO_*.md
 Instructivo_*.md
 INSTRUCTIVO_*.pdf
 Instructivo_*.pdf
+
+# Manual de uso del admin (no versionar)
+src/manual-ankaloo.pdf
