@@ -5,7 +5,6 @@ import AuthLayout from "./layout/AuthLayout";
 import AdminLayout from "./layout/AdminLayout";
 import RRHHLayout from "./layout/RRHHLayout";
 import ErrorBoundary from "./components/ErrorBoundary";
-const Posts = lazy(() => import("./views/Posts"));
 const Inicio = lazy(() => import("./views/Inicio"));
 const Login = lazy(() => import("./views/Login"));
 const MyAccount = lazy(() => import("./views/MyAccount"));
@@ -77,8 +76,6 @@ const LeadsRRHH = lazy(() => import("./components/LeadsRRHH"));
 const TrabajaConNosotros = lazy(
   () => import("./components/TrabajaConNosotros"),
 );
-const BlogList = lazy(() => import("./components/Blog/BlogList"));
-const BlogDetail = lazy(() => import("./components/Blog/BlogDetail"));
 const Sede = lazy(() => import("./views/Sede"));
 const Calidad = lazy(() => import("./views/Calidad"));
 const Compromiso = lazy(() => import("./views/Compromiso"));
@@ -123,8 +120,6 @@ const router = createBrowserRouter([
       },
       { path: "/servicios/:categoria", element: suspense(<ServiciosGrid />) },
       { path: "/servicio/:slug", element: suspense(<ServicioDetails />) },
-      { path: "/blog", element: suspense(<BlogList />) },
-      { path: "/blog/:slug", element: suspense(<BlogDetail />) },
       { path: "/contacto", element: suspense(<Contacto />) },
       {
         path: "/trabaja-con-nosotros",
@@ -216,7 +211,6 @@ const router = createBrowserRouter([
         path: "/admin-dash/servicios/editar/:id",
         element: suspense(<EditServicios />),
       },
-      { path: "/admin-dash/posts", element: suspense(<Posts />) },
       { path: "/admin-dash/finanzas", element: suspense(<Finanzas />) },
       {
         path: "/admin-dash/leads-contacto",
