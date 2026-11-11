@@ -10,7 +10,7 @@ export default function SEOHead(props) {
     title: pTitle,
     description: pDesc,
     keywords,
-    author = company?.name ?? "Anka Loo Anka Loo",
+    author = company?.name ?? "Anka Loo",
     canonical: pCanonical,
     robots = "index, follow",
     og = {},

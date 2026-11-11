@@ -194,8 +194,8 @@ const TrabajaConNosotros = () => {
     <section className="relative overflow-hidden">
       <SEOHead
         priority="low"
-        title="Anka Loo Anka Loo | Trabaja Con Nosotros"
-        description="Envía tu CV y únete al equipo de Anka Loo Anka Loo. Buscamos profesionales talentosos para impulsar grandes obras de infraestructura."
+        title="Anka Loo | Trabaja Con Nosotros"
+        description="Envía tu CV y únete al equipo de Anka Loo. Buscamos profesionales talentosos para impulsar grandes obras de infraestructura."
       />
 
       {/* ── HERO ── */}
@@ -225,7 +225,7 @@ const TrabajaConNosotros = () => {
           <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden">
             <iframe
               src={videoEmbedUrl}
-              title="Video Anka Loo Anka Loo"
+              title="Video Anka Loo"
               className="w-full h-full"
               allowFullScreen
             />

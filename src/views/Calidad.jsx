@@ -41,7 +41,7 @@ export default function Calidad() {
   return (
     <>
       <SEOHead
-        title={`Calidad y Certificaciones - ${company.name || "Anka Loo Anka Loo"}`}
+        title={`Calidad y Certificaciones - ${company.name || "Anka Loo"}`}
         description="Conoce nuestras certificaciones de calidad y estándares de excelencia en infraestructura."
       />
 

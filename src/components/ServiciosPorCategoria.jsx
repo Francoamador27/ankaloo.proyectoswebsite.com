@@ -376,7 +376,7 @@ export default function ServiciosPorCategoria() {
 
             <a
               href={WhatsappHref({
-                message: `Hola, vengo desde la web de Anka Loo Anka Loo y me gustaría información sobre ${
+                message: `Hola, vengo desde la web de Anka Loo y me gustaría información sobre ${
                   categoriaInfo?.nombre || "los Servicios "
                 }.`,
               })}

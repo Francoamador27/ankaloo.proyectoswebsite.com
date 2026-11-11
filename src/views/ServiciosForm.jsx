@@ -359,7 +359,7 @@ const ServiciosForm = () => {
               <TiptapEditor
                 content={description}
                 onChange={setDescription}
-                placeholder="Describe el servicio, ingredientes principales y estilo de preparacion..."
+                placeholder="Describí el servicio: alcance, tipo de obra, equipos y capacidades..."
               />
             </div>
 

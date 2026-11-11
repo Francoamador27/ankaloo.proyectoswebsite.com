@@ -23,7 +23,6 @@ const AdminAbastecimientoList = lazy(
 const AdminAbastecimientoForm = lazy(
   () => import("./views/AdminAbastecimientoForm"),
 );
-const PagoResultado = lazy(() => import("./views/PagoResultado"));
 const NotFound = lazy(() => import("./components/NotFound"));
 const ResetPassword = lazy(() => import("./views/ResetPassword"));
 const Contacto = lazy(() => import("./components/Contacto"));
@@ -130,7 +129,6 @@ const router = createBrowserRouter([
       { path: "/maquinarias/:id", element: suspense(<PortafolioDetail />) },
       { path: "auth/login", element: suspense(<Login />) },
       { path: "auth/reset-password", element: suspense(<ResetPassword />) },
-      { path: "/pagos/:estado", element: suspense(<PagoResultado />) },
       { path: "/sede", element: suspense(<Sede />) },
       { path: "/calidad", element: suspense(<Calidad />) },
       { path: "/compromiso", element: suspense(<Compromiso />) },

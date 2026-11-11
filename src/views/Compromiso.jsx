@@ -67,7 +67,7 @@ export default function Compromiso() {
   return (
     <>
       <SEOHead
-        title={`Compromiso Ambiental - ${company.name || "Anka Loo Anka Loo"}`}
+        title={`Compromiso Ambiental - ${company.name || "Anka Loo"}`}
         description="Conocé nuestro compromiso con la sustentabilidad: biocombustibles, paneles solares, reforestación y gestión responsable de residuos."
       />
 

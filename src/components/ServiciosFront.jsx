@@ -197,7 +197,7 @@ export default function ServiciosSwiper() {
           </h2>
 
           <p className="max-w-2xl mx-auto text-xl leading-relaxed font-light text-[#5a5a5a]">
-            En Anka Loo Anka Loo brindamos servicios de infraestructura en obras
+            En Anka Loo brindamos servicios de infraestructura en obras
             hidráulicas, viales, de urbanización y saneamiento.
           </p>
         </div>

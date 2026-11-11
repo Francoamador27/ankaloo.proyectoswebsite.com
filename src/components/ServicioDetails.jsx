@@ -162,7 +162,7 @@ export default function ServicioDetails() {
   return (
     <>
       <SEOHead
-        title={`${servicio?.titulo || "Servicio"} - Anka Loo Anka Loo`}
+        title={`${servicio?.titulo || "Servicio"} - Anka Loo`}
         description={servicio?.descripcion || ""}
       />
 
@@ -338,7 +338,7 @@ export default function ServicioDetails() {
                   dangerouslySetInnerHTML={{
                     __html:
                       servicio.descripcion ||
-                      "Servicio de infraestructura de Anka Loo Anka Loo.",
+                      "Servicio de infraestructura de Anka Loo.",
                   }}
                 />
 
