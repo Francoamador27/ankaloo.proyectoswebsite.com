@@ -10,8 +10,6 @@ import "@fontsource/inter/400.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 
-import GTMBody from "./components/BodyVerification/GTMBody";
-
 // Si un chunk/CSS de un build anterior ya no existe (deploy nuevo), recargamos
 // una sola vez para traer el index.html con los hashes actuales.
 // Si vuelve a fallar, un CSS faltante no debe tirar la página entera:
@@ -33,10 +31,6 @@ window.addEventListener("vite:preloadError", (event) => {
 
 createRoot(document.getElementById("root")).render(
     <Provider>
-      {/* GTM / scripts globales */}
-      <GTMBody gtmId={"sadas"} />
-
-      {/* App con router */}
       <RouterProvider router={router} />
     </Provider>
 );

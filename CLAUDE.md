@@ -10,7 +10,7 @@ Sitio de **Anka Loo**, empresa constructora de Córdoba (obras hidráulicas, via
 - SEO por página con el componente `src/components/Head/Head.jsx` (SEOHead), que actualiza title/meta al renderizar. Como es una SPA, el `index.html` estático también tiene title y meta description por defecto (es lo que ve Google si el render falla).
 
 ## Backend
-- API externa (proyecto aparte, no está en este repo). URL en `VITE_API_URL`, usada por `src/config/axios.js`.
+- API externa (proyecto aparte, no está en este repo) en `https://api.ankaloo.com.ar`. URL en `VITE_API_URL`, usada por `src/config/axios.js`.
 - Variables de entorno (`.env.local` en desarrollo): `VITE_API_URL`, `VITE_TURNSTILE_SITE_KEY`, `VITE_ENTORNO`, `VITE_CKEDITOR_LICENSE_KEY`.
 - Son variables de **build**: en producción tienen que estar cargadas en la configuración de Cloudflare Pages.
 
@@ -35,4 +35,5 @@ Después de cambios de SEO: en Search Console, Inspección de URL → "Probar UR
 
 ## Notas
 - Idioma del sitio y de la comunicación: español (Argentina).
-- Analytics: gtag `G-7R9SLGXN05` en `index.html`.
+- Analytics: gtag `G-7R9SLGXN05` en `index.html`. No se usa Google Tag Manager.
+- No es PWA (`public/site.webmanifest` no se usa).
