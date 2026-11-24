@@ -2,7 +2,12 @@ import { useRouteError, isRouteErrorResponse } from 'react-router-dom';
 
 export default function ErrorBoundary() {
   const error = useRouteError();
-  const isDynamicImportError = error?.message?.includes('Failed to fetch');
+  // El mensaje técnico va a consola, nunca a la pantalla (Google lo indexa).
+  console.error(error);
+  const errorMessage = error?.message?.toLowerCase() ?? '';
+  const isDynamicImportError =
+    errorMessage.includes('failed to fetch') ||
+    errorMessage.includes('unable to preload css');
 
   if (isDynamicImportError) {
     return (
@@ -43,7 +48,7 @@ export default function ErrorBoundary() {
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Algo salió mal</h1>
         <p className="text-gray-600 mb-6">
-          {error?.message || 'Ocurrió un error inesperado. Por favor intenta nuevamente.'}
+          Ocurrió un error inesperado. Por favor intenta nuevamente.
         </p>
         <div className="flex gap-3">
           <button
